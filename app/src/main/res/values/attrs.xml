@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <declare-styleable name="Header">
+            <attr name="header_title" format="reference|string" localization="suggested" />
+        </declare-styleable>
+        <declare-styleable name="Entry">
+            <attr name="key" format="reference|string" localization="suggested" />
+            <attr name="value" format="reference|string" localization="suggested" />
+        </declare-styleable>
+</resources>

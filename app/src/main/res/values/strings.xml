@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sample Beacon Admin</string>
+    <string name="range_beacons">Range beacons</string>
+    <string name="monitor_beacons">Monitor beacons</string>
+    <string name="action_settings">Settings</string>
+    <string name="venue">Venue</string>
+    <string name="cancel">Cancel</string>
+
+
+    <!--Format strings-->
+    <string name="format_connect">Connect %s</string>
+    <string name="password">Password</string>
+    <string name="connect">Connect</string>
+    <string name="ok">Ok</string>
+    <string name="proximity_uuid">Proximity UUID</string>
+    <string name="major">Major</string>
+    <string name="minor">Minor</string>
+    <string name="power_level">Power Level</string>
+    <string name="advertising_interval">Advertising Interval</string>
+    <string name="set_password">Set password</string>
+    <string name="model_name">Model name</string>
+    <string name="proximity">Proximity</string>
+    <string name="transmission_power">Transmission Power</string>
+    <string name="timers">Timers</string>
+    <string name="access_control">Access Control</string>
+    <string name="battery">Battery</string>
+    <string name="battery_level">Battery Level</string>
+    <string name="device_information">Device Information</string>
+    <string name="manufacturer_name">Manufacturer Name</string>
+    <string name="firmware_revision">Firmware Revision</string>
+    <string name="hardware_revision">Hardware Revision</string>
+    <string name="reset">Reset</string>
+    <string name="reset_device">Reset Device</string>
+    <string name="restore_default_settings">Restore Default Settings</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="profiles">Profiles</string>
+    <string name="accept_profile">Accept Profile</string>
+    <string name="pending_configs">Pending configurations</string>
+    <string name="apply_config">Apply Configuration</string>
+    <string name="generate">Generate</string>
+    <string name="beacon_unique_id">Beacon Unique Id</string>
+    <string name="submit">Submit</string>
+
+</resources>

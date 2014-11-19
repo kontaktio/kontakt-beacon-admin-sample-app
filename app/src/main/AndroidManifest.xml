@@ -1,0 +1,38 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.kontakt.sample">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:icon="@drawable/icon_launcher"
+                 android:theme="@style/AppTheme">
+
+        <meta-data android:name="kontakt.io.API_KEY" android:value="your-api-key"/>
+
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.activity.BeaconMonitorActivity"/>
+        <activity android:name=".ui.activity.BeaconRangeActivity"/>
+        <activity android:name=".ui.activity.BeaconControllerActivity"/>
+        <activity android:name=".ui.activity.ProfilesActivity"/>
+        <activity android:name=".ui.activity.ConfigFormActivity"/>
+
+        <service android:name="com.kontakt.sdk.android.manager.BeaconService" android:exported="false"/>
+        <service android:name="com.kontakt.sdk.android.manager.ActionService" android:exported="false"/>
+
+    </application>
+
+</manifest>

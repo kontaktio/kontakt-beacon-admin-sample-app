@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="5dp"
+    android:paddingTop="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <com.kontakt.sample.ui.Header
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/proximity"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/proximity_uuid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/proximity_uuid"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/major"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/major"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/minor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/minor"/>
+
+        <com.kontakt.sample.ui.Header
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/transmission_power"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/power_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/power_level"/>
+
+        <com.kontakt.sample.ui.Header
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/timers"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/advertising_interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/advertising_interval"/>
+
+        <com.kontakt.sample.ui.Header
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/access_control"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/set_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/set_password"/>
+
+        <com.kontakt.sample.ui.Header
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/battery"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/battery_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/battery_level"/>
+
+        <com.kontakt.sample.ui.Header
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/device_information"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/manufacturer_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/manufacturer_name"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/model_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/model_name"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/firmware_revision"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/firmware_revision"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/hardware_revision"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/hardware_revision"/>
+
+        <com.kontakt.sample.ui.Header
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/profiles"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/accept_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/accept_profile"/>
+
+        <com.kontakt.sample.ui.Header
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/pending_configs"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/apply_config"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/apply_config"/>
+
+        <com.kontakt.sample.ui.Header
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_title="@string/reset"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/reset_device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/reset_device"/>
+
+        <com.kontakt.sample.ui.Entry
+            android:id="@+id/default_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="@string/restore_default_settings"/>
+
+    </LinearLayout>
+
+</ScrollView>

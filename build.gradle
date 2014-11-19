@@ -1,0 +1,16 @@
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.14.2'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'http://repo.kontakt.io/repository/internal/' }
+    }
+}
