@@ -12,6 +12,8 @@ import com.kontakt.sdk.core.interfaces.BiConsumer;
 
 public class PasswordDialogFragment extends InputDialogFragment {
 
+    private static final int KONTAKT_BEACON_PASSWORD_LENGTH = 4;
+
     public static PasswordDialogFragment newInstance(final String title,
                                                   final String message,
                                                   final String buttonText,
@@ -51,11 +53,7 @@ public class PasswordDialogFragment extends InputDialogFragment {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() != 4) {
-                            submitButton.setEnabled(false);
-                        } else {
-                            submitButton.setEnabled(true);
-                        }
+                        submitButton.setEnabled(s.length() == KONTAKT_BEACON_PASSWORD_LENGTH);
                     }
 
                     @Override
