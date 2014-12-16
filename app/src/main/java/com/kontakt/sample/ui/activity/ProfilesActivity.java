@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.kontakt.sample.adapter.ProfilesAdapter;
-import com.kontakt.sdk.android.http.ApiClient;
+import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.model.Profile;
 import com.kontakt.sdk.core.exception.ClientException;
 import com.kontakt.sdk.core.http.Result;
@@ -91,7 +91,7 @@ public class ProfilesActivity extends ListActivity {
 
         @Override
         protected Result<Set<Profile>> doInBackground(Void... params) {
-            final ApiClient apiClient = ApiClient.newInstance();
+            final KontaktApiClient apiClient = KontaktApiClient.newInstance();
             try {
                 return apiClient.getProfiles();
             } catch (ClientException e) {

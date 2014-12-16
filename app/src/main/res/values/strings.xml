@@ -8,7 +8,6 @@
     <string name="venue">Venue</string>
     <string name="cancel">Cancel</string>
 
-
     <!--Format strings-->
     <string name="format_connect">Connect %s</string>
     <string name="password">Password</string>
@@ -43,5 +42,13 @@
     <string name="generate">Generate</string>
     <string name="beacon_unique_id">Beacon Unique Id</string>
     <string name="submit">Submit</string>
+    <string name="device_name">Device Name</string>
+    <string name="rssi">Rssi</string>
+    <string name="power">Power</string>
+    <string name="address">MAC address</string>
+    <string name="firmware_version">Firmware version</string>
+    <string name="unexpected_error_monitoring_start">Unexpected error occured during monitoring start</string>
+    <string name="bluetooth_not_enabled">Bluetooth not enabled</string>
+    <string name="unexpected_error_connection">Unexpected error occured during establishing connection to Beacon Service</string>
 
 </resources>

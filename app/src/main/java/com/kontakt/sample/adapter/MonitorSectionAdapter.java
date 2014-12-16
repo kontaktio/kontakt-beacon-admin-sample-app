@@ -130,13 +130,17 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
         }
 
         final ChildViewHolder childViewHolder = (ChildViewHolder) convertView.getTag();
-        childViewHolder.macTextView.setText(String.format("%s: %s (%s)", device.getName(),
+        childViewHolder.nameTextView.setText(String.format("%s: %s (%s)", device.getName(),
                 device.getMacAddress(),
                 new DecimalFormat("#.##").format(device.getAccuracy())));
+        childViewHolder.proximityUUIDTextView.setText(String.format("Proximity UUID: %s", device.getProximityUUID().toString()));
         childViewHolder.majorTextView.setText(String.format("Major: %d", device.getMajor()));
         childViewHolder.minorTextView.setText(String.format("Minor: %d", device.getMinor()));
         childViewHolder.rssiTextView.setText(String.format("Rssi: %f", device.getRssi()));
         childViewHolder.txPowerTextView.setText(String.format("Tx Power: %d", device.getTxPower()));
+        childViewHolder.beaconUniqueIdTextView.setText(String.format("Beacon Unique Id: %s", device.getBeaconUniqueId()));
+        childViewHolder.firmwareVersionTextView.setText(String.format("Firmware version: %d", device.getFirmwareVersion()));
+        childViewHolder.proximityTextView.setText(String.format("Proximity: %s", device.getProximity()));
 
         return convertView;
     }
@@ -168,18 +172,26 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
     }
 
     static class ChildViewHolder {
-        final TextView macTextView;
+        final TextView nameTextView;
         final TextView majorTextView;
         final TextView minorTextView;
         final TextView txPowerTextView;
         final TextView rssiTextView;
+        final TextView proximityUUIDTextView;
+        final TextView beaconUniqueIdTextView;
+        final TextView firmwareVersionTextView;
+        final TextView proximityTextView;
 
         ChildViewHolder(View view) {
-            macTextView = (TextView) view.findViewWithTag("mac");
-            majorTextView = (TextView) view.findViewWithTag("major");
-            minorTextView = (TextView) view.findViewWithTag("minor");
-            txPowerTextView = (TextView) view.findViewWithTag("mpower");
-            rssiTextView = (TextView) view.findViewWithTag("rssi");
+            nameTextView = (TextView) view.findViewById(R.id.device_name);
+            majorTextView = (TextView) view.findViewById(R.id.major);
+            minorTextView = (TextView)  view.findViewById(R.id.minor);
+            txPowerTextView = (TextView) view.findViewById(R.id.power);
+            rssiTextView = (TextView) view.findViewById(R.id.rssi);
+            proximityUUIDTextView = (TextView) view.findViewById(R.id.proximity_uuid);
+            beaconUniqueIdTextView = (TextView) view.findViewById(R.id.beacon_unique_id);
+            firmwareVersionTextView = (TextView) view.findViewById(R.id.firmware_version);
+            proximityTextView = (TextView) view.findViewById(R.id.proximity);
         }
     }
 }

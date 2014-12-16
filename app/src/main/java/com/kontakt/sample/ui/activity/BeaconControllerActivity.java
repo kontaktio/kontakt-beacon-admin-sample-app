@@ -22,7 +22,7 @@ import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.connection.BeaconConnection;
 import com.kontakt.sdk.android.device.Beacon;
-import com.kontakt.sdk.android.http.ApiClient;
+import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.model.Config;
 import com.kontakt.sdk.android.model.Profile;
 import com.kontakt.sdk.core.exception.ClientException;
@@ -475,7 +475,7 @@ public class BeaconControllerActivity extends Activity implements View.OnClickLi
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final ApiClient apiClient = ApiClient.newInstance();
+                        final KontaktApiClient apiClient = KontaktApiClient.newInstance();
                         try {
                             apiClient.applyConfig(batchHolder);
                         } catch (ClientException e) {

@@ -12,10 +12,12 @@ import android.widget.Toast;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.http.ApiClient;
+import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.model.Config;
 import com.kontakt.sdk.core.exception.ClientException;
 import com.kontakt.sdk.core.http.Result;
+
+import org.apache.http.HttpStatus;
 
 import java.util.UUID;
 
@@ -79,7 +81,7 @@ public class ConfigFormActivity extends Activity {
     }
 
     private Config createConfig() {
-        return Config.builder()
+        return new Config.Builder()
                      .setProximityUUID(UUID.fromString(proximityUUIDText.getText().toString().trim()))
                      .setMajor(Integer.parseInt(majorText.getText().toString()))
                      .setMinor(Integer.parseInt(minorText.getText().toString()))
@@ -106,8 +108,8 @@ public class ConfigFormActivity extends Activity {
 
         @Override
         protected Result<Config> doInBackground(Config... params) {
-            ApiClient.init(activity);
-            final ApiClient apiClient = ApiClient.newInstance();
+            KontaktApiClient.init(activity);
+            final KontaktApiClient apiClient = KontaktApiClient.newInstance();
             try {
                 return apiClient.createConfig(params[0]);
 
@@ -115,7 +117,7 @@ public class ConfigFormActivity extends Activity {
                 return Result.of(null, -1, e.getMessage());
             } catch(ClientException e) {
                 e.printStackTrace();
-                return Result.of(null, 404, e.getMessage());
+                return Result.of(null, HttpStatus.SC_NOT_FOUND, e.getMessage());
             } finally {
                apiClient.close();
             }

@@ -1,76 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_margin="@dimen/default_margin"
-    android:weightSum="8"
-    android:animateLayoutChanges="true">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:layout_margin="@dimen/default_margin"
+              android:weightSum="8"
+              android:animateLayoutChanges="true">
 
-    <ImageView android:layout_width="60dp"
-        android:layout_height="80dp"
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="2"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="5dp"
-        android:padding="10dp"
-        android:layout_weight="1"
         android:src="@drawable/kontakt_io"/>
 
-    <LinearLayout android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="7"
-        android:orientation="vertical">
+    <LinearLayout android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="6"
+                  android:orientation="vertical">
 
         <TextView
-            android:tag="mac"
+            android:id="@+id/device_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Device Name"/>
+            android:text="@string/device_name"/>
 
-        <LinearLayout android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <TextView
+            android:id="@+id/proximity_uuid"
+            android:text="@string/proximity_uuid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-            <LinearLayout android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <TextView
+            android:id="@+id/major"
+            android:text="@string/major"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:tag="rssi"
-                    android:text="rssi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/minor"
+            android:text="@string/minor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:tag="major"
-                    android:text="major"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/beacon_unique_id"
+            android:text="@string/beacon_unique_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-            </LinearLayout>
+        <TextView
+            android:id="@+id/firmware_version"
+            android:text="@string/firmware_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-            <LinearLayout android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <TextView
+            android:id="@+id/rssi"
+            android:text="@string/rssi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:tag="mpower"
-                    android:text="power"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/power"
+            android:text="@string/power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:tag="minor"
-                    android:text="minor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:tag="proximity"
-                    android:text="@string/proximity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/proximity"
+            android:text="@string/proximity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

@@ -1,8 +1,10 @@
 package com.kontakt.sample.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.view.Surface;
+import android.widget.Toast;
 
 public final class Utils {
 
@@ -27,6 +29,10 @@ public final class Utils {
         } else {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
+    }
+
+    public static void showToast(final Context context, final String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     private Utils() { }
