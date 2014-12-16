@@ -108,7 +108,6 @@ public class ConfigFormActivity extends Activity {
 
         @Override
         protected Result<Config> doInBackground(Config... params) {
-            KontaktApiClient.init(activity);
             final KontaktApiClient apiClient = KontaktApiClient.newInstance();
             try {
                 return apiClient.createConfig(params[0]);
