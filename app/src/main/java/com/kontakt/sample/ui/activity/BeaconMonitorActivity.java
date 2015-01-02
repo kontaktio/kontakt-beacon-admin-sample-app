@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.MonitorSectionAdapter;
 import com.kontakt.sample.util.Utils;
+import com.kontakt.sdk.android.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.configuration.MonitorPeriod;
 import com.kontakt.sdk.android.connection.OnServiceBoundListener;
 import com.kontakt.sdk.android.data.RssiCalculators;
@@ -44,6 +45,7 @@ public class BeaconMonitorActivity extends Activity {
         list.setAdapter(adapter);
         beaconManager = BeaconManager.newInstance(this);
 
+        beaconManager.setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT);
 
         beaconManager.setScanMode(BeaconManager.SCAN_MODE_BALANCED); // Works only for Android L OS version
 
