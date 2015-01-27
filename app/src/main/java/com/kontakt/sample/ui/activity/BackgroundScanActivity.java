@@ -1,6 +1,5 @@
 package com.kontakt.sample.ui.activity;
 
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,10 +20,9 @@ import com.kontakt.sample.broadcast.AbstractBroadcastHandler;
 import com.kontakt.sample.broadcast.ForegroundBroadcastHandler;
 import com.kontakt.sample.receiver.AbstractScanBroadcastReceiver;
 import com.kontakt.sample.service.BackgroundScanService;
+import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.util.Logger;
 import com.kontakt.sdk.core.util.Preconditions;
-
-import java.util.List;
 
 public class BackgroundScanActivity extends ActionBarActivity {
 
@@ -34,8 +32,6 @@ public class BackgroundScanActivity extends ActionBarActivity {
     public static final int MESSAGE_STOP_SCAN = 25;
 
     private static final IntentFilter SCAN_INTENT_FILTER;
-
-    private NotificationManager notificationManager;
 
     private ServiceConnection serviceConnection;
 
@@ -65,7 +61,6 @@ public class BackgroundScanActivity extends ActionBarActivity {
             }
         });
 
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         serviceConnection = createServiceConnection();
 
         bindServiceAndStartMonitoring();
@@ -74,7 +69,7 @@ public class BackgroundScanActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cancelNotifications();
+        Utils.cancelNotifications(this, BackgroundScanService.INFO_LIST);
         registerReceiver(scanReceiver, SCAN_INTENT_FILTER);
     }
 
@@ -91,14 +86,6 @@ public class BackgroundScanActivity extends ActionBarActivity {
         serviceMessenger = null;
         unbindService(serviceConnection);
         serviceConnection = null;
-    }
-
-    private void cancelNotifications() {
-        final List<Integer> infoList = BackgroundScanService.INFO_LIST;
-
-        for(final Integer info : infoList) {
-            notificationManager.cancel(info);
-        }
     }
 
     private void bindServiceAndStartMonitoring() {

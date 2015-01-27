@@ -1,12 +1,23 @@
 package com.kontakt.sample.util;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.view.Surface;
 import android.widget.Toast;
 
+import java.util.List;
+
 public final class Utils {
+
+    public static void cancelNotifications(final Context context, final List<Integer> notificationIdList) {
+        final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        for(final int notificationId : notificationIdList) {
+            notificationManager.cancel(notificationId);
+        }
+    }
 
     public static void setOrientationChangeEnabled(final boolean state, final Activity activity) {
         if(!state) {
