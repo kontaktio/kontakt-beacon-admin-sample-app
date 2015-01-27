@@ -19,22 +19,17 @@ import com.kontakt.sdk.android.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.connection.OnServiceBoundListener;
 import com.kontakt.sdk.android.connection.ServiceConnectionChain;
-import com.kontakt.sdk.android.data.RssiCalculator;
 import com.kontakt.sdk.android.data.RssiCalculators;
-import com.kontakt.sdk.android.device.Beacon;
+import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
-import com.kontakt.sdk.android.factory.AdvertisingPackage;
-import com.kontakt.sdk.android.factory.Filters;
 import com.kontakt.sdk.android.manager.ActionManager;
 import com.kontakt.sdk.android.manager.BeaconManager;
+import com.kontakt.sdk.android.model.Beacon;
 import com.kontakt.sdk.android.util.MemoryUnit;
 import com.kontakt.sdk.core.interfaces.BiConsumer;
-import com.kontakt.sdk.core.interfaces.model.Action;
+import com.kontakt.sdk.core.interfaces.model.IAction;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 public class BeaconRangeActivity extends ListActivity {
 
@@ -57,9 +52,9 @@ public class BeaconRangeActivity extends ListActivity {
         actionManager.setMemoryCacheSize(20, MemoryUnit.BYTES);
         actionManager.registerActionNotifier(new ActionManager.ActionNotifier() {
             @Override
-            public void onActionsFound(final List<Action<com.kontakt.sdk.android.model.Beacon>> actions) {
-                final Action<com.kontakt.sdk.android.model.Beacon> action = actions.get(0);
-                final com.kontakt.sdk.android.model.Beacon beacon = action.getProximitySource();
+            public void onActionsFound(final List<IAction<Beacon>> actions) {
+                final IAction<Beacon> action = actions.get(0);
+                final Beacon beacon = action.getProximitySource();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -125,7 +120,7 @@ public class BeaconRangeActivity extends ListActivity {
 
         beaconManager.registerRangingListener(new BeaconManager.RangingListener() {
             @Override
-            public void onBeaconsDiscovered(final Region region, final List<Beacon> beacons) {
+            public void onBeaconsDiscovered(final Region region, final List<BeaconDevice> beacons) {
                 BeaconRangeActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -171,8 +166,8 @@ public class BeaconRangeActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        final Beacon beacon = (Beacon) adapter.getItem(position);
-        PasswordDialogFragment.newInstance(getString(R.string.format_connect, beacon.getMacAddress()),
+        final BeaconDevice beacon = (BeaconDevice) adapter.getItem(position);
+        PasswordDialogFragment.newInstance(getString(R.string.format_connect, beacon.getAddress()),
                 getString(R.string.password),
                 getString(R.string.connect),
                 new BiConsumer<DialogInterface, String>() {
@@ -219,7 +214,7 @@ public class BeaconRangeActivity extends ListActivity {
                     .connect(actionManager, new OnServiceBoundListener() {
                         @Override
                         public void onServiceBound() {
-                            beaconManager.setActionController(actionManager.getController());
+                            beaconManager.setActionController(actionManager.getActionController());
                         }
                     })
                     .connect(beaconManager, new OnServiceBoundListener() {

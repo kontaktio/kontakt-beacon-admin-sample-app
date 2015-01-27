@@ -8,7 +8,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.kontakt.sample.R;
-import com.kontakt.sdk.android.device.Beacon;
+import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
 
 import java.text.DecimalFormat;
@@ -21,17 +21,17 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
 
     private final Context context;
     private final List<Region> headersList;
-    private final Map<Region, List<Beacon>> childMap;
+    private final Map<Region, List<BeaconDevice>> childMap;
 
     public MonitorSectionAdapter(final Context context) {
         this.context = context;
-        headersList = new ArrayList<Region>();
-        childMap = new HashMap<Region, List<Beacon>>();
+        headersList = new ArrayList<>();
+        childMap = new HashMap<>();
     }
 
     public void addGroup(final Region beaconRegion) {
         headersList.add(beaconRegion);
-        childMap.put(beaconRegion, new ArrayList<Beacon>());
+        childMap.put(beaconRegion, new ArrayList<BeaconDevice>());
         notifyDataSetChanged();
     }
 
@@ -39,16 +39,16 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
         return headersList.indexOf(beaconRegion);
     }
 
-    public void replaceChildren(final int groupPosition, final List<Beacon> devices) {
-        final List<Beacon> beacons = childMap.get(getGroup(groupPosition));
+    public void replaceChildren(final int groupPosition, final List<BeaconDevice> devices) {
+        final List<BeaconDevice> beacons = childMap.get(getGroup(groupPosition));
         beacons.clear();
         beacons.addAll(devices);
         notifyDataSetChanged();
     }
 
-    public boolean addOrReplaceChild(final int groupPosition, final Beacon device) {
+    public boolean addOrReplaceChild(final int groupPosition, final BeaconDevice device) {
         final Region region = (Region) getGroup(groupPosition);
-        final List<Beacon> devices = childMap.get(region);
+        final List<BeaconDevice> devices = childMap.get(region);
         final int index = devices.indexOf(device);
         boolean state;
 
@@ -121,7 +121,7 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final Beacon device = (Beacon) getChild(groupPosition, childPosition);
+        final BeaconDevice device = (BeaconDevice) getChild(groupPosition, childPosition);
 
         if(convertView == null) {
             convertView = createView(R.layout.beacon_list_row);
@@ -131,7 +131,7 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
 
         final ChildViewHolder childViewHolder = (ChildViewHolder) convertView.getTag();
         childViewHolder.nameTextView.setText(String.format("%s: %s (%s)", device.getName(),
-                device.getMacAddress(),
+                device.getAddress(),
                 new DecimalFormat("#.##").format(device.getAccuracy())));
         childViewHolder.proximityUUIDTextView.setText(String.format("Proximity UUID: %s", device.getProximityUUID().toString()));
         childViewHolder.majorTextView.setText(String.format("Major: %d", device.getMajor()));

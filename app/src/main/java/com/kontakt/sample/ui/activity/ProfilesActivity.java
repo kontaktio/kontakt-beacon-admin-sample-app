@@ -13,7 +13,9 @@ import com.kontakt.sample.adapter.ProfilesAdapter;
 import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.model.Profile;
 import com.kontakt.sdk.core.exception.ClientException;
-import com.kontakt.sdk.core.http.Result;
+import com.kontakt.sdk.core.http.HttpResult;
+
+import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +71,7 @@ public class ProfilesActivity extends ListActivity {
         void onProfilesAbsent();
     }
 
-    private static class LoadProfilesTask extends AsyncTask<Void, Void, Result<Set<Profile>>> {
+    private static class LoadProfilesTask extends AsyncTask<Void, Void, HttpResult<Set<Profile>>> {
 
         private Context context;
         private ProfilesListener profilesListener;
@@ -90,19 +92,19 @@ public class ProfilesActivity extends ListActivity {
         }
 
         @Override
-        protected Result<Set<Profile>> doInBackground(Void... params) {
+        protected HttpResult<Set<Profile>> doInBackground(Void... params) {
             final KontaktApiClient apiClient = KontaktApiClient.newInstance();
             try {
                 return apiClient.getProfiles();
             } catch (ClientException e) {
-                return Result.absent(404);
+                return HttpResult.of(HttpStatus.SC_NOT_FOUND);
             } finally {
                 apiClient.close();
             }
         }
 
         @Override
-        protected void onPostExecute(Result<Set<Profile>> result) {
+        protected void onPostExecute(HttpResult<Set<Profile>> result) {
             progressDialog.dismiss();
 
             if(result.isPresent()) {

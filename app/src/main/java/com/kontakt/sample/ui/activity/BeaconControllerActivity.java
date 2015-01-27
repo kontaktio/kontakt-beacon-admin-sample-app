@@ -3,11 +3,11 @@ package com.kontakt.sample.ui.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,7 @@ import com.kontakt.sample.ui.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.connection.BeaconConnection;
-import com.kontakt.sdk.android.device.Beacon;
+import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.model.Config;
 import com.kontakt.sdk.android.model.Profile;
@@ -30,7 +30,7 @@ import com.kontakt.sdk.core.interfaces.BiConsumer;
 
 import java.util.UUID;
 
-public class BeaconControllerActivity extends Activity implements View.OnClickListener {
+public class BeaconControllerActivity extends ActionBarActivity implements View.OnClickListener {
     public static final String EXTRA_BEACON_DEVICE = "extra_beacon_device";
 
     public static final String EXTRA_FAILURE_MESSAGE = "extra_failure_message";
@@ -39,7 +39,7 @@ public class BeaconControllerActivity extends Activity implements View.OnClickLi
 
     public static final int REQUEST_CODE_OBTAIN_PROFILE = 2;
 
-    private Beacon beacon;
+    private BeaconDevice beacon;
 
     private BeaconConnection beaconConnection;
 
@@ -164,7 +164,7 @@ public class BeaconControllerActivity extends Activity implements View.OnClickLi
             }
 
             @Override
-            public void onAuthenticationSuccess(final Beacon.Characteristics characteristics) {
+            public void onAuthenticationSuccess(final BeaconDevice.Characteristics characteristics) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -198,7 +198,7 @@ public class BeaconControllerActivity extends Activity implements View.OnClickLi
             }
 
             @Override
-            public void onCharacteristicsUpdated(final Beacon.Characteristics characteristics) {
+            public void onCharacteristicsUpdated(final BeaconDevice.Characteristics characteristics) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -250,7 +250,7 @@ public class BeaconControllerActivity extends Activity implements View.OnClickLi
         };
     }
 
-    private void fillEntries(Beacon.Characteristics characteristics) {
+    private void fillEntries(BeaconDevice.Characteristics characteristics) {
         proximityUuidEntry.setValue(characteristics.getProximityUUID().toString());
         majorEntry.setValue(String.valueOf(characteristics.getMajor()));
         minorEntry.setValue(String.valueOf(characteristics.getMinor()));

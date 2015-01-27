@@ -50,5 +50,11 @@
     <string name="unexpected_error_monitoring_start">Unexpected error occured during monitoring start</string>
     <string name="bluetooth_not_enabled">Bluetooth not enabled</string>
     <string name="unexpected_error_connection">Unexpected error occured during establishing connection to Beacon Service</string>
-
+    <string name="background_scan">Background Scan</string>
+    <string name="scan_stopped">Scan stopped</string>
+    <string name="scan_started">Scan started</string>
+    <string name="region_entered">%1$s entered</string>
+    <string name="region_abandoned">%1$s abandoned</string>
+    <string name="beacon_appeared">%1$s appeared</string>
+    <string name="appeared_beacon_info">ProximityUUID:\n%1$s\nMajor:\n%2$d\nMinor:\n%3$d\nDistance:\n%4$.1f</string>
 </resources>

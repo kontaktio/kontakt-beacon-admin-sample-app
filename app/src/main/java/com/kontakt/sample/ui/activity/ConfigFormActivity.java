@@ -15,7 +15,7 @@ import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.model.Config;
 import com.kontakt.sdk.core.exception.ClientException;
-import com.kontakt.sdk.core.http.Result;
+import com.kontakt.sdk.core.http.HttpResult;
 
 import org.apache.http.HttpStatus;
 
@@ -91,7 +91,7 @@ public class ConfigFormActivity extends Activity {
                      .build();
     }
 
-    private static class SyncConfigTask extends AsyncTask<Config, Void, Result<Config>> {
+    private static class SyncConfigTask extends AsyncTask<Config, Void, HttpResult<Config>> {
 
         private ProgressDialog progressDialog;
         private Activity activity;
@@ -107,23 +107,23 @@ public class ConfigFormActivity extends Activity {
         }
 
         @Override
-        protected Result<Config> doInBackground(Config... params) {
+        protected HttpResult<Config> doInBackground(Config... params) {
             final KontaktApiClient apiClient = KontaktApiClient.newInstance();
             try {
                 return apiClient.createConfig(params[0]);
 
             } catch(IllegalArgumentException e) {
-                return Result.of(null, -1, e.getMessage());
+                return HttpResult.of(-1);
             } catch(ClientException e) {
                 e.printStackTrace();
-                return Result.of(null, HttpStatus.SC_NOT_FOUND, e.getMessage());
+                return HttpResult.of(HttpStatus.SC_NOT_FOUND);
             } finally {
                apiClient.close();
             }
         }
 
         @Override
-        protected void onPostExecute(Result<Config> configResult) {
+        protected void onPostExecute(HttpResult<Config> configResult) {
             progressDialog.dismiss();
             if(configResult.isPresent()) {
                 final Intent resultIntent = new Intent();

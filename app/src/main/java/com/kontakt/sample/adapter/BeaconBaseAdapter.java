@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.kontakt.sample.R;
-import com.kontakt.sdk.android.device.Beacon;
+import com.kontakt.sdk.android.device.BeaconDevice;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 public class BeaconBaseAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
-    private List<Beacon> beacons;
+    private List<BeaconDevice> beacons;
 
     public BeaconBaseAdapter(final Context context) {
         layoutInflater = LayoutInflater.from(context);
@@ -45,10 +45,10 @@ public class BeaconBaseAdapter extends BaseAdapter {
         convertView = getTheSameOrInflate(convertView, parent);
         final ViewHolder viewHolder = (ViewHolder) convertView.getTag();
 
-        final Beacon beacon = (Beacon) getItem(position);
+        final BeaconDevice beacon = (BeaconDevice) getItem(position);
 
         viewHolder.nameTextView.setText(String.format("%s: %s(%s)", beacon.getName(),
-                beacon.getMacAddress(),
+                beacon.getAddress(),
                 new DecimalFormat("#.##").format(beacon.getAccuracy())));
         viewHolder.majorTextView.setText(String.format("Major : %d", beacon.getMajor()));
         viewHolder.minorTextView.setText(String.format("Minor : %d", beacon.getMinor()));
@@ -62,7 +62,7 @@ public class BeaconBaseAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void replaceWith(final List<Beacon> beacons) {
+    public void replaceWith(final List<BeaconDevice> beacons) {
         this.beacons.clear();
         this.beacons.addAll(beacons);
         notifyDataSetChanged();

@@ -28,13 +28,20 @@
         <activity android:name=".ui.activity.BeaconMonitorActivity"/>
         <activity android:name=".ui.activity.BeaconRangeActivity"/>
         <activity android:name=".ui.activity.BeaconControllerActivity"/>
+        <activity android:name=".ui.activity.BackgroundScanActivity"/>
         <activity android:name=".ui.activity.ProfilesActivity"/>
         <activity android:name=".ui.activity.ConfigFormActivity"/>
 
+        <service android:name=".service.BackgroundScanService" android:exported="false"/>
         <service android:name="com.kontakt.sdk.android.manager.BeaconService" android:exported="false"/>
         <service android:name="com.kontakt.sdk.android.manager.BeaconServiceL" android:exported="false"/>
-
         <service android:name="com.kontakt.sdk.android.manager.ActionService" android:exported="false"/>
+
+        <receiver android:name=".receiver.BackgroundScanReceiver" android:exported="false">
+            <intent-filter android:priority="1">
+                <action android:name="com.kontakt.sample.service.BackgroundScanService.BROADCAST"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

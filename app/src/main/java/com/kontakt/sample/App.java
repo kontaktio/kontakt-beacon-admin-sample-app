@@ -12,6 +12,7 @@ public class App extends Application {
         super.onCreate();
 
         Logger.setDebugLoggingEnabled(BuildConfig.DEBUG);
+        Logger.setCrashlyticsLoggingEnabled(true);
         KontaktApiClient.init(this);
     }
 }

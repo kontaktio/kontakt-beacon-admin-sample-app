@@ -5,6 +5,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.Window;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
@@ -16,7 +19,7 @@ import com.kontakt.sdk.android.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.configuration.MonitorPeriod;
 import com.kontakt.sdk.android.connection.OnServiceBoundListener;
 import com.kontakt.sdk.android.data.RssiCalculators;
-import com.kontakt.sdk.android.device.Beacon;
+import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
 import com.kontakt.sdk.android.factory.Filters;
 import com.kontakt.sdk.android.manager.BeaconManager;
@@ -24,7 +27,7 @@ import com.kontakt.sdk.android.manager.BeaconManager;
 import java.util.List;
 
 
-public class BeaconMonitorActivity extends Activity {
+public class BeaconMonitorActivity extends ActionBarActivity {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
 
@@ -35,8 +38,19 @@ public class BeaconMonitorActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.beacon_monitor_list_activity);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         final ExpandableListView list = (ExpandableListView) findViewById(R.id.list);
 
@@ -110,7 +124,7 @@ public class BeaconMonitorActivity extends Activity {
             }
 
             @Override
-            public void onBeaconsUpdated(final Region venue, final List<Beacon> beacons) {
+            public void onBeaconsUpdated(final Region venue, final List<BeaconDevice> beacons) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -123,7 +137,7 @@ public class BeaconMonitorActivity extends Activity {
             }
 
             @Override
-            public void onBeaconAppeared(final Region region, final Beacon beacon) {
+            public void onBeaconAppeared(final Region region, final BeaconDevice beacon) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
