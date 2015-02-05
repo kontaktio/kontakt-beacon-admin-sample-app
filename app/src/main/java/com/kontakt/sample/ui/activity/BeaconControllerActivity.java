@@ -2,12 +2,12 @@ package com.kontakt.sample.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,13 +67,24 @@ public class BeaconControllerActivity extends ActionBarActivity implements View.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.beacon_activity);
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         beaconForm = (ViewGroup) findViewById(R.id.beacon_form);
         beaconForm.setVisibility(View.GONE);
         progressBar = findViewById(R.id.loading_spinner);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         setUpView();
         beacon = getIntent().getParcelableExtra(EXTRA_BEACON_DEVICE);
-        setUpActionBar(getActionBar());
         setTitle(beacon.getName());
 
         beaconConnection = BeaconConnection.newInstance(this, beacon, createConnectionListener());
@@ -117,18 +128,6 @@ public class BeaconControllerActivity extends ActionBarActivity implements View.
             default:
                 super.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch(item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -327,10 +326,6 @@ public class BeaconControllerActivity extends ActionBarActivity implements View.
                         hideView.setVisibility(View.GONE);
                     }
                 });
-    }
-
-    private void setUpActionBar(final ActionBar actionBar) {
-        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void clearConnection() {
