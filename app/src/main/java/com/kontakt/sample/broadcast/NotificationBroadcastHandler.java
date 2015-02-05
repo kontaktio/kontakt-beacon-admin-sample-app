@@ -10,6 +10,7 @@ import com.kontakt.sample.R;
 import com.kontakt.sample.ui.activity.BackgroundScanActivity;
 import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
+import com.kontakt.sdk.core.Proximity;
 
 public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
 
@@ -31,6 +32,8 @@ public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
         final int major = beaconDevice.getMajor();
         final int minor = beaconDevice.getMinor();
         final double distance = beaconDevice.getAccuracy();
+        final Proximity proximity = beaconDevice.getProximity();
+
 
         final Notification notification = new Notification.Builder(context)
                 .setWhen(System.currentTimeMillis())
@@ -41,7 +44,12 @@ public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
                         redirectIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(context.getString(R.string.beacon_appeared, deviceName))
-                .setStyle(new Notification.BigTextStyle().bigText(context.getString(R.string.appeared_beacon_info, proximityUUID, major, minor, distance)))
+                .setStyle(new Notification.BigTextStyle().bigText(context.getString(R.string.appeared_beacon_info, deviceName,
+                                                                                                                   proximityUUID,
+                                                                                                                   major,
+                                                                                                                   minor,
+                                                                                                                   distance,
+                                                                                                                   proximity.name())))
                 .setSmallIcon(R.drawable.icon_launcher)
                 .build();
 

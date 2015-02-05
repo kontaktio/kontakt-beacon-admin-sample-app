@@ -7,6 +7,7 @@ import com.kontakt.sample.R;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
+import com.kontakt.sdk.core.Proximity;
 
 public class ForegroundBroadcastHandler extends AbstractBroadcastHandler {
     public ForegroundBroadcastHandler(Context context) {
@@ -15,13 +16,21 @@ public class ForegroundBroadcastHandler extends AbstractBroadcastHandler {
 
     @Override
     protected void onBeaconAppeared(int info, BeaconDevice beaconDevice) {
-        String proximityUUID = beaconDevice.getProximityUUID().toString();
-        int major = beaconDevice.getMajor();
-        int minor = beaconDevice.getMinor();
-        double distance = beaconDevice.getAccuracy();
+
+        final String deviceName = beaconDevice.getName();
+        final String proximityUUID = beaconDevice.getProximityUUID().toString();
+        final int major = beaconDevice.getMajor();
+        final int minor = beaconDevice.getMinor();
+        final double distance = beaconDevice.getAccuracy();
+        final Proximity proximity = beaconDevice.getProximity();
 
         Context context = getContext();
-        Utils.showToast(context, context.getString(R.string.appeared_beacon_info, proximityUUID, major, minor, distance));
+        Utils.showToast(context, context.getString(R.string.appeared_beacon_info, deviceName,
+                                                                                  proximityUUID,
+                                                                                  major,
+                                                                                  minor,
+                                                                                  distance,
+                                                                                  proximity.name()));
     }
 
     @Override
