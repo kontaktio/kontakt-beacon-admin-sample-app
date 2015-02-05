@@ -220,7 +220,7 @@ public class BeaconMonitorActivity extends ActionBarActivity {
             } else {
                 final String bluetoothNotEnabledInfo = getString(R.string.bluetooth_not_enabled);
                 Toast.makeText(this, bluetoothNotEnabledInfo, Toast.LENGTH_LONG).show();
-                getActionBar().setSubtitle(bluetoothNotEnabledInfo);
+                getSupportActionBar().setSubtitle(bluetoothNotEnabledInfo);
             }
             return;
         }
