@@ -12,5 +12,6 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'http://repo.kontakt.io/repository/internal/' }
+        maven { url 'http://repo.kontakt.io/repository/snapshots/' }
     }
 }

@@ -7,8 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.kontakt.sample.R;
-import com.kontakt.sample.service.BackgroundScanService;
-import com.kontakt.sample.util.Utils;
 
 public class MainActivity extends ActionBarActivity {
 

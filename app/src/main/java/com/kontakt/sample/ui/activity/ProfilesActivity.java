@@ -32,18 +32,6 @@ public class ProfilesActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         profilesAdapter = new ProfilesAdapter(this, new ArrayList<Profile>());
         setListAdapter(profilesAdapter);
-        new LoadProfilesTask(this, new ProfilesListener() {
-            @Override
-            public void onProfilesDelivered(final Set<Profile> profiles) {
-                profilesAdapter.replaceWith(Collections.unmodifiableSet(profiles));
-            }
-
-            @Override
-            public void onProfilesAbsent() {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        }).execute();
     }
 
     @Override
@@ -69,49 +57,5 @@ public class ProfilesActivity extends ListActivity {
     private interface ProfilesListener {
         void onProfilesDelivered(final Set<Profile> profiles);
         void onProfilesAbsent();
-    }
-
-    private static class LoadProfilesTask extends AsyncTask<Void, Void, HttpResult<Set<Profile>>> {
-
-        private Context context;
-        private ProfilesListener profilesListener;
-
-        public LoadProfilesTask(final Context context, final ProfilesListener onProfilesDeliveredListener) {
-            super();
-            this.context = context;
-            this.profilesListener = onProfilesDeliveredListener;
-        }
-
-        private ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(context,
-                                                "Fetching profiles",
-                                                "Please wait....");
-        }
-
-        @Override
-        protected HttpResult<Set<Profile>> doInBackground(Void... params) {
-            final KontaktApiClient apiClient = KontaktApiClient.newInstance();
-            try {
-                return apiClient.getProfiles();
-            } catch (ClientException e) {
-                return HttpResult.of(HttpStatus.SC_NOT_FOUND);
-            } finally {
-                apiClient.close();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(HttpResult<Set<Profile>> result) {
-            progressDialog.dismiss();
-
-            if(result.isPresent()) {
-                profilesListener.onProfilesDelivered(result.get());
-            } else {
-                profilesListener.onProfilesAbsent();
-            }
-        }
     }
 }

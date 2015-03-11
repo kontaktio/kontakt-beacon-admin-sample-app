@@ -24,7 +24,7 @@ import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
 import com.kontakt.sdk.android.manager.ActionManager;
 import com.kontakt.sdk.android.manager.BeaconManager;
-import com.kontakt.sdk.android.model.Beacon;
+import com.kontakt.sdk.android.model.Device;
 import com.kontakt.sdk.android.util.MemoryUnit;
 import com.kontakt.sdk.core.interfaces.BiConsumer;
 import com.kontakt.sdk.core.interfaces.model.IAction;
@@ -52,9 +52,9 @@ public class BeaconRangeActivity extends ListActivity {
         actionManager.setMemoryCacheSize(20, MemoryUnit.BYTES);
         actionManager.registerActionNotifier(new ActionManager.ActionNotifier() {
             @Override
-            public void onActionsFound(final List<IAction<Beacon>> actions) {
-                final IAction<Beacon> action = actions.get(0);
-                final Beacon beacon = action.getProximitySource();
+            public void onActionsFound(final List<IAction<Device>> actions) {
+                final IAction<Device> action = actions.get(0);
+                final Device beacon = action.getDevice();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

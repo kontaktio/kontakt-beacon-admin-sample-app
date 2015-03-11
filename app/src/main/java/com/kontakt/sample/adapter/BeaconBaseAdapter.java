@@ -14,6 +14,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import hugo.weaving.DebugLog;
+
 public class BeaconBaseAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
@@ -62,6 +64,7 @@ public class BeaconBaseAdapter extends BaseAdapter {
         return convertView;
     }
 
+    @DebugLog
     public void replaceWith(final List<BeaconDevice> beacons) {
         this.beacons.clear();
         this.beacons.addAll(beacons);

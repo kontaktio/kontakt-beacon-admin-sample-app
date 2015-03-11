@@ -1,4 +1,15 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
+    }
+}
+
 apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.hugo'
 
 android {
     compileSdkVersion 21
@@ -21,5 +32,6 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:21.0.+'
-    compile 'com.kontakt.sdk.android:library:1.0.5'
+    compile 'com.kontakt.sdk.android:library:1.0.6-SNAPSHOT'
+    compile 'com.jakewharton:butterknife:6.1.0'
 }
