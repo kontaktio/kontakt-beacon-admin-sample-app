@@ -134,8 +134,8 @@ public class BeaconRangeActivity extends ListActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
 
         if(! beaconManager.isBluetoothEnabled()){
             final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -146,8 +146,8 @@ public class BeaconRangeActivity extends ListActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         beaconManager.stopRanging();
         setProgressBarIndeterminateVisibility(false);
     }

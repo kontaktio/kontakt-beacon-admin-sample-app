@@ -1,7 +1,7 @@
 package com.kontakt.sample.loader;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.support.v4.content.AsyncTaskLoader;
 
 abstract class AbstractLoader<D> extends AsyncTaskLoader<D> {
 

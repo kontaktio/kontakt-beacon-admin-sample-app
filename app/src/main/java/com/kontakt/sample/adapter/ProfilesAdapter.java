@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.kontakt.sample.R;
 import com.kontakt.sdk.android.model.Profile;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class ProfilesAdapter extends BaseAdapter {
     private final List<Profile> profiles;
     private Context context;
 
-    public ProfilesAdapter(final Context context, List<Profile> profiles) {
-        this.profiles = profiles;
+    public ProfilesAdapter(final Context context) {
+        this.profiles = new ArrayList<>();
         this.context = context;
     }
 
