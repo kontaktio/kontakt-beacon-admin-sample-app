@@ -21,19 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            android:weightSum="7"
-            android:orientation="horizontal">
+            android:orientation="vertical">
             <EditText
                 android:id="@+id/proximity_uuid_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/generate_button"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/generate"
-                android:layout_weight="2"/>
+                android:text="@string/generate"/>
         </LinearLayout>
         <TextView
             android:paddingTop="10dp"

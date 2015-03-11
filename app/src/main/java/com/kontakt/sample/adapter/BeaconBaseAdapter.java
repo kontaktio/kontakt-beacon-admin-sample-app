@@ -64,7 +64,6 @@ public class BeaconBaseAdapter extends BaseAdapter {
         return convertView;
     }
 
-    @DebugLog
     public void replaceWith(final List<BeaconDevice> beacons) {
         this.beacons.clear();
         this.beacons.addAll(beacons);

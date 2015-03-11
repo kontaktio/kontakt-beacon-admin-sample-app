@@ -12,64 +12,64 @@ import com.kontakt.sdk.android.model.Config;
 
 import java.util.UUID;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 public class ConfigFormActivity extends Activity {
 
     public static final String EXTRA_RESULT_CONFIG = "extra_result_config";
 
-    private Button generateProximityUUIDButton;
-    private Button submitButton;
-    private EditText proximityUUIDText;
-    private EditText majorText;
-    private EditText minorText;
-    private EditText powerLevelText;
-    private EditText advertisingIntervalText;
-    private EditText beaconUniqueIdText;
+
+    @InjectView(R.id.generate_button)
+    Button generateProximityUUIDButton;
+
+    @InjectView(R.id.submit_button)
+    Button submitButton;
+
+    @InjectView(R.id.proximity_uuid_text)
+    EditText proximityUUIDText;
+
+    @InjectView(R.id.major_text)
+    EditText majorText;
+
+    @InjectView(R.id.minor_text)
+    EditText minorText;
+
+    @InjectView(R.id.power_level_text)
+    EditText powerLevelText;
+
+    @InjectView(R.id.advertising_interval_text)
+    EditText advertisingIntervalText;
+
+    @InjectView(R.id.beacon_unique_id_text)
+    EditText beaconUniqueIdText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.config_form_activity);
-        setUpViews();
+        ButterKnife.inject(this);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.reset(this);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    @OnClick(R.id.generate_button)
+    void onGenerateRandomProximityUUID() {
+        proximityUUIDText.setText(UUID.randomUUID().toString());
     }
 
-    private void setUpViews() {
-        submitButton = (Button) findViewById(R.id.submit_button);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Config config = createConfig();
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra(EXTRA_RESULT_CONFIG, config);
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
-            }
-        });
-
-        proximityUUIDText = (EditText) findViewById(R.id.proximity_uuid_text);
-
-        generateProximityUUIDButton = (Button) findViewById(R.id.generate_button);
-        generateProximityUUIDButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                proximityUUIDText.setText(UUID.randomUUID().toString());
-            }
-        });
-
-        majorText = (EditText) findViewById(R.id.major_text);
-        minorText = (EditText) findViewById(R.id.minor_text);
-        powerLevelText = (EditText) findViewById(R.id.power_level_text);
-        advertisingIntervalText = (EditText) findViewById(R.id.advertising_interval_text);
-        beaconUniqueIdText = (EditText) findViewById(R.id.beacon_unique_id_text);
+    @OnClick(R.id.submit_button)
+    void onSubmit() {
+        Config config = createConfig();
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(EXTRA_RESULT_CONFIG, config);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 
     private Config createConfig() {
