@@ -1,15 +1,18 @@
 package com.kontakt.sample.ui.activity;
 
 import android.app.ListActivity;
+import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
 import com.kontakt.sample.adapter.ProfilesAdapter;
+import com.kontakt.sample.loader.ProfilesLoader;
 import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.model.Profile;
 import com.kontakt.sdk.core.exception.ClientException;
@@ -19,9 +22,10 @@ import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
-public class ProfilesActivity extends ListActivity {
+public class ProfilesActivity extends ListActivity implements LoaderManager.LoaderCallbacks<List<Profile>> {
 
     public static final String EXTRA_PROFILE = "extra_profile";
 
@@ -32,11 +36,7 @@ public class ProfilesActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         profilesAdapter = new ProfilesAdapter(this, new ArrayList<Profile>());
         setListAdapter(profilesAdapter);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -54,8 +54,18 @@ public class ProfilesActivity extends ListActivity {
         finish();
     }
 
-    private interface ProfilesListener {
-        void onProfilesDelivered(final Set<Profile> profiles);
-        void onProfilesAbsent();
+    @Override
+    public Loader<List<Profile>> onCreateLoader(int id, Bundle args) {
+        return new ProfilesLoader(this);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Profile>> loader, List<Profile> data) {
+        profilesAdapter.replaceWith(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Profile>> loader) {
+        profilesAdapter.replaceWith(Collections.<Profile>emptyList());
     }
 }
