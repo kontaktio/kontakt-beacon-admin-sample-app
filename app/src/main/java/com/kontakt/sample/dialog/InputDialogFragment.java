@@ -39,7 +39,7 @@ public class InputDialogFragment extends DialogFragment {
                                                   final String message,
                                                   final String buttonText,
                                                   final Drawable icon,
-                                                  final BiConsumer submitBiConsumer) {
+                                                  final BiConsumer<DialogInterface, String> submitBiConsumer) {
         InputDialogFragment dialog = new InputDialogFragment();
         Bundle args = new Bundle();
         args.putString(TITLE_TAG, title);

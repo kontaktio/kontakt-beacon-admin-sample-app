@@ -15,17 +15,20 @@ import android.widget.Toast;
 import com.kontakt.sample.R;
 import com.kontakt.sample.dialog.ChoiceDialogFragment;
 import com.kontakt.sample.dialog.InputDialogFragment;
+import com.kontakt.sample.dialog.NumericInputDialogFragment;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
 import com.kontakt.sample.ui.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.connection.BeaconConnection;
+import com.kontakt.sdk.android.data.Validator;
 import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.model.Config;
 import com.kontakt.sdk.android.model.Profile;
 import com.kontakt.sdk.core.exception.ClientException;
 import com.kontakt.sdk.core.interfaces.BiConsumer;
+import com.kontakt.sdk.core.interfaces.Predicate;
 
 import java.util.UUID;
 
@@ -318,22 +321,24 @@ public class BeaconControllerActivity extends ActionBarActivity {
             hideView = beaconForm;
         }
 
-        showView.setAlpha(0f);
-        showView.setVisibility(View.VISIBLE);
-        showView.animate()
-                .alpha(1f)
-                .setDuration(animationDuration)
-                .setListener(null);
+        if(showView != null && hideView != null) {
+            showView.setAlpha(0f);
+            showView.setVisibility(View.VISIBLE);
+            showView.animate()
+                    .alpha(1f)
+                    .setDuration(animationDuration)
+                    .setListener(null);
 
-        hideView.animate()
-                .alpha(0f)
-                .setDuration(animationDuration)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        hideView.setVisibility(View.GONE);
-                    }
-                });
+            hideView.animate()
+                    .alpha(0f)
+                    .setDuration(animationDuration)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            hideView.setVisibility(View.GONE);
+                        }
+                    });
+        }
     }
 
     private void clearConnection() {
@@ -356,9 +361,20 @@ public class BeaconControllerActivity extends ActionBarActivity {
 
     @OnClick(R.id.major)
     void writeMajor() {
-        InputDialogFragment.newInstance("Overwrite",
+        NumericInputDialogFragment.newInstance("Overwrite",
                 getString(R.string.major),
                 getString(R.string.ok),
+                new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer target) {
+                        try {
+                            Validator.validateMajor(target);
+                            return true;
+                        } catch(Exception e) {
+                            return false;
+                        }
+                    }
+                },
                 new BiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
@@ -369,9 +385,20 @@ public class BeaconControllerActivity extends ActionBarActivity {
 
     @OnClick(R.id.minor)
     void writeMinor() {
-        InputDialogFragment.newInstance("Overwrite",
+        NumericInputDialogFragment.newInstance("Overwrite",
                 getString(R.string.minor),
                 getString(R.string.ok),
+                new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer target) {
+                        try {
+                            Validator.validateMinor(target);
+                            return true;
+                        } catch(Exception e) {
+                            return false;
+                        }
+                    }
+                },
                 new BiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
@@ -383,9 +410,20 @@ public class BeaconControllerActivity extends ActionBarActivity {
 
     @OnClick(R.id.power_level)
     void writePowerLevel() {
-        InputDialogFragment.newInstance("Overwrite",
+        NumericInputDialogFragment.newInstance("Overwrite",
                 getString(R.string.power_level),
                 getString(R.string.ok),
+                new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer target) {
+                        try {
+                            Validator.validatePowerLevel(target);
+                            return true;
+                        } catch(Exception e) {
+                            return false;
+                        }
+                    }
+                },
                 new BiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
@@ -396,9 +434,20 @@ public class BeaconControllerActivity extends ActionBarActivity {
 
     @OnClick(R.id.advertising_interval)
     void writeAdvertisingInterval() {
-        InputDialogFragment.newInstance("Overwrite",
+        NumericInputDialogFragment.newInstance("Overwrite",
                 getString(R.string.advertising_interval),
                 getString(R.string.ok),
+                new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer target) {
+                        try {
+                            Validator.validateAdvertisingInterval(target);
+                            return true;
+                        } catch(Exception e) {
+                            return false;
+                        }
+                    }
+                },
                 new BiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
