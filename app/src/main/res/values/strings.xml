@@ -58,4 +58,6 @@
     <string name="beacon_appeared">%1$s appeared</string>
     <string name="appeared_beacon_info">Device found:\n%1$s\nProximityUUID:\n%2$s\nMajor:\n%3$d\nMinor:\n%4$d\nDistance:\n%5$.1f m (%6$s)</string>
     <string name="foreground_background_scan">foreground/background scan</string>
+    <string name="syncing_config">Syncing config…</string>
+    <string name="response_status">HttpResponse status: %1$d</string>
 </resources>

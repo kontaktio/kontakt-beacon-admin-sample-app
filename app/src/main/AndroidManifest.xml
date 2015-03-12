@@ -32,6 +32,7 @@
         <activity android:name=".ui.activity.ConfigFormActivity"/>
 
         <service android:name=".service.BackgroundScanService" android:exported="false"/>
+        <service android:name=".service.SyncService" android:exported="false"/>
         <service android:name="com.kontakt.sdk.android.manager.BeaconService" android:exported="false"/>
         <service android:name="com.kontakt.sdk.android.manager.BeaconServiceL" android:exported="false"/>
         <service android:name="com.kontakt.sdk.android.manager.ActionService" android:exported="false"/>

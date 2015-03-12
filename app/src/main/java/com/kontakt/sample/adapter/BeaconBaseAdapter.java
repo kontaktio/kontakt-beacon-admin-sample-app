@@ -14,8 +14,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import hugo.weaving.DebugLog;
-
 public class BeaconBaseAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;

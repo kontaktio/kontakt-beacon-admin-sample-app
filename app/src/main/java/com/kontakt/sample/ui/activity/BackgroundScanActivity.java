@@ -11,9 +11,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.broadcast.AbstractBroadcastHandler;

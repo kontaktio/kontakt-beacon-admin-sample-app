@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +16,15 @@ import com.kontakt.sample.dialog.ChoiceDialogFragment;
 import com.kontakt.sample.dialog.InputDialogFragment;
 import com.kontakt.sample.dialog.NumericInputDialogFragment;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
+import com.kontakt.sample.service.SyncService;
 import com.kontakt.sample.ui.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.connection.BeaconConnection;
 import com.kontakt.sdk.android.data.Validator;
 import com.kontakt.sdk.android.device.BeaconDevice;
-import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.model.Config;
 import com.kontakt.sdk.android.model.Profile;
-import com.kontakt.sdk.core.exception.ClientException;
 import com.kontakt.sdk.core.interfaces.BiConsumer;
 import com.kontakt.sdk.core.interfaces.Predicate;
 
@@ -508,6 +506,7 @@ public class BeaconControllerActivity extends BaseActivity {
     void applyConfig() {
         startActivityForResult(new Intent(this, ConfigFormActivity.class), REQUEST_CODE_OBTAIN_CONFIG);
     }
+
     private void onApplyConfig(final Config config) {
         beaconConnection.applyConfig(config, new BeaconConnection.WriteBatchListener<Config>() {
             @Override
@@ -518,33 +517,12 @@ public class BeaconControllerActivity extends BaseActivity {
             }
 
             @Override
-            public void onWriteBatchFinish(final Config batchHolder) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final KontaktApiClient apiClient = KontaktApiClient.newInstance();
-                        try {
-                            apiClient.applyConfig(batchHolder);
-                        } catch (ClientException e) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(BeaconControllerActivity.this,
-                                            "Config applied to Beacon but not synced",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } finally {
-                            apiClient.close();
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressDialog.dismiss();
-                                }
-                            });
-                        }
-                    }
-                }).start();
+            public void onWriteBatchFinish(final Config batch) {
+                progressDialog.dismiss();
+                final Intent serviceIntent = new Intent(BeaconControllerActivity.this, SyncService.class);
+                serviceIntent.putExtra(SyncService.EXTRA_REQUEST_CODE, SyncService.REQUEST_SYNC_CONFIG);
+                serviceIntent.putExtra(SyncService.EXTRA_ITEM, batch);
+                startService(serviceIntent);
             }
 
             @Override
