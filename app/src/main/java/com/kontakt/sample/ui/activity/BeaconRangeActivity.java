@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.widget.ListView;
@@ -31,11 +34,22 @@ import com.kontakt.sdk.core.interfaces.model.IAction;
 
 import java.util.List;
 
-public class BeaconRangeActivity extends ListActivity {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+
+public class BeaconRangeActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
 
     private static final int REQUEST_CODE_CONNECT_TO_DEVICE = 2;
+
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @InjectView(R.id.device_list)
+    ListView deviceList;
 
     private BeaconBaseAdapter adapter;
     private BeaconManager beaconManager;
@@ -44,8 +58,10 @@ public class BeaconRangeActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
+        setContentView(R.layout.beacon_range_activity);
+        ButterKnife.inject(this);
+        setUpActionBar(toolbar);
+        setUpActionBarTitle(getString(R.string.range_beacons));
         adapter = new BeaconBaseAdapter(this);
 
         actionManager = ActionManager.newInstance(this);
@@ -130,7 +146,7 @@ public class BeaconRangeActivity extends ListActivity {
             }
         });
 
-        setListAdapter(adapter);
+        deviceList.setAdapter(adapter);
     }
 
     @Override
@@ -161,27 +177,29 @@ public class BeaconRangeActivity extends ListActivity {
                 .performQuietly();
         actionManager = null;
         beaconManager = null;
+        ButterKnife.reset(this);
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    @OnItemClick(R.id.device_list)
+    void onListItemClick(final int position) {
         final BeaconDevice beacon = (BeaconDevice) adapter.getItem(position);
-        PasswordDialogFragment.newInstance(getString(R.string.format_connect, beacon.getAddress()),
-                getString(R.string.password),
-                getString(R.string.connect),
-                new BiConsumer<DialogInterface, String>() {
-                    @Override
-                    public void accept(DialogInterface dialogInterface, String password) {
+        if(beacon != null) {
+            PasswordDialogFragment.newInstance(getString(R.string.format_connect, beacon.getAddress()),
+                    getString(R.string.password),
+                    getString(R.string.connect),
+                    new BiConsumer<DialogInterface, String>() {
+                        @Override
+                        public void accept(DialogInterface dialogInterface, String password) {
 
-                        beacon.setPassword(password.getBytes());
+                            beacon.setPassword(password.getBytes());
 
-                        final Intent intent = new Intent(BeaconRangeActivity.this, BeaconControllerActivity.class);
-                        intent.putExtra(BeaconControllerActivity.EXTRA_BEACON_DEVICE, beacon);
+                            final Intent intent = new Intent(BeaconRangeActivity.this, BeaconControllerActivity.class);
+                            intent.putExtra(BeaconControllerActivity.EXTRA_BEACON_DEVICE, beacon);
 
-                        startActivityForResult(intent, REQUEST_CODE_CONNECT_TO_DEVICE);
-                    }
-                }).show(getFragmentManager(), "dialog");
+                            startActivityForResult(intent, REQUEST_CODE_CONNECT_TO_DEVICE);
+                        }
+                    }).show(getFragmentManager(), "dialog");
+        }
     }
 
     @Override
@@ -192,7 +210,6 @@ public class BeaconRangeActivity extends ListActivity {
             } else {
                 final String bluetoothNotEnabledInfo = getString(R.string.bluetooth_not_enabled);
                 Toast.makeText(BeaconRangeActivity.this, bluetoothNotEnabledInfo, Toast.LENGTH_LONG).show();
-                getActionBar().setSubtitle(bluetoothNotEnabledInfo);
             }
 
             return;

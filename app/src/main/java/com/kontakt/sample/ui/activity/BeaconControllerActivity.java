@@ -36,7 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class BeaconControllerActivity extends ActionBarActivity {
+public class BeaconControllerActivity extends BaseActivity {
     public static final String EXTRA_BEACON_DEVICE = "extra_beacon_device";
 
     public static final String EXTRA_FAILURE_MESSAGE = "extra_failure_message";
@@ -103,22 +103,13 @@ public class BeaconControllerActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.beacon_activity);
         ButterKnife.inject(this);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        setUpActionBar(toolbar);
 
         beaconForm.setVisibility(View.GONE);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         setUpView();
         beacon = getIntent().getParcelableExtra(EXTRA_BEACON_DEVICE);
-        setTitle(beacon.getName());
+        setUpActionBarTitle(String.format("%s (%s)", beacon.getName(), beacon.getAddress()));
 
         beaconConnection = BeaconConnection.newInstance(this, beacon, createConnectionListener());
     }

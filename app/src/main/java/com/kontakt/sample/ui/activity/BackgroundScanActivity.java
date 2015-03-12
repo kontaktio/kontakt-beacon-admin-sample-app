@@ -24,7 +24,10 @@ import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.util.Logger;
 import com.kontakt.sdk.core.util.Preconditions;
 
-public class BackgroundScanActivity extends ActionBarActivity {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+public class BackgroundScanActivity extends BaseActivity {
 
     public static final String TAG = BackgroundScanActivity.class.getSimpleName();
 
@@ -33,14 +36,17 @@ public class BackgroundScanActivity extends ActionBarActivity {
 
     private static final IntentFilter SCAN_INTENT_FILTER;
 
-    private ServiceConnection serviceConnection;
-
-    private Messenger serviceMessenger;
-
     static {
         SCAN_INTENT_FILTER = new IntentFilter(BackgroundScanService.BROADCAST);
         SCAN_INTENT_FILTER.setPriority(2);
     }
+
+    private ServiceConnection serviceConnection;
+
+    private Messenger serviceMessenger;
+
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
 
     private final BroadcastReceiver scanReceiver = new ForegrondScanReceiver();
 
@@ -48,18 +54,10 @@ public class BackgroundScanActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.background_scan_activity);
+        ButterKnife.inject(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        setUpActionBar(toolbar);
+        setUpActionBarTitle(getString(R.string.foreground_background_scan));
 
         serviceConnection = createServiceConnection();
 
@@ -86,6 +84,7 @@ public class BackgroundScanActivity extends ActionBarActivity {
         serviceMessenger = null;
         unbindService(serviceConnection);
         serviceConnection = null;
+        ButterKnife.reset(this);
     }
 
     private void bindServiceAndStartMonitoring() {

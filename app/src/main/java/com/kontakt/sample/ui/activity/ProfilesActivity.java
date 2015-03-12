@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 
-public class ProfilesActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<List<Profile>> {
+public class ProfilesActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<List<Profile>> {
 
     public static final String EXTRA_PROFILE = "extra_profile";
 
@@ -38,7 +38,8 @@ public class ProfilesActivity extends ActionBarActivity implements LoaderManager
         setContentView(R.layout.profiles_activity);
         ButterKnife.inject(this);
 
-        toolbar.setTitle(getString(R.string.profiles));
+        setUpActionBar(toolbar);
+        setUpActionBarTitle(getString(R.string.profiles));
 
         profilesAdapter = new ProfilesAdapter(this);
         setListAdapter(profilesAdapter);

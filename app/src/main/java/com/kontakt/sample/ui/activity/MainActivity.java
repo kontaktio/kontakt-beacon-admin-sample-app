@@ -8,47 +8,43 @@ import android.view.View;
 
 import com.kontakt.sample.R;
 
-public class MainActivity extends ActionBarActivity {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
+public class MainActivity extends BaseActivity {
+
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        ButterKnife.inject(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        setUpListeners();
+        setUpActionBar(toolbar);
+        setUpActionBarTitle(getString(R.string.app_name));
     }
 
-    private void setUpListeners() {
-        findViewById(R.id.range_beacons).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, BeaconRangeActivity.class));
-            }
-        });
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.reset(this);
+    }
 
-        findViewById(R.id.monitor_beacons).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, BeaconMonitorActivity.class));
-            }
-        });
+    @OnClick(R.id.range_beacons)
+    void startRanging() {
+        startActivity(new Intent(MainActivity.this, BeaconRangeActivity.class));
+    }
 
-        findViewById(R.id.background_scan).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
-            }
-        });
+    @OnClick(R.id.monitor_beacons)
+    void startMonitoring() {
+        startActivity(new Intent(MainActivity.this, BeaconMonitorActivity.class));
+    }
+
+    @OnClick(R.id.background_scan)
+    void startForegroundBackgroundScan() {
+        startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
     }
 }

@@ -5,7 +5,7 @@
 
     <style name="Theme.Base" parent="Theme.AppCompat.Light">
         <item name="windowActionBar">false</item>
-        <item name="colorPrimary">@android:color/background_dark</item>
+        <item name="colorPrimary">@android:color/darker_gray</item>
         <item name="colorPrimaryDark">@android:color/darker_gray</item>
         <item name="android:windowNoTitle">true</item>
     </style>

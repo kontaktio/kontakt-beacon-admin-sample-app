@@ -5,10 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Window;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
@@ -26,8 +23,11 @@ import com.kontakt.sdk.android.manager.BeaconManager;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
-public class BeaconMonitorActivity extends ActionBarActivity {
+
+public class BeaconMonitorActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
 
@@ -35,24 +35,19 @@ public class BeaconMonitorActivity extends ActionBarActivity {
 
     private BeaconManager beaconManager;
 
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @InjectView(R.id.list)
+    ExpandableListView list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.beacon_monitor_list_activity);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        final ExpandableListView list = (ExpandableListView) findViewById(R.id.list);
+        ButterKnife.inject(this);
+        setUpActionBar(toolbar);
+        setUpActionBarTitle(getString(R.string.monitor_beacons));
 
         adapter = new MonitorSectionAdapter(this);
 
@@ -209,6 +204,7 @@ public class BeaconMonitorActivity extends ActionBarActivity {
         super.onDestroy();
         beaconManager.disconnect();
         beaconManager = null;
+        ButterKnife.reset(this);
     }
 
     @Override
