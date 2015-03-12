@@ -29,7 +29,11 @@ import com.kontakt.sdk.core.interfaces.BiConsumer;
 
 import java.util.UUID;
 
-public class BeaconControllerActivity extends ActionBarActivity implements View.OnClickListener {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
+public class BeaconControllerActivity extends ActionBarActivity {
     public static final String EXTRA_BEACON_DEVICE = "extra_beacon_device";
 
     public static final String EXTRA_FAILURE_MESSAGE = "extra_failure_message";
@@ -42,21 +46,50 @@ public class BeaconControllerActivity extends ActionBarActivity implements View.
 
     private BeaconConnection beaconConnection;
 
-    private ViewGroup beaconForm;
-    private Entry proximityUuidEntry;
-    private Entry majorEntry;
-    private Entry minorEntry;
-    private Entry powerLevelEntry;
-    private Entry advertisingIntervalEntry;
-    private Entry batteryLevelEntry;
-    private Entry manufacturerNameEntry;
-    private Entry modelNameEntry;
-    private Entry firmwareRevisionEntry;
-    private Entry hardwareRevisionEntry;
-    private Entry acceptProfileEntry;
-    private Entry applyConfigEntry;
+    @InjectView(R.id.beacon_form)
+    ViewGroup beaconForm;
 
-    private View progressBar;
+    @InjectView(R.id.proximity_uuid)
+    Entry proximityUuidEntry;
+
+    @InjectView(R.id.major)
+    Entry majorEntry;
+
+    @InjectView(R.id.minor)
+    Entry minorEntry;
+
+    @InjectView(R.id.power_level)
+    Entry powerLevelEntry;
+
+    @InjectView(R.id.advertising_interval)
+    Entry advertisingIntervalEntry;
+
+    @InjectView(R.id.battery_level)
+    Entry batteryLevelEntry;
+
+    @InjectView(R.id.manufacturer_name)
+    Entry manufacturerNameEntry;
+
+    @InjectView(R.id.model_name)
+    Entry modelNameEntry;
+
+    @InjectView(R.id.firmware_revision)
+    Entry firmwareRevisionEntry;
+
+    @InjectView(R.id.hardware_revision)
+    Entry hardwareRevisionEntry;
+
+    @InjectView(R.id.accept_profile)
+    Entry acceptProfileEntry;
+
+    @InjectView(R.id.apply_config)
+    Entry applyConfigEntry;
+
+    @InjectView(R.id.loading_spinner)
+    View progressBar;
+
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
 
     private ProgressDialog progressDialog;
 
@@ -66,8 +99,8 @@ public class BeaconControllerActivity extends ActionBarActivity implements View.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.beacon_activity);
+        ButterKnife.inject(this);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -78,9 +111,7 @@ public class BeaconControllerActivity extends ActionBarActivity implements View.
             }
         });
 
-        beaconForm = (ViewGroup) findViewById(R.id.beacon_form);
         beaconForm.setVisibility(View.GONE);
-        progressBar = findViewById(R.id.loading_spinner);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         setUpView();
         beacon = getIntent().getParcelableExtra(EXTRA_BEACON_DEVICE);
@@ -113,6 +144,7 @@ public class BeaconControllerActivity extends ActionBarActivity implements View.
     protected void onDestroy() {
         clearConnection();
         super.onDestroy();
+        ButterKnife.reset(this);
     }
 
     @Override
@@ -262,40 +294,17 @@ public class BeaconControllerActivity extends ActionBarActivity implements View.
     }
 
     private void setUpView() {
-        proximityUuidEntry = (Entry) beaconForm.findViewById(R.id.proximity_uuid);
-        majorEntry = (Entry) beaconForm.findViewById(R.id.major);
-        minorEntry = (Entry) beaconForm.findViewById(R.id.minor);
-        powerLevelEntry = (Entry) beaconForm.findViewById(R.id.power_level);
-        advertisingIntervalEntry = (Entry) beaconForm.findViewById(R.id.advertising_interval);
-        modelNameEntry = (Entry) beaconForm.findViewById(R.id.model_name);
-        batteryLevelEntry = (Entry) beaconForm.findViewById(R.id.battery_level);
         batteryLevelEntry.setEnabled(false);
 
         acceptProfileEntry = (Entry) beaconForm.findViewById(R.id.accept_profile);
         applyConfigEntry = (Entry) beaconForm.findViewById(R.id.apply_config);
 
-        manufacturerNameEntry = (Entry) beaconForm.findViewById(R.id.manufacturer_name);
         manufacturerNameEntry.setEnabled(false);
 
-        firmwareRevisionEntry = (Entry) beaconForm.findViewById(R.id.firmware_revision);
         firmwareRevisionEntry.setEnabled(false);
 
-        hardwareRevisionEntry = (Entry) beaconForm.findViewById(R.id.hardware_revision);
         hardwareRevisionEntry.setEnabled(false);
-
-        proximityUuidEntry.setOnClickListener(this);
-        majorEntry.setOnClickListener(this);
-        acceptProfileEntry.setOnClickListener(this);
-        applyConfigEntry.setOnClickListener(this);
-        minorEntry.setOnClickListener(this);
-        powerLevelEntry.setOnClickListener(this);
-        advertisingIntervalEntry.setOnClickListener(this);
-        modelNameEntry.setOnClickListener(this);
-        beaconForm.findViewById(R.id.set_password).setOnClickListener(this);
-        beaconForm.findViewById(R.id.reset_device).setOnClickListener(this);
-        beaconForm.findViewById(R.id.default_settings).setOnClickListener(this);
     }
-
     private void setBeaconFormVisible(final boolean state) {
 
         final View showView;
@@ -332,129 +341,133 @@ public class BeaconControllerActivity extends ActionBarActivity implements View.
         beaconConnection = null;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-
-            case R.id.proximity_uuid:
-                InputDialogFragment.newInstance("Overwrite",
-                        getString(R.string.proximity_uuid),
-                        getString(R.string.ok),
-                        new BiConsumer<DialogInterface, String>() {
-                            @Override
-                            public void accept(DialogInterface dialogInterface, String result) {
-                                onOverwriteProximityUUID(UUID.fromString(result));
-                            }
-                        }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-                break;
-
-            case R.id.major:
-                InputDialogFragment.newInstance("Overwrite",
-                        getString(R.string.major),
-                        getString(R.string.ok),
-                        new BiConsumer<DialogInterface, String>() {
-                            @Override
-                            public void accept(DialogInterface dialogInterface, String result) {
-                                onOverwriteMajor(Integer.parseInt(result));
-                            }
-                        }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-                break;
-
-            case R.id.minor:
-                InputDialogFragment.newInstance("Overwrite",
-                        getString(R.string.minor),
-                        getString(R.string.ok),
-                        new BiConsumer<DialogInterface, String>() {
-                            @Override
-                            public void accept(DialogInterface dialogInterface, String result) {
-                                onOverwriteMinor(Integer.parseInt(result));
-                            }
-                        }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-                break;
-
-            case R.id.power_level:
-                InputDialogFragment.newInstance("Overwrite",
-                        getString(R.string.power_level),
-                        getString(R.string.ok),
-                        new BiConsumer<DialogInterface, String>() {
-                            @Override
-                            public void accept(DialogInterface dialogInterface, String result) {
-                                onOverwritePowerLevel(Integer.parseInt(result));
-                            }
-                        }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-                break;
-
-            case R.id.advertising_interval:
-                InputDialogFragment.newInstance("Overwrite",
-                        getString(R.string.advertising_interval),
-                        getString(R.string.ok),
-                        new BiConsumer<DialogInterface, String>() {
-                            @Override
-                            public void accept(DialogInterface dialogInterface, String result) {
-                                onOverwriteAdvertisingInterval(Long.parseLong(result));
-                            }
-                        }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-                break;
-
-            case R.id.set_password:
-                PasswordDialogFragment.newInstance("Overwrite",
-                        getString(R.string.set_password),
-                        getString(R.string.ok),
-                        new BiConsumer<DialogInterface, String>() {
-                            @Override
-                            public void accept(DialogInterface dialogInterface, String result) {
-                                onOverwritePassword(result);
-                            }
-                        }
-                ).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-                break;
-
-            case R.id.model_name:
-                InputDialogFragment.newInstance("Overwrite",
-                        getString(R.string.model_name),
-                        getString(R.string.ok),
-                        new BiConsumer<DialogInterface, String>() {
-                            @Override
-                            public void accept(DialogInterface dialogInterface, String result) {
-                                onOverwriteModelName(result);
-                            }
-                        }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-                break;
-
-            case R.id.reset_device:
-                ChoiceDialogFragment.newInstance("Reset device",
-                        "Are you sure you want to reset beacon?",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                onResetDevice();
-                            }
-                        }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-                break;
-
-            case R.id.default_settings:
-                InputDialogFragment.newInstance("Restore default settings",
-                        "Master password",
-                        "Restore",
-                        new BiConsumer<DialogInterface, String>() {
-                            @Override
-                            public void accept(DialogInterface dialogInterface, String masterPassword) {
-                                onRestoreDefaultSettings(masterPassword);
-                            }
-                        }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-                break;
-
-            case R.id.accept_profile:
-                startActivityForResult(new Intent(this, ProfilesActivity.class), REQUEST_CODE_OBTAIN_PROFILE);
-                break;
-            case R.id.apply_config:
-                startActivityForResult(new Intent(this, ConfigFormActivity.class), REQUEST_CODE_OBTAIN_CONFIG);
-                break;
-            default:
-                break;
-        }
+    @OnClick(R.id.proximity_uuid)
+    void writeProximityUUID() {
+        InputDialogFragment.newInstance("Overwrite",
+                getString(R.string.proximity_uuid),
+                getString(R.string.ok),
+                new BiConsumer<DialogInterface, String>() {
+                    @Override
+                    public void accept(DialogInterface dialogInterface, String result) {
+                        onOverwriteProximityUUID(UUID.fromString(result));
+                    }
+                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
+    @OnClick(R.id.major)
+    void writeMajor() {
+        InputDialogFragment.newInstance("Overwrite",
+                getString(R.string.major),
+                getString(R.string.ok),
+                new BiConsumer<DialogInterface, String>() {
+                    @Override
+                    public void accept(DialogInterface dialogInterface, String result) {
+                        onOverwriteMajor(Integer.parseInt(result));
+                    }
+                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+    }
+
+    @OnClick(R.id.minor)
+    void writeMinor() {
+        InputDialogFragment.newInstance("Overwrite",
+                getString(R.string.minor),
+                getString(R.string.ok),
+                new BiConsumer<DialogInterface, String>() {
+                    @Override
+                    public void accept(DialogInterface dialogInterface, String result) {
+                        onOverwriteMinor(Integer.parseInt(result));
+                    }
+                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+
+    }
+
+    @OnClick(R.id.power_level)
+    void writePowerLevel() {
+        InputDialogFragment.newInstance("Overwrite",
+                getString(R.string.power_level),
+                getString(R.string.ok),
+                new BiConsumer<DialogInterface, String>() {
+                    @Override
+                    public void accept(DialogInterface dialogInterface, String result) {
+                        onOverwritePowerLevel(Integer.parseInt(result));
+                    }
+                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+    }
+
+    @OnClick(R.id.advertising_interval)
+    void writeAdvertisingInterval() {
+        InputDialogFragment.newInstance("Overwrite",
+                getString(R.string.advertising_interval),
+                getString(R.string.ok),
+                new BiConsumer<DialogInterface, String>() {
+                    @Override
+                    public void accept(DialogInterface dialogInterface, String result) {
+                        onOverwriteAdvertisingInterval(Long.parseLong(result));
+                    }
+                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+    }
+
+    @OnClick(R.id.set_password)
+    void writePassword() {
+        PasswordDialogFragment.newInstance("Overwrite",
+                getString(R.string.set_password),
+                getString(R.string.ok),
+                new BiConsumer<DialogInterface, String>() {
+                    @Override
+                    public void accept(DialogInterface dialogInterface, String result) {
+                        onOverwritePassword(result);
+                    }
+                }
+        ).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+    }
+
+    @OnClick(R.id.model_name)
+    void writeModelName() {
+        InputDialogFragment.newInstance("Overwrite",
+                getString(R.string.model_name),
+                getString(R.string.ok),
+                new BiConsumer<DialogInterface, String>() {
+                    @Override
+                    public void accept(DialogInterface dialogInterface, String result) {
+                        onOverwriteModelName(result);
+                    }
+                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+    }
+
+    @OnClick(R.id.reset_device)
+    void resetDevice() {
+        ChoiceDialogFragment.newInstance("Reset device",
+                "Are you sure you want to reset beacon?",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onResetDevice();
+                    }
+                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+    }
+
+    @OnClick(R.id.default_settings)
+    void restoreDefaultSettings() {
+        InputDialogFragment.newInstance("Restore default settings",
+                "Master password",
+                "Restore",
+                new BiConsumer<DialogInterface, String>() {
+                    @Override
+                    public void accept(DialogInterface dialogInterface, String masterPassword) {
+                        onRestoreDefaultSettings(masterPassword);
+                    }
+                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+    }
+
+    @OnClick(R.id.accept_profile)
+    void acceptProfile() {
+        startActivityForResult(new Intent(this, ProfilesActivity.class), REQUEST_CODE_OBTAIN_PROFILE);
+    }
+
+    @OnClick(R.id.apply_config)
+    void applyConfig() {
+        startActivityForResult(new Intent(this, ConfigFormActivity.class), REQUEST_CODE_OBTAIN_CONFIG);
+    }
     private void onApplyConfig(final Config config) {
         beaconConnection.applyConfig(config, new BeaconConnection.WriteBatchListener<Config>() {
             @Override
