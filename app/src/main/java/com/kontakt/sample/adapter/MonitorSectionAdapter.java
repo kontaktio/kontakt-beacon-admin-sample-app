@@ -138,7 +138,7 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
         childViewHolder.minorTextView.setText(String.format("Minor: %d", device.getMinor()));
         childViewHolder.rssiTextView.setText(String.format("Rssi: %f", device.getRssi()));
         childViewHolder.txPowerTextView.setText(String.format("Tx Power: %d", device.getTxPower()));
-        childViewHolder.beaconUniqueIdTextView.setText(String.format("Beacon Unique Id: %s", device.getBeaconUniqueId()));
+        childViewHolder.beaconUniqueIdTextView.setText(String.format("Beacon Unique Id: %s", device.getUniqueId()));
         childViewHolder.firmwareVersionTextView.setText(String.format("Firmware version: %d", device.getFirmwareVersion()));
         childViewHolder.proximityTextView.setText(String.format("Proximity: %s", device.getProximity()));
 

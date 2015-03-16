@@ -32,6 +32,6 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:21.0.+'
-    compile 'com.kontakt.sdk.android:library:1.0.6-SNAPSHOT'
+    compile 'com.kontakt.sdk.android:library:1.0.6'
     compile 'com.jakewharton:butterknife:6.1.0'
 }

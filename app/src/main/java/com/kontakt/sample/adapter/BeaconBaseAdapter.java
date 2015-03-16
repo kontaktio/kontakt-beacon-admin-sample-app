@@ -56,7 +56,7 @@ public class BeaconBaseAdapter extends BaseAdapter {
         viewHolder.txPowerTextView.setText(String.format("Tx Power : %d", beacon.getTxPower()));
         viewHolder.proximityTextView.setText(String.format("Proximity: %s", beacon.getProximity().name()));
         viewHolder.firmwareVersionTextView.setText(String.format("Firmware: %d", beacon.getFirmwareVersion()));
-        viewHolder.beaconUniqueIdTextView.setText(String.format("Beacon Unique Id: %s", beacon.getBeaconUniqueId()));
+        viewHolder.beaconUniqueIdTextView.setText(String.format("Beacon Unique Id: %s", beacon.getUniqueId()));
         viewHolder.proximityUUIDTextView.setText(String.format("Proximity UUID: %s", beacon.getProximityUUID().toString()));
 
         return convertView;
