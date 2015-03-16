@@ -5,3 +5,6 @@
 /build/*
 *.iml
 gradle/*
+app/mapping.txt
+app/seeds.txt
+app/unused.txt

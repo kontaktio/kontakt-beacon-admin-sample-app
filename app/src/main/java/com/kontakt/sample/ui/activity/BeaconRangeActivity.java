@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.BeaconBaseAdapter;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
+import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.connection.OnServiceBoundListener;
@@ -150,6 +151,8 @@ public class BeaconRangeActivity extends BaseActivity {
         if(! beaconManager.isBluetoothEnabled()){
             final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
+        } else if(beaconManager.isConnected()) {
+            startRanging();
         } else {
             connect();
         }
@@ -159,7 +162,6 @@ public class BeaconRangeActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         beaconManager.stopRanging();
-        setProgressBarIndeterminateVisibility(false);
     }
 
     @Override
@@ -218,8 +220,15 @@ public class BeaconRangeActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void startRanging() {
+        try {
+            beaconManager.startRanging();
+        } catch (RemoteException e) {
+            Utils.showToast(this, e.getMessage());
+        }
+    }
+
     private void connect() {
-        setProgressBarIndeterminateVisibility(true);
         try {
             ServiceConnectionChain.start()
                     .connect(actionManager, new OnServiceBoundListener() {
@@ -247,7 +256,6 @@ public class BeaconRangeActivity extends BaseActivity {
                         }
                     })
                     .perform();
-            BeaconRangeActivity.this.setProgressBarIndeterminateVisibility(true);
         } catch (RemoteException e) {
             Toast.makeText(BeaconRangeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }

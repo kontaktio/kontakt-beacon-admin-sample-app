@@ -175,19 +175,7 @@ public class BeaconMonitorActivity extends BaseActivity {
             final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
         } else if(beaconManager.isConnected()) {
-            try {
-                beaconManager.startMonitoring(); // starts monitoring everywhere
-
-                /*final Set<Region> regionSet = new HashSet<Region>();
-                                regionSet.add(new Region(UUID.randomUUID(), 333, 333, "My region"));
-                                beaconManager.startMonitoring(regionSet);
-
-                                You can monitor Beacons by specifying Region Set as it was
-                                in previous versions of kontakt.io's Android SDK
-                                */
-            } catch (RemoteException e) {
-                Utils.showToast(this, getString(R.string.unexpected_error_monitoring_start));
-            }
+            startMonitoring();
         } else {
             connect();
         }
@@ -222,6 +210,22 @@ public class BeaconMonitorActivity extends BaseActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void startMonitoring() {
+        try {
+            beaconManager.startMonitoring(); // starts monitoring everywhere
+
+                /*final Set<Region> regionSet = new HashSet<Region>();
+                                regionSet.add(new Region(UUID.randomUUID(), 333, 333, "My region"));
+                                beaconManager.startMonitoring(regionSet);
+
+                                You can monitor Beacons by specifying Region Set as it was
+                                in previous versions of kontakt.io's Android SDK
+                                */
+        } catch (RemoteException e) {
+            Utils.showToast(this, getString(R.string.unexpected_error_monitoring_start));
+        }
     }
 
     private void connect() {

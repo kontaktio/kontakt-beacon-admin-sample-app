@@ -1,17 +1,36 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in /usr/local/share/sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# kontakt.io SDK configuration
+-keep class com.kontakt.sdk.android.** {
+    *;
+}
+-keep public class com.kontakt.sdk.core.data.** {
+    *;
+}
 
-# Add any project specific keep options here:
+# kontakt.io SDK configuration
+# From the very beginning of Android SDK existence
+# there was also a Core SDK for Java SE providing REST API interaction only.
+# To some extent the Android SDK derives some classes from the Core SDK.
+# However, at some point the Android-specific functionalities were introduced
+# e.g. implementing Parcelable interface in models.
+# For the packages below, both of which come from the Core SDK
+# there are Android equivalents. Thus, we do not care
+# about them and allow Proguard to take care of them during shrinking process.
+-dontwarn com.kontakt.sdk.core.http.**
+-dontwarn com.kontakt.sdk.core.data.changelog.**
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# ButterKnife configuration copied from the official website http://jakewharton.github.io/butterknife/
+-printmapping mapping.txt
+-printseeds seeds.txt
+-printusage unused.txt
+
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewInjector { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
