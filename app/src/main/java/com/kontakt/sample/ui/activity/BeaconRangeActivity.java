@@ -21,6 +21,7 @@ import com.kontakt.sdk.android.connection.ServiceConnectionChain;
 import com.kontakt.sdk.android.data.RssiCalculators;
 import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
+import com.kontakt.sdk.android.factory.Filters;
 import com.kontakt.sdk.android.manager.ActionManager;
 import com.kontakt.sdk.android.manager.BeaconManager;
 import com.kontakt.sdk.android.model.Device;
@@ -29,6 +30,7 @@ import com.kontakt.sdk.core.interfaces.BiConsumer;
 import com.kontakt.sdk.core.interfaces.model.IAction;
 
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -48,7 +50,6 @@ public class BeaconRangeActivity extends BaseActivity {
 
     private BeaconBaseAdapter adapter;
     private BeaconManager beaconManager;
-    private ActionManager actionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,34 +60,11 @@ public class BeaconRangeActivity extends BaseActivity {
         setUpActionBarTitle(getString(R.string.range_beacons));
         adapter = new BeaconBaseAdapter(this);
 
-        actionManager = ActionManager.newInstance(this);
-        actionManager.setMemoryCacheSize(20, MemoryUnit.BYTES);
-        actionManager.registerActionNotifier(new ActionManager.ActionNotifier() {
-            @Override
-            public void onActionsFound(final List<IAction<Device>> actions) {
-                final IAction<Device> action = actions.get(0);
-                final Device beacon = action.getDevice();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final String info = String.format("%d Actions found for beacon:\nID: %s\nMajor: %d\nMinor: %d\nProximity UUID: %s\nProximity: %s",
-                                actions.size(),
-                                beacon.getId().toString(),
-                                beacon.getMajor(),
-                                beacon.getMinor(),
-                                beacon.getProximityUUID().toString(),
-                                action.getProximity().name());
-                        Toast.makeText(BeaconRangeActivity.this, info, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-
         beaconManager = BeaconManager.newInstance(this);
 
         beaconManager.setScanMode(BeaconManager.SCAN_MODE_BALANCED); // Works only for Android L OS version
 
-        beaconManager.setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5)); //Calculate rssi value basing on arithmethic mean of 5 last notified values
+        beaconManager.setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5)); //Calculate rssi value basing on arithmethic mean basing on 5 last notified values
 /*
         beaconManager.setRssiCalculator(new RssiCalculators.CustomRssiCalculator() { //Provide your own Rssi Calculator to estimate manipulate Rssi value
             @Override                                                                  //and thus Proximity from Beacon device
@@ -167,11 +145,7 @@ public class BeaconRangeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ServiceConnectionChain.start()
-                .disconnect(actionManager)
-                .disconnect(beaconManager)
-                .performQuietly();
-        actionManager = null;
+        beaconManager.disconnect();
         beaconManager = null;
         ButterKnife.reset(this);
     }
@@ -230,32 +204,12 @@ public class BeaconRangeActivity extends BaseActivity {
 
     private void connect() {
         try {
-            ServiceConnectionChain.start()
-                    .connect(actionManager, new OnServiceBoundListener() {
-                        @Override
-                        public void onServiceBound() {
-                            beaconManager.setActionController(actionManager.getActionController());
-                        }
-                    })
-                    .connect(beaconManager, new OnServiceBoundListener() {
-                        @Override
-                        public void onServiceBound() {
-                            try {
-                                beaconManager.startRanging(); //Starts ranging everywhere
-
-                                /*final Set<Region> regionSet = new HashSet<Region>();
-                                regionSet.add(new Region(UUID.randomUUID(), 333, 333, "My region"));
-                                beaconManager.startRanging(regionSet);
-
-                                You can range Beacons by specifying Region Set as it was
-                                in previous versions of kontakt.io's Android SDK
-                                */
-                            } catch (RemoteException e) {
-                                Toast.makeText(BeaconRangeActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    })
-                    .perform();
+            beaconManager.connect(new OnServiceBoundListener() {
+                @Override
+                public void onServiceBound() throws RemoteException {
+                    beaconManager.startRanging();
+                }
+            });
         } catch (RemoteException e) {
             Toast.makeText(BeaconRangeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
