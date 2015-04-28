@@ -1,5 +1,7 @@
 package com.kontakt.sample.ui.activity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,8 @@ import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
 
+    private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 121;
+
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -23,6 +27,17 @@ public class MainActivity extends BaseActivity {
 
         setUpActionBar(toolbar);
         setUpActionBarTitle(getString(R.string.app_name));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == REQUEST_CODE_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
+            startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -43,6 +58,12 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.background_scan)
     void startForegroundBackgroundScan() {
-        startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+        if(bluetoothManager.getAdapter().isEnabled()) {
+            startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
+        } else {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
+        }
     }
 }

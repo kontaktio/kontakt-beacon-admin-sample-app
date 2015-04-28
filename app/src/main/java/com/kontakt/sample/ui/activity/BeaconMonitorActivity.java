@@ -177,14 +177,16 @@ public class BeaconMonitorActivity extends BaseActivity {
         } else if(beaconManager.isConnected()) {
             startMonitoring();
         } else {
-            connect();
+            connectAndStartMonitoring();
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        beaconManager.stopMonitoring();
+        if(beaconManager.isConnected()) {
+            beaconManager.stopMonitoring();
+        }
     }
 
     @Override
@@ -200,7 +202,7 @@ public class BeaconMonitorActivity extends BaseActivity {
 
         if(requestCode == REQUEST_CODE_ENABLE_BLUETOOTH) {
             if(resultCode == Activity.RESULT_OK) {
-                connect();
+                connectAndStartMonitoring();
             } else {
                 final String bluetoothNotEnabledInfo = getString(R.string.bluetooth_not_enabled);
                 Toast.makeText(this, bluetoothNotEnabledInfo, Toast.LENGTH_LONG).show();
@@ -228,7 +230,7 @@ public class BeaconMonitorActivity extends BaseActivity {
         }
     }
 
-    private void connect() {
+    private void connectAndStartMonitoring() {
         try {
             beaconManager.connect(new OnServiceBoundListener() {
                 @Override

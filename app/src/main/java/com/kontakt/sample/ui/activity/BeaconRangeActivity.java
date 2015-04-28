@@ -139,7 +139,9 @@ public class BeaconRangeActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        beaconManager.stopRanging();
+        if(beaconManager.isConnected()) {
+            beaconManager.stopRanging();
+        }
     }
 
     @Override
@@ -175,13 +177,10 @@ public class BeaconRangeActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE_ENABLE_BLUETOOTH) {
-            if(resultCode == Activity.RESULT_OK) {
-                connect();
-            } else {
+            if(resultCode != Activity.RESULT_OK) {
                 final String bluetoothNotEnabledInfo = getString(R.string.bluetooth_not_enabled);
                 Toast.makeText(BeaconRangeActivity.this, bluetoothNotEnabledInfo, Toast.LENGTH_LONG).show();
             }
-
             return;
         }  else if(requestCode == REQUEST_CODE_CONNECT_TO_DEVICE) {
             if(resultCode == Activity.RESULT_CANCELED) {
@@ -189,6 +188,7 @@ public class BeaconRangeActivity extends BaseActivity {
                         String.format("Beacon authentication failure: %s", data.getExtras().getString(BeaconControllerActivity.EXTRA_FAILURE_MESSAGE, "")),
                         Toast.LENGTH_SHORT).show();
             }
+            return;
         }
 
         super.onActivityResult(requestCode, resultCode, data);

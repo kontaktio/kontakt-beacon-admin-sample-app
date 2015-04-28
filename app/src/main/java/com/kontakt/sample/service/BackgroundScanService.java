@@ -77,6 +77,11 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_NOT_STICKY;
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
         return serviceMessenger.getBinder();
     }
