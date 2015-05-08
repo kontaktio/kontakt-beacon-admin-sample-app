@@ -60,4 +60,5 @@
     <string name="foreground_background_scan">foreground/background scan</string>
     <string name="syncing_config">Syncing config…</string>
     <string name="response_status">HttpResponse status: %1$d</string>
+    <string name="configuration">Configuration</string>
 </resources>

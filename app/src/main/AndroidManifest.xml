@@ -26,7 +26,7 @@
 
         <activity android:name=".ui.activity.BeaconMonitorActivity"/>
         <activity android:name=".ui.activity.BeaconRangeActivity"/>
-        <activity android:name=".ui.activity.BeaconControllerActivity"/>
+        <activity android:name=".ui.activity.BeaconManagementActivity"/>
         <activity android:name=".ui.activity.BackgroundScanActivity"/>
         <activity android:name=".ui.activity.ProfilesActivity"/>
         <activity android:name=".ui.activity.ConfigFormActivity"/>

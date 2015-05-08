@@ -3,6 +3,7 @@ package com.kontakt.sample.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -15,10 +16,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class ConfigFormActivity extends Activity {
+public class ConfigFormActivity extends BaseActivity {
 
     public static final String EXTRA_RESULT_CONFIG = "extra_result_config";
 
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
 
     @InjectView(R.id.generate_button)
     Button generateProximityUUIDButton;
@@ -49,6 +52,8 @@ public class ConfigFormActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.config_form_activity);
         ButterKnife.inject(this);
+        setUpActionBar(toolbar);
+        setUpActionBarTitle(getString(R.string.configuration));
     }
 
     @Override

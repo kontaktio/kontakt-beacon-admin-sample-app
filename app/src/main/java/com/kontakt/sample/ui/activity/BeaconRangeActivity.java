@@ -17,20 +17,13 @@ import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.connection.OnServiceBoundListener;
-import com.kontakt.sdk.android.connection.ServiceConnectionChain;
 import com.kontakt.sdk.android.data.RssiCalculators;
 import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
-import com.kontakt.sdk.android.factory.Filters;
-import com.kontakt.sdk.android.manager.ActionManager;
 import com.kontakt.sdk.android.manager.BeaconManager;
-import com.kontakt.sdk.android.model.Device;
-import com.kontakt.sdk.android.util.MemoryUnit;
 import com.kontakt.sdk.core.interfaces.BiConsumer;
-import com.kontakt.sdk.core.interfaces.model.IAction;
 
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -165,8 +158,8 @@ public class BeaconRangeActivity extends BaseActivity {
 
                             beacon.setPassword(password.getBytes());
 
-                            final Intent intent = new Intent(BeaconRangeActivity.this, BeaconControllerActivity.class);
-                            intent.putExtra(BeaconControllerActivity.EXTRA_BEACON_DEVICE, beacon);
+                            final Intent intent = new Intent(BeaconRangeActivity.this, BeaconManagementActivity.class);
+                            intent.putExtra(BeaconManagementActivity.EXTRA_BEACON_DEVICE, beacon);
 
                             startActivityForResult(intent, REQUEST_CODE_CONNECT_TO_DEVICE);
                         }
@@ -185,7 +178,7 @@ public class BeaconRangeActivity extends BaseActivity {
         }  else if(requestCode == REQUEST_CODE_CONNECT_TO_DEVICE) {
             if(resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this,
-                        String.format("Beacon authentication failure: %s", data.getExtras().getString(BeaconControllerActivity.EXTRA_FAILURE_MESSAGE, "")),
+                        String.format("Beacon authentication failure: %s", data.getExtras().getString(BeaconManagementActivity.EXTRA_FAILURE_MESSAGE, "")),
                         Toast.LENGTH_SHORT).show();
             }
             return;

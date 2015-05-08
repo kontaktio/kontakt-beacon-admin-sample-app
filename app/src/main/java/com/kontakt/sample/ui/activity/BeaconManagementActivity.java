@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class BeaconControllerActivity extends BaseActivity {
+public class BeaconManagementActivity extends BaseActivity {
     public static final String EXTRA_BEACON_DEVICE = "extra_beacon_device";
 
     public static final String EXTRA_FAILURE_MESSAGE = "extra_failure_message";
@@ -180,7 +180,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Connected", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Connected", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -190,7 +190,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Authentication Success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Authentication Success", Toast.LENGTH_SHORT).show();
                         fillEntries(characteristics);
                         setBeaconFormVisible(true);
                     }
@@ -237,19 +237,19 @@ public class BeaconControllerActivity extends BaseActivity {
                         switch(errorCode) {
 
                             case BeaconConnection.ERROR_OVERWRITE_REQUEST:
-                                Toast.makeText(BeaconControllerActivity.this, "Overwrite request error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BeaconManagementActivity.this, "Overwrite request error", Toast.LENGTH_SHORT).show();
                                 break;
 
                             case BeaconConnection.ERROR_SERVICES_DISCOVERY:
-                                Toast.makeText(BeaconControllerActivity.this, "Services discovery error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BeaconManagementActivity.this, "Services discovery error", Toast.LENGTH_SHORT).show();
                                 break;
 
                             case BeaconConnection.ERROR_AUTHENTICATION:
-                                Toast.makeText(BeaconControllerActivity.this, "Authentication error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BeaconManagementActivity.this, "Authentication error", Toast.LENGTH_SHORT).show();
                                 break;
 
                             case BeaconConnection.ERROR_CHARACTERISTIC_READING:
-                                Toast.makeText(BeaconControllerActivity.this, "Characteristic reading error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BeaconManagementActivity.this, "Characteristic reading error", Toast.LENGTH_SHORT).show();
                                 break;
 
                             default:
@@ -264,7 +264,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Disconnected", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Disconnected", Toast.LENGTH_SHORT).show();
                         setBeaconFormVisible(false);
                     }
                 });
@@ -511,7 +511,7 @@ public class BeaconControllerActivity extends BaseActivity {
         beaconConnection.applyConfig(config, new BeaconConnection.WriteBatchListener<Config>() {
             @Override
             public void onWriteBatchStart(Config batchHolder) {
-                progressDialog = ProgressDialog.show(BeaconControllerActivity.this,
+                progressDialog = ProgressDialog.show(BeaconManagementActivity.this,
                         "Applying Config",
                         "Please wait...");
             }
@@ -519,7 +519,7 @@ public class BeaconControllerActivity extends BaseActivity {
             @Override
             public void onWriteBatchFinish(final Config batch) {
                 progressDialog.dismiss();
-                final Intent serviceIntent = new Intent(BeaconControllerActivity.this, SyncService.class);
+                final Intent serviceIntent = new Intent(BeaconManagementActivity.this, SyncService.class);
                 serviceIntent.putExtra(SyncService.EXTRA_REQUEST_CODE, SyncService.REQUEST_SYNC_CONFIG);
                 serviceIntent.putExtra(SyncService.EXTRA_ITEM, batch);
                 startService(serviceIntent);
@@ -531,27 +531,27 @@ public class BeaconControllerActivity extends BaseActivity {
 
                 switch(errorCode) {
                     case BeaconConnection.ERROR_BATCH_WRITE_TX_POWER:
-                        Toast.makeText(BeaconControllerActivity.this,
+                        Toast.makeText(BeaconManagementActivity.this,
                                 "Error during Batch write operation - could not write Tx Power",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case BeaconConnection.ERROR_BATCH_WRITE_INTERVAL:
-                        Toast.makeText(BeaconControllerActivity.this,
+                        Toast.makeText(BeaconManagementActivity.this,
                                 "Error during Batch write operation - could not write Interval",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case BeaconConnection.ERROR_BATCH_WRITE_MAJOR:
-                        Toast.makeText(BeaconControllerActivity.this,
+                        Toast.makeText(BeaconManagementActivity.this,
                                 "Error during Batch write operation - could not write Major value",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case BeaconConnection.ERROR_BATCH_WRITE_MINOR:
-                        Toast.makeText(BeaconControllerActivity.this,
+                        Toast.makeText(BeaconManagementActivity.this,
                                 "Error during Batch write operation - could not write Minor value",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case BeaconConnection.ERROR_BATCH_WRITE_PROXIMITY_UUID:
-                        Toast.makeText(BeaconControllerActivity.this,
+                        Toast.makeText(BeaconManagementActivity.this,
                                 "Error during Batch write operation - could not write Proximity UUID",
                                 Toast.LENGTH_SHORT).show();
                         break;
@@ -566,7 +566,7 @@ public class BeaconControllerActivity extends BaseActivity {
         beaconConnection.acceptProfile(profile, new BeaconConnection.WriteBatchListener<Profile>() {
             @Override
             public void onWriteBatchStart(Profile batchHolder) {
-                progressDialog = ProgressDialog.show(BeaconControllerActivity.this,
+                progressDialog = ProgressDialog.show(BeaconManagementActivity.this,
                         String.format("Accepting profile - %s", profile.getName()),
                         "Please wait...");
             }
@@ -582,17 +582,17 @@ public class BeaconControllerActivity extends BaseActivity {
 
                 switch(errorCode) {
                     case BeaconConnection.ERROR_BATCH_WRITE_TX_POWER:
-                        Toast.makeText(BeaconControllerActivity.this,
+                        Toast.makeText(BeaconManagementActivity.this,
                                 "Error during Batch write operation - could not write Tx Power",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case BeaconConnection.ERROR_BATCH_WRITE_INTERVAL:
-                        Toast.makeText(BeaconControllerActivity.this,
+                        Toast.makeText(BeaconManagementActivity.this,
                                 "Error during Batch write operation - could not write Interval",
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case BeaconConnection.ERROR_BATCH_WRITE_PROXIMITY_UUID:
-                        Toast.makeText(BeaconControllerActivity.this,
+                        Toast.makeText(BeaconManagementActivity.this,
                                 "Error during Batch write operation - could not write Proximity UUID",
                                 Toast.LENGTH_SHORT).show();
                         break;
@@ -610,7 +610,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Device restored to default settings", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Device restored to default settings", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -620,7 +620,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Device could not be restored to default settings", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Device could not be restored to default settings", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -635,7 +635,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Device reset successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Device reset successfully", Toast.LENGTH_SHORT).show();
                         beaconConnection.connect();
                     }
                 });
@@ -646,7 +646,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Device reset error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Device reset error", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -660,7 +660,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Model name written successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Model name written successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -670,7 +670,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Model name overwrite failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Model name overwrite failure", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -684,7 +684,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Password written successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Password written successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -694,7 +694,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Advertising Interval write failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Advertising Interval write failure", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -708,7 +708,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Advertising Interval written successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Advertising Interval written successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -718,7 +718,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Advertising Interval overwrite failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Advertising Interval overwrite failure", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -732,7 +732,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Power level written successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Power level written successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -742,7 +742,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Power level overwrite failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Power level overwrite failure", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -756,7 +756,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Minor overwritten successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Minor overwritten successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -766,7 +766,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Minor overwrite failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Minor overwrite failure", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -780,7 +780,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Major overwritten successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Major overwritten successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -790,7 +790,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Minor overwrite failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Minor overwrite failure", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -804,7 +804,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Proximity UUID overwritten successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Proximity UUID overwritten successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -814,7 +814,7 @@ public class BeaconControllerActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BeaconControllerActivity.this, "Minor overwrite failure", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BeaconManagementActivity.this, "Minor overwrite failure", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
