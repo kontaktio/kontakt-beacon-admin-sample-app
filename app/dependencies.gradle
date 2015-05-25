@@ -1,5 +1,0 @@
-dependencies {
-    compile 'com.android.support:appcompat-v7:22.+'
-    compile 'com.jakewharton:butterknife:6.1.0'
-    compile 'com.kontakt.sdk.android:library:1.0.6'
-}
