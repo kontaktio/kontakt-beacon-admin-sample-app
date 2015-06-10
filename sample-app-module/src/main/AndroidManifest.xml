@@ -32,9 +32,8 @@
 
         <service android:name=".service.BackgroundScanService" android:exported="false"/>
         <service android:name=".service.SyncService" android:exported="false"/>
-        <service android:name="com.kontakt.sdk.android.ble.manager.BeaconService" android:exported="false"/>
-        <service android:name="com.kontakt.sdk.android.ble.manager.BeaconServiceL" android:exported="false"/>
-        <service android:name="com.kontakt.sdk.android.ble.manager.ActionService" android:exported="false"/>
+        <service android:name="com.kontakt.sdk.android.ble.service.BeaconService" android:exported="false"/>
+        <service android:name="com.kontakt.sdk.android.ble.service.BeaconServiceL" android:exported="false"/>
 
         <receiver android:name=".receiver.BackgroundScanReceiver" android:exported="false">
             <intent-filter android:priority="1">

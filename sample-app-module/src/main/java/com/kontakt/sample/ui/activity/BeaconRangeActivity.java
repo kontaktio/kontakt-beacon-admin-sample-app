@@ -16,6 +16,7 @@ import com.kontakt.sample.dialog.PasswordDialogFragment;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
+import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceBoundListener;
 import com.kontakt.sdk.android.ble.device.IBeaconDevice;
 import com.kontakt.sdk.android.ble.device.IRegion;
@@ -29,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 
-public class BeaconRangeActivity extends BaseActivity {
+public class BeaconRangeActivity extends BaseActivity implements BeaconManager.RangingListener {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
 
@@ -42,7 +43,15 @@ public class BeaconRangeActivity extends BaseActivity {
     ListView deviceList;
 
     private BeaconBaseAdapter adapter;
-    private BeaconManager beaconManager;
+
+    private BeaconManager deviceManager;
+
+    private final ScanContext scanContext = new ScanContext.Builder()
+            .setScanMode(BeaconManager.SCAN_MODE_BALANCED)
+            .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+            .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
+            .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,66 +60,10 @@ public class BeaconRangeActivity extends BaseActivity {
         ButterKnife.inject(this);
         setUpActionBar(toolbar);
         setUpActionBarTitle(getString(R.string.range_beacons));
+
         adapter = new BeaconBaseAdapter(this);
 
-        beaconManager = BeaconManager.newInstance(this);
-
-        beaconManager.setScanMode(BeaconManager.SCAN_MODE_BALANCED); // Works only for Android L OS version
-
-        beaconManager.setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5)); //Calculate rssi value basing on arithmethic mean basing on 5 last notified values
-/*
-        beaconManager.setRssiCalculator(new RssiCalculators.CustomRssiCalculator() { //Provide your own Rssi Calculator to estimate manipulate Rssi value
-            @Override                                                                  //and thus Proximity from Beacon device
-            public double calculateRssi(int beaconHashCode, int rssiValue) {
-                return rssiValue;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-        });
-*/
-
-        //beaconManager.addFilter(Filters.newProximityUUIDFilter(BeaconManager.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID)); //accept Beacons with default Proximity UUID only
-        //(f7826da6-4fa2-4e98-8024-bc5b71e0893e)
-/*
-        beaconManager.addFilter(Filters.newAddressFilter("00:00:00:00:00:00")); //accept Beacons with specified MAC address only
-        beaconManager.addFilter(Filters.newBeaconUniqueIdFilter("myID"));         //accept Beacons with specified Unique Id only
-        beaconManager.addFilter(Filters.newDeviceNameFilter("my_beacon_name"));   //accept Beacons with specified name only
-        beaconManager.addFilter(Filters.newFirmwareFilter(26));                   //accept Beacons with specified Firmware version only
-        beaconManager.addFilter(Filters.newMajorFilter(666));                     //accept Beacons with specified Major only
-        beaconManager.addFilter(Filters.newMinorFilter(333));                     //accept Beacons with specified Minor only
-        beaconManager.addFilter(Filters.newMultiFilterBuilder()                   //accept Beacon matching constraints specified in MultiFilter
-                                        .setBeaconUniqueId("Boom")
-                                        .setDeviceName("device_name")
-                                        .setAddress("00:00:00:00:00:00")
-                                        .setFirmware(26)
-                                        .setProximityUUID(UUID.randomUUID())
-                                        .build());
-        beaconManager.addFilter(new Filters.CustomFilter() {                      //create your customized filter
-            @Override
-            public boolean filter(AdvertisingPackage advertisingPackage) {
-                return advertisingPackage.getAccuracy() < 5;                     //accept beacons from distance 5m at most
-            }
-        });
-*/
-
-        beaconManager.setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT);
-
-        beaconManager.setForceScanConfiguration(ForceScanConfiguration.DEFAULT);
-
-        beaconManager.registerRangingListener(new BeaconManager.RangingListener() {
-            @Override
-            public void onIBeaconsDiscovered(final IRegion region, final List<IBeaconDevice> beacons) {
-                BeaconRangeActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.replaceWith(beacons);
-                    }
-                });
-            }
-        });
+        deviceManager = new BeaconManager(this);
 
         deviceList.setAdapter(adapter);
     }
@@ -119,29 +72,31 @@ public class BeaconRangeActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        if(! beaconManager.isBluetoothEnabled()){
+        if(! deviceManager.isBluetoothEnabled()){
             final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
-        } else if(beaconManager.isConnected()) {
-            startRanging();
         } else {
-            connect();
+            try {
+                deviceManager.initializeScan(scanContext);
+            } catch (RemoteException e) {
+                Utils.showToast(this, e.getMessage());
+            }
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(beaconManager.isConnected()) {
-            beaconManager.stopRanging();
+        if(deviceManager.isConnected()) {
+            deviceManager.finishScan();
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        beaconManager.disconnect();
-        beaconManager = null;
+        deviceManager.disconnect();
+        deviceManager = null;
         ButterKnife.reset(this);
     }
 
@@ -187,24 +142,13 @@ public class BeaconRangeActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void startRanging() {
-        try {
-            beaconManager.startRanging();
-        } catch (RemoteException e) {
-            Utils.showToast(this, e.getMessage());
-        }
-    }
-
-    private void connect() {
-        try {
-            beaconManager.connect(new OnServiceBoundListener() {
-                @Override
-                public void onServiceBound() throws RemoteException {
-                    beaconManager.startRanging();
-                }
-            });
-        } catch (RemoteException e) {
-            Toast.makeText(BeaconRangeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onIBeaconsDiscovered(IRegion region, final List<IBeaconDevice> iBeaconDevices) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.replaceWith(iBeaconDevices);
+            }
+        });
     }
 }
