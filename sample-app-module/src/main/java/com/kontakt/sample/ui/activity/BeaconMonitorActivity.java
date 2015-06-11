@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.MonitorSectionAdapter;
+import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
@@ -90,7 +91,7 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
 
             @Override
             public void onConnectionFailure() {
-
+                Utils.showToast(BeaconMonitorActivity.this, getString(R.string.unexpected_error_connection));
             }
         });
     }

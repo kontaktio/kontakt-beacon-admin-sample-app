@@ -160,6 +160,7 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
     public void removeGroup(IRegion beaconRegion) {
         headersList.remove(beaconRegion);
         childMap.remove(beaconRegion);
+        notifyDataSetChanged();
     }
 
     public boolean containsGroup(IRegion beaconRegion) {

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.BeaconBaseAdapter;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
+import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
@@ -82,7 +83,9 @@ public class BeaconRangeActivity extends BaseActivity implements BeaconManager.R
                 }
 
                 @Override
-                public void onConnectionFailure() { }
+                public void onConnectionFailure() {
+                    Utils.showToast(BeaconRangeActivity.this, getString(R.string.unexpected_error_connection));
+                }
             });
         }
     }
