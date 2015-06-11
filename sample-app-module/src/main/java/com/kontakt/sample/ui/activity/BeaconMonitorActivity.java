@@ -4,18 +4,16 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.v7.widget.Toolbar;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.MonitorSectionAdapter;
-import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
-import com.kontakt.sdk.android.ble.connection.OnServiceBoundListener;
+import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.device.IBeaconDevice;
 import com.kontakt.sdk.android.ble.device.IRegion;
 import com.kontakt.sdk.android.ble.filter.Filters;
@@ -27,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
 
 public class BeaconMonitorActivity extends BaseActivity implements BeaconManager.MonitoringListener {
 
@@ -78,10 +75,31 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
         if(!deviceManager.isBluetoothEnabled()) {
             final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
-        } else if(deviceManager.isConnected()) {
-            startMonitoring();
         } else {
-            connectAndStartMonitoring();
+            startMonitoring();
+        }
+    }
+
+    private void startMonitoring() {
+        deviceManager.initializeScan(scanContext, new OnServiceReadyListener() {
+            @Override
+            public void onServiceReady() {
+                deviceManager.attachListener(BeaconMonitorActivity.this);
+            }
+
+            @Override
+            public void onConnectionFailure() {
+
+            }
+        });
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+
+        if(level == TRIM_MEMORY_UI_HIDDEN) {
+            deviceManager.detachListener(this);
         }
     }
 
@@ -93,9 +111,9 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         deviceManager.disconnect();
         deviceManager = null;
+        super.onDestroy();
         ButterKnife.reset(this);
     }
 
@@ -104,7 +122,7 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
 
         if(requestCode == REQUEST_CODE_ENABLE_BLUETOOTH) {
             if(resultCode == Activity.RESULT_OK) {
-                connectAndStartMonitoring();
+                startMonitoring();
             } else {
                 final String bluetoothNotEnabledInfo = getString(R.string.bluetooth_not_enabled);
                 Toast.makeText(this, bluetoothNotEnabledInfo, Toast.LENGTH_LONG).show();
@@ -115,27 +133,6 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    private void startMonitoring() {
-        try {
-            deviceManager.initializeScan(scanContext);
-        } catch (RemoteException e) {
-            Utils.showToast(this, getString(R.string.unexpected_error_monitoring_start));
-        }
-    }
-
-    private void connectAndStartMonitoring() {
-            deviceManager.connect(new OnServiceBoundListener() {
-                @Override
-                public void onServiceBound() {
-                    try {
-                        deviceManager.initializeScan(scanContext);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
 
     @Override
     public void onMonitorStart() {

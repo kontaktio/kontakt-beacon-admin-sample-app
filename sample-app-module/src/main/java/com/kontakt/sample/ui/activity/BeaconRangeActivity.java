@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -13,11 +12,10 @@ import android.widget.Toast;
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.BeaconBaseAdapter;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
-import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
-import com.kontakt.sdk.android.ble.connection.OnServiceBoundListener;
+import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.device.IBeaconDevice;
 import com.kontakt.sdk.android.ble.device.IRegion;
 import com.kontakt.sdk.android.ble.manager.BeaconManager;
@@ -76,19 +74,29 @@ public class BeaconRangeActivity extends BaseActivity implements BeaconManager.R
             final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
         } else {
-            try {
-                deviceManager.initializeScan(scanContext);
-            } catch (RemoteException e) {
-                Utils.showToast(this, e.getMessage());
-            }
+            deviceManager.initializeScan(scanContext, new OnServiceReadyListener() {
+                @Override
+                public void onServiceReady() {
+                    deviceManager.attachListener(BeaconRangeActivity.this);
+                }
+
+                @Override
+                public void onConnectionFailure() { }
+            });
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(deviceManager.isConnected()) {
-            deviceManager.finishScan();
+
+        deviceManager.finishScan();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        if(level == TRIM_MEMORY_UI_HIDDEN) {
+            deviceManager.detachListener(this);
         }
     }
 

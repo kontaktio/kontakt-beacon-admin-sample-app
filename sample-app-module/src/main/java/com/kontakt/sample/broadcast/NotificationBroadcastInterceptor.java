@@ -44,12 +44,13 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
                         redirectIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(context.getString(R.string.beacon_appeared, deviceName))
+                .setSmallIcon(R.drawable.beacon)
                 .setStyle(new Notification.BigTextStyle().bigText(context.getString(R.string.appeared_beacon_info, deviceName,
-                                                                                                                   proximityUUID,
-                                                                                                                   major,
-                                                                                                                   minor,
-                                                                                                                   distance,
-                                                                                                                   proximity.name())))
+                        proximityUUID,
+                        major,
+                        minor,
+                        distance,
+                        proximity.name())))
                 .build();
 
         notificationManager.notify(info, notification);
@@ -72,6 +73,7 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(context.getString(R.string.region_abandoned, regionName))
+                .setSmallIcon(R.drawable.region)
                 .build();
 
         notificationManager.notify(info, notification);
@@ -93,6 +95,7 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(context.getString(R.string.region_entered, region.getIdentifier()))
+                .setSmallIcon(R.drawable.region)
                 .build();
 
         notificationManager.notify(info, notification);
@@ -112,6 +115,7 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
                         redirectIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(context.getString(R.string.scan_started))
+                .setSmallIcon(R.drawable.beacon)
                 .build();
 
         notificationManager.notify(info, notification);
@@ -132,6 +136,7 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
                         redirectIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(context.getString(R.string.scan_stopped))
+                .setSmallIcon(R.drawable.beacon)
                 .build();
 
         notificationManager.notify(info, notification);

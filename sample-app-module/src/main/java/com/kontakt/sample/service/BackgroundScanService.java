@@ -6,13 +6,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.os.RemoteException;
 
 import com.kontakt.sample.ui.activity.BackgroundScanActivity;
 import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
-import com.kontakt.sdk.android.ble.connection.OnServiceBoundListener;
+import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.device.IBeaconDevice;
 import com.kontakt.sdk.android.ble.device.IRegion;
 import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
@@ -54,7 +53,7 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
 
     private final Messenger serviceMessenger = new Messenger(new ServiceHandler());
 
-    private BeaconManager deviceManager;
+    private BeaconManager beaconManger;
 
     private final ScanContext scanContext = new ScanContext.Builder()
             .setScanMode(BeaconManager.SCAN_MODE_BALANCED)
@@ -75,13 +74,12 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
     public void onCreate() {
         super.onCreate();
 
-        deviceManager = new BeaconManager(this);
+        beaconManger = new BeaconManager(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-
         return START_NOT_STICKY;
     }
 
@@ -93,20 +91,22 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
     @Override
     public void onDestroy() {
         super.onDestroy();
-        deviceManager.disconnect();
-        deviceManager = null;
+        beaconManger.disconnect();
+        beaconManger = null;
     }
 
     private void startMonitoring() {
-        if (!deviceManager.isConnected()) {
-            deviceManager.connect(new OnServiceBoundListener() {
-                @Override
-                public void onServiceBound() throws RemoteException {
-                    deviceManager.attachListener(BackgroundScanService.this);
-                    deviceManager.initializeScan();
-                }
-            });
-        }
+        beaconManger.initializeScan(scanContext, new OnServiceReadyListener() {
+            @Override
+            public void onServiceReady() {
+                beaconManger.attachListener(BackgroundScanService.this);
+            }
+
+            @Override
+            public void onConnectionFailure() {
+
+            }
+        });
     }
 
     @Override
@@ -155,13 +155,7 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
     }
 
     private void stopMonitoring() {
-        try {
-            deviceManager.detachListener(this);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-
-        deviceManager.finishScan();
+        beaconManger.finishScan();
     }
 
     private void scheduleBroadcast(Intent intent) {
