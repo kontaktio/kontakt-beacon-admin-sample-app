@@ -1,12 +1,12 @@
 package com.kontakt.sample.ui.activity;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.kontakt.sample.R;
+import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -58,8 +58,8 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.background_scan)
     void startForegroundBackgroundScan() {
-        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
-        if(bluetoothManager.getAdapter().isEnabled()) {
+
+        if(! BluetoothUtils.isBluetoothEnabled()) {
             startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
         } else {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);

@@ -20,6 +20,7 @@ import com.kontakt.sdk.android.ble.device.IBeaconDevice;
 import com.kontakt.sdk.android.ble.device.IRegion;
 import com.kontakt.sdk.android.ble.manager.BeaconManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
+import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 import com.kontakt.sdk.android.common.interfaces.BiConsumer;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class BeaconRangeActivity extends BaseActivity implements BeaconManager.R
     protected void onResume() {
         super.onResume();
 
-        if(! deviceManager.isBluetoothEnabled()){
+        if(!BluetoothUtils.isBluetoothEnabled()){
             final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
         } else {

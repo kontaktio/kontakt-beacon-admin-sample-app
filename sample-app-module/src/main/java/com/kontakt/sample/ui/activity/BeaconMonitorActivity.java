@@ -19,6 +19,7 @@ import com.kontakt.sdk.android.ble.device.IRegion;
 import com.kontakt.sdk.android.ble.filter.Filters;
 import com.kontakt.sdk.android.ble.manager.BeaconManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
+import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +73,7 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
     @Override
     protected void onStart() {
         super.onStart();
-        if(!deviceManager.isBluetoothEnabled()) {
+        if(! BluetoothUtils.isBluetoothEnabled()) {
             final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
         } else {
