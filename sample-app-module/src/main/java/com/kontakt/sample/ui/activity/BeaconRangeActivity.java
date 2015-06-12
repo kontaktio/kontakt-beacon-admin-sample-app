@@ -17,12 +17,12 @@ import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguratio
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
-import com.kontakt.sdk.android.ble.device.IBeaconDevice;
-import com.kontakt.sdk.android.ble.device.IRegion;
+import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
+import com.kontakt.sdk.android.common.ibeacon.Region;
 import com.kontakt.sdk.android.ble.manager.BeaconManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
-import com.kontakt.sdk.android.common.interfaces.BiConsumer;
+import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 
 import java.util.List;
 
@@ -119,7 +119,7 @@ public class BeaconRangeActivity extends BaseActivity implements BeaconManager.R
             PasswordDialogFragment.newInstance(getString(R.string.format_connect, beacon.getAddress()),
                     getString(R.string.password),
                     getString(R.string.connect),
-                    new BiConsumer<DialogInterface, String>() {
+                    new SDKBiConsumer<DialogInterface, String>() {
                         @Override
                         public void accept(DialogInterface dialogInterface, String password) {
 
@@ -155,7 +155,7 @@ public class BeaconRangeActivity extends BaseActivity implements BeaconManager.R
     }
 
     @Override
-    public void onIBeaconsDiscovered(IRegion region, final List<IBeaconDevice> iBeaconDevices) {
+    public void onIBeaconsDiscovered(Region region, final List<IBeaconDevice> iBeaconDevices) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

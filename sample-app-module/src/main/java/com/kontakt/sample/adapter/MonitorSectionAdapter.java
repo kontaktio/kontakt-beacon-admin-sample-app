@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import com.kontakt.sample.R;
 import com.kontakt.sdk.android.ble.device.BeaconDevice;
-import com.kontakt.sdk.android.ble.device.IBeaconDevice;
-import com.kontakt.sdk.android.ble.device.IRegion;
-import com.kontakt.sdk.android.ble.device.Region;
+import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
+import com.kontakt.sdk.android.common.ibeacon.Region;
+import com.kontakt.sdk.android.ble.device.IBeaconRegion;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ import java.util.Map;
 public class MonitorSectionAdapter extends BaseExpandableListAdapter {
 
     private final Context context;
-    private final List<IRegion> headersList;
-    private final Map<IRegion, List<IBeaconDevice>> childMap;
+    private final List<Region> headersList;
+    private final Map<Region, List<IBeaconDevice>> childMap;
 
     public MonitorSectionAdapter(final Context context) {
         this.context = context;
@@ -31,13 +31,13 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
         childMap = new HashMap<>();
     }
 
-    public void addGroup(final IRegion beaconRegion) {
+    public void addGroup(final Region beaconRegion) {
         headersList.add(beaconRegion);
         childMap.put(beaconRegion, new ArrayList<IBeaconDevice>());
         notifyDataSetChanged();
     }
 
-    public int getGroupIndex(final IRegion beaconRegion) {
+    public int getGroupIndex(final Region beaconRegion) {
         return headersList.indexOf(beaconRegion);
     }
 
@@ -49,7 +49,7 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
     }
 
     public boolean addOrReplaceChild(final int groupPosition, final IBeaconDevice device) {
-        final Region region = (Region) getGroup(groupPosition);
+        final IBeaconRegion region = (IBeaconRegion) getGroup(groupPosition);
         final List<IBeaconDevice> devices = childMap.get(region);
         final int index = devices.indexOf(device);
         boolean state;
@@ -109,7 +109,7 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        final Region region = (Region) getGroup(groupPosition);
+        final IBeaconRegion region = (IBeaconRegion) getGroup(groupPosition);
         if(convertView == null) {
             convertView = createView(R.layout.monitor_section_list_header);
             GroupViewHolder groupViewHolder = new GroupViewHolder(convertView);
@@ -117,7 +117,7 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
         }
 
         final GroupViewHolder groupViewHolder = (GroupViewHolder) convertView.getTag();
-        groupViewHolder.header.setText(region.getIdentifier());
+        groupViewHolder.header.setText(region.getName());
         return convertView;
     }
 
@@ -157,13 +157,13 @@ public class MonitorSectionAdapter extends BaseExpandableListAdapter {
         return inflater.inflate(viewId, null);
     }
 
-    public void removeGroup(IRegion beaconRegion) {
+    public void removeGroup(Region beaconRegion) {
         headersList.remove(beaconRegion);
         childMap.remove(beaconRegion);
         notifyDataSetChanged();
     }
 
-    public boolean containsGroup(IRegion beaconRegion) {
+    public boolean containsGroup(Region beaconRegion) {
         return headersList.contains(beaconRegion);
     }
 

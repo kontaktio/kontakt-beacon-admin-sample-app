@@ -19,8 +19,8 @@ import com.kontakt.sample.broadcast.ForegroundBroadcastInterceptor;
 import com.kontakt.sample.receiver.AbstractScanBroadcastReceiver;
 import com.kontakt.sample.service.BackgroundScanService;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.common.Logger;
-import com.kontakt.sdk.android.common.SDKPreconditions;
+import com.kontakt.sdk.android.common.log.Logger;
+import com.kontakt.sdk.android.common.util.SDKPreconditions;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

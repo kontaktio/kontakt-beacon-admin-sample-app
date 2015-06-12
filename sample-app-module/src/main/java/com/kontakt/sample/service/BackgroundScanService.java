@@ -12,8 +12,8 @@ import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguratio
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
-import com.kontakt.sdk.android.ble.device.IBeaconDevice;
-import com.kontakt.sdk.android.ble.device.IRegion;
+import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
+import com.kontakt.sdk.android.common.ibeacon.Region;
 import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
 import com.kontakt.sdk.android.ble.filter.CustomFilter;
 import com.kontakt.sdk.android.ble.manager.BeaconManager;
@@ -124,13 +124,13 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
     }
 
     @Override
-    public void onIBeaconsUpdated(IRegion region, List<IBeaconDevice> beaconDevices) {
+    public void onIBeaconsUpdated(Region region, List<IBeaconDevice> beaconDevices) {
         /*You can send broadcast with entire list of Beacon devices.
         * However, please be aware of Bundle limitations.*/
     }
 
     @Override
-    public void onIBeaconAppeared(IRegion region, IBeaconDevice beaconDevice) {
+    public void onIBeaconAppeared(Region region, IBeaconDevice beaconDevice) {
         scheduleBroadcast(new BroadcastBuilder()
                 .setInfo(INFO_BEACON_APPEARED)
                 .setBeaconDevice(beaconDevice)
@@ -139,7 +139,7 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
     }
 
     @Override
-    public void onRegionEntered(IRegion region) {
+    public void onRegionEntered(Region region) {
         scheduleBroadcast(new BroadcastBuilder()
                 .setInfo(INFO_REGION_ENTERED)
                 .setRegion(region)
@@ -147,7 +147,7 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
     }
 
     @Override
-    public void onRegionAbandoned(IRegion region) {
+    public void onRegionAbandoned(Region region) {
         scheduleBroadcast(new BroadcastBuilder()
                 .setInfo(INFO_REGION_ABANDONED)
                 .setRegion(region)
@@ -186,7 +186,7 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
 
     private static class BroadcastBuilder {
         private int info;
-        private IRegion region;
+        private Region region;
         private IBeaconDevice beaconDevice;
 
         public BroadcastBuilder setInfo(int info) {
@@ -199,7 +199,7 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
             return this;
         }
 
-        public BroadcastBuilder setRegion(IRegion region) {
+        public BroadcastBuilder setRegion(Region region) {
             this.region = region;
             return this;
         }

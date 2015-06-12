@@ -20,7 +20,7 @@ public class ProfilesLoader extends AbstractLoader<List<Profile>> {
     public ProfilesLoader(Context context) {
         super(context);
         observer = new DisableableContentObserver(new ForceLoadContentObserver());
-        kontaktApiClient = KontaktApiClient.newInstance();
+        kontaktApiClient = new KontaktApiClient();
     }
 
     @Override

@@ -8,8 +8,8 @@ import android.content.Intent;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.ui.activity.BackgroundScanActivity;
-import com.kontakt.sdk.android.ble.device.IBeaconDevice;
-import com.kontakt.sdk.android.ble.device.IRegion;
+import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
+import com.kontakt.sdk.android.common.ibeacon.Region;
 import com.kontakt.sdk.android.common.Proximity;
 
 public class NotificationBroadcastInterceptor extends AbstractBroadcastInterceptor {
@@ -57,11 +57,11 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
     }
 
     @Override
-    protected void onRegionAbandoned(int info, IRegion region) {
+    protected void onRegionAbandoned(int info, Region region) {
         final Context context = getContext();
         final Intent redirectIntent = new Intent(context, BackgroundScanActivity.class);
         redirectIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        final String regionName = region.getIdentifier();
+        final String regionName = region.getName();
 
         final Notification notification = new Notification.Builder(context)
                 .setWhen(System.currentTimeMillis())
@@ -80,7 +80,7 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
     }
 
     @Override
-    protected void onRegionEntered(int info, IRegion region) {
+    protected void onRegionEntered(int info, Region region) {
         final Context context = getContext();
         final Intent redirectIntent = new Intent(context, BackgroundScanActivity.class);
         redirectIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -88,13 +88,13 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
         final Notification notification = new Notification.Builder(context)
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
-                .setTicker(context.getString(R.string.region_entered, region.getIdentifier()))
+                .setTicker(context.getString(R.string.region_entered, region.getName()))
                 .setContentIntent(PendingIntent.getActivity(context,
                         0,
                         redirectIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(context.getString(R.string.app_name))
-                .setContentText(context.getString(R.string.region_entered, region.getIdentifier()))
+                .setContentText(context.getString(R.string.region_entered, region.getName()))
                 .setSmallIcon(R.drawable.region)
                 .build();
 

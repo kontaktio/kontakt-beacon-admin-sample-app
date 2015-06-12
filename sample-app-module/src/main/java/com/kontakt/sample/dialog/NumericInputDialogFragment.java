@@ -8,16 +8,16 @@ import android.text.InputType;
 import android.text.TextWatcher;
 
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.common.interfaces.BiConsumer;
-import com.kontakt.sdk.android.common.interfaces.Predicate;
+import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
+import com.kontakt.sdk.android.common.interfaces.SDKPredicate;
 
 public class NumericInputDialogFragment extends InputDialogFragment {
 
     public static NumericInputDialogFragment newInstance(final String title,
                                                          final String message,
                                                          final String buttonText,
-                                                         final Predicate<Integer> valuePredicate,
-                                                         final BiConsumer submitBiConsumer) {
+                                                         final SDKPredicate<Integer> valuePredicate,
+                                                         final SDKBiConsumer submitBiConsumer) {
         NumericInputDialogFragment dialog = new NumericInputDialogFragment();
         Bundle args = new Bundle();
         args.putString(TITLE_TAG, title);
@@ -29,7 +29,7 @@ public class NumericInputDialogFragment extends InputDialogFragment {
         return dialog;
     }
 
-    private Predicate<Integer> valuePredicate;
+    private SDKPredicate<Integer> valuePredicate;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

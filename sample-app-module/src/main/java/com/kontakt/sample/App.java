@@ -2,8 +2,8 @@ package com.kontakt.sample;
 
 import android.app.Application;
 
-import com.kontakt.sdk.android.common.Logger;
-import com.kontakt.sdk.android.http.KontaktApiClient;
+import com.kontakt.sdk.android.common.KontaktSDK;
+import com.kontakt.sdk.android.common.log.LogLevel;
 import com.squareup.leakcanary.LeakCanary;
 
 import butterknife.ButterKnife;
@@ -22,10 +22,10 @@ public class App extends Application {
             LeakCanary.install(this);
         }
 
-        Logger.setDebugLoggingEnabled(BuildConfig.DEBUG);
-
-        Logger.setCrashlyticsLoggingEnabled(true);
-        KontaktApiClient.init(this);
+        KontaktSDK.initialize(this)
+                  .setDebugLoggingEnabled(BuildConfig.DEBUG)
+                  .setLogLevelEnabled(LogLevel.DEBUG, true)
+                  .setCrashlyticsLoggingEnabled(true);
 
         ButterKnife.setDebug(BuildConfig.DEBUG);
     }

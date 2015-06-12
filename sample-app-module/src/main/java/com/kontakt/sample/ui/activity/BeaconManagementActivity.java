@@ -21,10 +21,10 @@ import com.kontakt.sample.ui.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.connection.IBeaconConnection;
-import com.kontakt.sdk.android.ble.device.IBeaconDevice;
-import com.kontakt.sdk.android.common.IBeaconPropertyValidator;
-import com.kontakt.sdk.android.common.interfaces.BiConsumer;
-import com.kontakt.sdk.android.common.interfaces.Predicate;
+import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
+import com.kontakt.sdk.android.common.util.IBeaconPropertyValidator;
+import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
+import com.kontakt.sdk.android.common.interfaces.SDKPredicate;
 import com.kontakt.sdk.android.common.model.Config;
 import com.kontakt.sdk.android.common.model.Profile;
 
@@ -341,7 +341,7 @@ public class BeaconManagementActivity extends BaseActivity {
         InputDialogFragment.newInstance("Overwrite",
                 getString(R.string.proximity_uuid),
                 getString(R.string.ok),
-                new BiConsumer<DialogInterface, String>() {
+                new SDKBiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteProximityUUID(UUID.fromString(result));
@@ -354,7 +354,7 @@ public class BeaconManagementActivity extends BaseActivity {
         NumericInputDialogFragment.newInstance("Overwrite",
                 getString(R.string.major),
                 getString(R.string.ok),
-                new Predicate<Integer>() {
+                new SDKPredicate<Integer>() {
                     @Override
                     public boolean test(Integer target) {
                         try {
@@ -365,7 +365,7 @@ public class BeaconManagementActivity extends BaseActivity {
                         }
                     }
                 },
-                new BiConsumer<DialogInterface, String>() {
+                new SDKBiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteMajor(Integer.parseInt(result));
@@ -378,7 +378,7 @@ public class BeaconManagementActivity extends BaseActivity {
         NumericInputDialogFragment.newInstance("Overwrite",
                 getString(R.string.minor),
                 getString(R.string.ok),
-                new Predicate<Integer>() {
+                new SDKPredicate<Integer>() {
                     @Override
                     public boolean test(Integer target) {
                         try {
@@ -389,7 +389,7 @@ public class BeaconManagementActivity extends BaseActivity {
                         }
                     }
                 },
-                new BiConsumer<DialogInterface, String>() {
+                new SDKBiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteMinor(Integer.parseInt(result));
@@ -403,7 +403,7 @@ public class BeaconManagementActivity extends BaseActivity {
         NumericInputDialogFragment.newInstance("Overwrite",
                 getString(R.string.power_level),
                 getString(R.string.ok),
-                new Predicate<Integer>() {
+                new SDKPredicate<Integer>() {
                     @Override
                     public boolean test(Integer target) {
                         try {
@@ -414,7 +414,7 @@ public class BeaconManagementActivity extends BaseActivity {
                         }
                     }
                 },
-                new BiConsumer<DialogInterface, String>() {
+                new SDKBiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwritePowerLevel(Integer.parseInt(result));
@@ -427,7 +427,7 @@ public class BeaconManagementActivity extends BaseActivity {
         NumericInputDialogFragment.newInstance("Overwrite",
                 getString(R.string.advertising_interval),
                 getString(R.string.ok),
-                new Predicate<Integer>() {
+                new SDKPredicate<Integer>() {
                     @Override
                     public boolean test(Integer target) {
                         try {
@@ -438,7 +438,7 @@ public class BeaconManagementActivity extends BaseActivity {
                         }
                     }
                 },
-                new BiConsumer<DialogInterface, String>() {
+                new SDKBiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteAdvertisingInterval(Long.parseLong(result));
@@ -451,7 +451,7 @@ public class BeaconManagementActivity extends BaseActivity {
         PasswordDialogFragment.newInstance("Overwrite",
                 getString(R.string.set_password),
                 getString(R.string.ok),
-                new BiConsumer<DialogInterface, String>() {
+                new SDKBiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwritePassword(result);
@@ -465,7 +465,7 @@ public class BeaconManagementActivity extends BaseActivity {
         InputDialogFragment.newInstance("Overwrite",
                 getString(R.string.model_name),
                 getString(R.string.ok),
-                new BiConsumer<DialogInterface, String>() {
+                new SDKBiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteModelName(result);
@@ -490,7 +490,7 @@ public class BeaconManagementActivity extends BaseActivity {
         InputDialogFragment.newInstance("Restore default settings",
                 "Master password",
                 "Restore",
-                new BiConsumer<DialogInterface, String>() {
+                new SDKBiConsumer<DialogInterface, String>() {
                     @Override
                     public void accept(DialogInterface dialogInterface, String masterPassword) {
                         onRestoreDefaultSettings(masterPassword);

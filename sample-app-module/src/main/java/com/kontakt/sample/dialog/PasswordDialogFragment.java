@@ -8,7 +8,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 
-import com.kontakt.sdk.android.common.interfaces.BiConsumer;
+import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 
 public class PasswordDialogFragment extends InputDialogFragment {
 
@@ -17,7 +17,7 @@ public class PasswordDialogFragment extends InputDialogFragment {
     public static PasswordDialogFragment newInstance(final String title,
                                                   final String message,
                                                   final String buttonText,
-                                                  final BiConsumer<DialogInterface, String> submitBiConsumer) {
+                                                  final SDKBiConsumer<DialogInterface, String> submitBiConsumer) {
         return newInstance(title, message, buttonText, null, submitBiConsumer);
     }
 
@@ -25,7 +25,7 @@ public class PasswordDialogFragment extends InputDialogFragment {
                                                   final String message,
                                                   final String buttonText,
                                                   final Drawable icon,
-                                                  final BiConsumer<DialogInterface, String> submitBiConsumer) {
+                                                  final SDKBiConsumer<DialogInterface, String> submitBiConsumer) {
         PasswordDialogFragment dialog = new PasswordDialogFragment();
         Bundle args = new Bundle();
         args.putString(TITLE_TAG, title);

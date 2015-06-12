@@ -3,7 +3,7 @@ package com.kontakt.sample.service;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.kontakt.sdk.android.common.SDKPreconditions;
+import com.kontakt.sdk.android.common.util.SDKPreconditions;
 import com.kontakt.sdk.android.common.model.Config;
 import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.http.exception.ClientException;
@@ -27,7 +27,7 @@ public class SyncService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        kontaktApiClient = KontaktApiClient.newInstance();
+        kontaktApiClient = new KontaktApiClient();
     }
 
     @Override

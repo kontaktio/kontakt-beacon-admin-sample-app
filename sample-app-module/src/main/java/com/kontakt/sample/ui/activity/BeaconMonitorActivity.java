@@ -15,8 +15,8 @@ import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguratio
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
-import com.kontakt.sdk.android.ble.device.IBeaconDevice;
-import com.kontakt.sdk.android.ble.device.IRegion;
+import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
+import com.kontakt.sdk.android.common.ibeacon.Region;
 import com.kontakt.sdk.android.ble.filter.Filters;
 import com.kontakt.sdk.android.ble.manager.BeaconManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
@@ -157,7 +157,7 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
     }
 
     @Override
-    public void onIBeaconsUpdated(final IRegion region, final List<IBeaconDevice> beacons) {
+    public void onIBeaconsUpdated(final Region region, final List<IBeaconDevice> beacons) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -170,7 +170,7 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
     }
 
     @Override
-    public void onIBeaconAppeared(final IRegion region, final IBeaconDevice beacon) {
+    public void onIBeaconAppeared(final Region region, final IBeaconDevice beacon) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -183,7 +183,7 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
     }
 
     @Override
-    public void onRegionEntered(final IRegion venue) {
+    public void onRegionEntered(final Region venue) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -195,7 +195,7 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
     }
 
     @Override
-    public void onRegionAbandoned(final IRegion region) {
+    public void onRegionAbandoned(final Region region) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

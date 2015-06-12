@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.kontakt.sample.R;
 import com.kontakt.sdk.android.ble.device.BeaconDevice;
-import com.kontakt.sdk.android.ble.device.IBeaconDevice;
+import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

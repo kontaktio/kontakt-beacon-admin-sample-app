@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.kontakt.sample.R;
-import com.kontakt.sdk.android.common.interfaces.BiConsumer;
+import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 
 public class InputDialogFragment extends DialogFragment {
 
@@ -26,12 +26,12 @@ public class InputDialogFragment extends DialogFragment {
     protected  EditText inputText;
     protected Button submitButton;
     protected Drawable icon;
-    protected BiConsumer<DialogInterface, String> biConsumer;
+    protected SDKBiConsumer<DialogInterface, String> biConsumer;
 
     public static InputDialogFragment newInstance(final String title,
                                                   final String message,
                                                   final String buttonText,
-                                                  final BiConsumer<DialogInterface, String> submitBiConsumer) {
+                                                  final SDKBiConsumer<DialogInterface, String> submitBiConsumer) {
         return newInstance(title, message, buttonText, null, submitBiConsumer);
     }
 
@@ -39,7 +39,7 @@ public class InputDialogFragment extends DialogFragment {
                                                   final String message,
                                                   final String buttonText,
                                                   final Drawable icon,
-                                                  final BiConsumer<DialogInterface, String> submitBiConsumer) {
+                                                  final SDKBiConsumer<DialogInterface, String> submitBiConsumer) {
         InputDialogFragment dialog = new InputDialogFragment();
         Bundle args = new Bundle();
         args.putString(TITLE_TAG, title);
