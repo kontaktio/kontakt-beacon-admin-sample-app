@@ -34,3 +34,5 @@
 -keepclasseswithmembernames class * {
     @butterknife.* <methods>;
 }
+
+-dontwarn okio.**
