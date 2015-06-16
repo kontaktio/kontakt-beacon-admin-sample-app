@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.kontakt.sample.R;
-import com.kontakt.sdk.android.common.model.Profile;
+import com.kontakt.sdk.android.common.model.IProfile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ProfilesAdapter extends BaseAdapter {
 
-    private final List<Profile> profiles;
+    private final List<IProfile> profiles;
     private Context context;
 
     public ProfilesAdapter(final Context context) {
@@ -30,7 +30,7 @@ public class ProfilesAdapter extends BaseAdapter {
     }
 
     @Override
-    public Profile getItem(int position) {
+    public IProfile getItem(int position) {
         return profiles.get(position);
     }
 
@@ -49,13 +49,13 @@ public class ProfilesAdapter extends BaseAdapter {
         }
 
         final ViewHolder holder = (ViewHolder) convertView.getTag();
-        final Profile profile = getItem(position);
+        final IProfile profile = getItem(position);
         holder.titleText.setText(profile.getName());
         holder.summaryText.setText(profile.getDescription());
         return convertView;
     }
 
-    public void replaceWith(final Collection<Profile> profilesCollection) {
+    public void replaceWith(final Collection<IProfile> profilesCollection) {
         profiles.clear();
         profiles.addAll(profilesCollection);
         notifyDataSetChanged();

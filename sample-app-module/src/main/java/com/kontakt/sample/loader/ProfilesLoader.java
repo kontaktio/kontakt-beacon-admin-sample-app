@@ -2,25 +2,26 @@ package com.kontakt.sample.loader;
 
 import android.content.Context;
 
-import com.kontakt.sdk.android.common.model.Profile;
+import com.kontakt.sdk.android.common.model.IProfile;
 import com.kontakt.sdk.android.http.HttpResult;
 import com.kontakt.sdk.android.http.KontaktApiClient;
 import com.kontakt.sdk.android.http.exception.ClientException;
+import com.kontakt.sdk.android.http.interfaces.ConfigurationApiAccessor;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-
-public class ProfilesLoader extends AbstractLoader<List<Profile>> {
+public class ProfilesLoader extends AbstractLoader<List<IProfile>> {
 
     private final DisableableContentObserver observer;
 
-    private final KontaktApiClient kontaktApiClient;
+    private final ConfigurationApiAccessor profilesApi;
 
     public ProfilesLoader(Context context) {
         super(context);
         observer = new DisableableContentObserver(new ForceLoadContentObserver());
-        kontaktApiClient = new KontaktApiClient();
+        profilesApi = new KontaktApiClient();
     }
 
     @Override
@@ -38,20 +39,19 @@ public class ProfilesLoader extends AbstractLoader<List<Profile>> {
     protected void onReset() {
         super.onReset();
         observer.setEnabled(false);
-        kontaktApiClient.close();
+        try {
+            profilesApi.close();
+        } catch (IOException ignored) { }
     }
 
     @Override
-    public List<Profile> loadInBackground() {
+    public List<IProfile> loadInBackground() {
         try {
-            HttpResult<List<Profile>> profilesResult = kontaktApiClient.listProfiles();
-            return profilesResult.isPresent() ? profilesResult.get() : Collections.<Profile>emptyList();
+            HttpResult<List<IProfile>> profilesResult = profilesApi.listProfiles();
+            return profilesResult.isPresent() ? profilesResult.get() : Collections.<IProfile>emptyList();
         } catch (ClientException e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
-
-
-
 }
