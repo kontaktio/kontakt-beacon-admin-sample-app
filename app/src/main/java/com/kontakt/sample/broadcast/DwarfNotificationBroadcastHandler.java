@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.ui.activity.TrackDwarf;
@@ -39,16 +40,17 @@ public class DwarfNotificationBroadcastHandler extends NotificationBroadcastHand
             .setAutoCancel(true)
             .setTicker(context.getString(R.string.dwarf_appeared, deviceName))
             .setContentIntent(PendingIntent.getActivity(context, 0,
-                redirectIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
+                    redirectIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
             .setContentTitle(context.getString(R.string.dwarf_appeared, deviceName))
             .setStyle(new Notification.BigTextStyle().bigText(
-                context.getString(R.string.appeared_beacon_info, deviceName,
-                    proximityUUID,
-                    major,
-                    minor,
-                    distance,
-                    proximity.name())))
+                    context.getString(R.string.appeared_beacon_info, deviceName,
+                            proximityUUID,
+                            major,
+                            minor,
+                            distance,
+                            proximity.name())))
+            .setLargeIcon(((BitmapDrawable) context.getResources().getDrawable(R.drawable.ic_launcher)).getBitmap())
             .setSmallIcon(R.drawable.ic_launcher)
             .build();
 
