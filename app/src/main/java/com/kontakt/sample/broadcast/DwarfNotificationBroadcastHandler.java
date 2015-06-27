@@ -49,7 +49,7 @@ public class DwarfNotificationBroadcastHandler extends NotificationBroadcastHand
                     minor,
                     distance,
                     proximity.name())))
-            .setSmallIcon(R.drawable.icon_launcher)
+            .setSmallIcon(R.drawable.ic_launcher)
             .build();
 
         notificationManager.notify(info, notification);
