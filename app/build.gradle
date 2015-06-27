@@ -23,6 +23,11 @@ android {
         versionName "1.0"
     }
 
+    dependencies {
+        compile 'com.flaviofaria:kenburnsview:1.0.6'
+        compile 'com.mcxiaoke.volley:library:1.0.9'
+    }
+
     //Uncomment the Signing configuration once you have all necessary keys generated
     //For more information navigate to http://developer.android.com/tools/publishing/app-signing.html
     /*signingConfigs {

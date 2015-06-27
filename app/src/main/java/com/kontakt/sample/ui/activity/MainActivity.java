@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import com.kontakt.sample.App;
 import com.kontakt.sample.R;
+import com.kontakt.sample.ui.KenBurnsNetImageView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -15,6 +17,9 @@ import butterknife.OnClick;
 public class MainActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 121;
+
+    @InjectView(R.id.banner)
+    KenBurnsNetImageView banner;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -27,6 +32,10 @@ public class MainActivity extends BaseActivity {
 
         setUpActionBar(toolbar);
         setUpActionBarTitle(getString(R.string.app_name));
+        banner.setImageUrl(
+            "http://krasnale.pl/wp-content/uploads/2012/01/Mi%C5%82os%CC%81nik2-Siem.jpg",
+            ((App) getApplication()).getImageLoader()
+        );
     }
 
     @Override
