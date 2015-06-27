@@ -33,6 +33,6 @@
         android:id="@+id/background_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/foreground_background_scan"/>
+        android:text="@string/foreground_background_scan_on"/>
 
 </LinearLayout>

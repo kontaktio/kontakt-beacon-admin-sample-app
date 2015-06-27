@@ -24,14 +24,16 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.TrackDwarf"/>
+        <activity android:name=".ui.activity.DwarfsServiceAwareActivity"/>
+        <service android:name=".service.BackgroundScanService" android:exported="false"/>
+
         <activity android:name=".ui.activity.BeaconMonitorActivity"/>
         <activity android:name=".ui.activity.BeaconRangeActivity"/>
         <activity android:name=".ui.activity.BeaconManagementActivity"/>
-        <activity android:name=".ui.activity.BackgroundScanActivity"/>
         <activity android:name=".ui.activity.ProfilesActivity"/>
         <activity android:name=".ui.activity.ConfigFormActivity"/>
 
-        <service android:name=".service.BackgroundScanService" android:exported="false"/>
         <service android:name=".service.SyncService" android:exported="false"/>
         <service android:name="com.kontakt.sdk.android.manager.BeaconService" android:exported="false"/>
         <service android:name="com.kontakt.sdk.android.manager.BeaconServiceL" android:exported="false"/>

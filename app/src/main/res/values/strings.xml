@@ -55,9 +55,10 @@
     <string name="scan_started">Scan started</string>
     <string name="region_entered">%1$s entered</string>
     <string name="region_abandoned">%1$s abandoned</string>
-    <string name="beacon_appeared">%1$s appeared</string>
+    <string name="dwarf_appeared">Krasnal %1$s jest w pobliżu. Bądź czujny!!!</string>
     <string name="appeared_beacon_info">Device found:\n%1$s\nProximityUUID:\n%2$s\nMajor:\n%3$d\nMinor:\n%4$d\nDistance:\n%5$.1f m (%6$s)</string>
-    <string name="foreground_background_scan">foreground/background scan</string>
+    <string name="foreground_background_scan_off">ZARZĄDŹ CISZĘ W ETERZE!</string>
+    <string name="foreground_background_scan_on">WŁĄCZ SKANER KRASNALI!</string>
     <string name="syncing_config">Syncing config…</string>
     <string name="response_status">HttpResponse status: %1$d</string>
     <string name="configuration">Configuration</string>

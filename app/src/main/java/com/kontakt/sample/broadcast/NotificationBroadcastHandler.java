@@ -7,14 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.kontakt.sample.R;
-import com.kontakt.sample.ui.activity.BackgroundScanActivity;
+import com.kontakt.sample.ui.activity.DwarfsServiceAwareActivity;
 import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
 import com.kontakt.sdk.core.Proximity;
 
 public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
 
-    private final NotificationManager notificationManager;
+    protected final NotificationManager notificationManager;
 
     public NotificationBroadcastHandler(Context context) {
         super(context);
@@ -24,7 +24,7 @@ public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
     @Override
     protected void onBeaconAppeared(int info, BeaconDevice beaconDevice) {
         final Context context = getContext();
-        final Intent redirectIntent = new Intent(context, BackgroundScanActivity.class);
+        final Intent redirectIntent = new Intent(context, DwarfsServiceAwareActivity.class);
         redirectIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         final String deviceName = beaconDevice.getName();
@@ -38,12 +38,12 @@ public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
         final Notification notification = new Notification.Builder(context)
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
-                .setTicker(context.getString(R.string.beacon_appeared, deviceName))
+                .setTicker(context.getString(R.string.dwarf_appeared, deviceName))
                 .setContentIntent(PendingIntent.getActivity(context,
                         0,
                         redirectIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
-                .setContentTitle(context.getString(R.string.beacon_appeared, deviceName))
+                .setContentTitle(context.getString(R.string.dwarf_appeared, deviceName))
                 .setStyle(new Notification.BigTextStyle().bigText(context.getString(R.string.appeared_beacon_info, deviceName,
                                                                                                                    proximityUUID,
                                                                                                                    major,
@@ -59,7 +59,7 @@ public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
     @Override
     protected void onRegionAbandoned(int info, Region region) {
         final Context context = getContext();
-        final Intent redirectIntent = new Intent(context, BackgroundScanActivity.class);
+        final Intent redirectIntent = new Intent(context, DwarfsServiceAwareActivity.class);
         redirectIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final String regionName = region.getIdentifier();
 
@@ -82,7 +82,7 @@ public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
     @Override
     protected void onRegionEntered(int info, Region region) {
         final Context context = getContext();
-        final Intent redirectIntent = new Intent(context, BackgroundScanActivity.class);
+        final Intent redirectIntent = new Intent(context, DwarfsServiceAwareActivity.class);
         redirectIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         final Notification notification = new Notification.Builder(context)
@@ -104,7 +104,7 @@ public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
     @Override
     protected void onScanStarted(int info) {
         final Context context = getContext();
-        final Intent redirectIntent = new Intent(context, BackgroundScanActivity.class);
+        final Intent redirectIntent = new Intent(context, DwarfsServiceAwareActivity.class);
 
         final Notification notification = new Notification.Builder(context)
                 .setWhen(System.currentTimeMillis())
@@ -124,7 +124,7 @@ public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
     @Override
     protected void onScanStopped(int info) {
         final Context context = getContext();
-        final Intent redirectIntent = new Intent(context, BackgroundScanActivity.class);
+        final Intent redirectIntent = new Intent(context, DwarfsServiceAwareActivity.class);
         redirectIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         final Notification notification = new Notification.Builder(context)

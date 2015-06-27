@@ -1,5 +1,8 @@
 package com.kontakt.sample.ui.activity;
 
+import android.app.ActivityManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,40 +28,30 @@ import com.kontakt.sdk.core.util.Preconditions;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class BackgroundScanActivity extends BaseActivity {
+public class DwarfsServiceAwareActivity extends BaseActivity {
 
-    public static final String TAG = BackgroundScanActivity.class.getSimpleName();
+    public static final String TAG = DwarfsServiceAwareActivity.class.getSimpleName();
 
     public static final int MESSAGE_START_SCAN = 16;
     public static final int MESSAGE_STOP_SCAN = 25;
 
     private static final IntentFilter SCAN_INTENT_FILTER;
+    private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 121;
 
     static {
         SCAN_INTENT_FILTER = new IntentFilter(BackgroundScanService.BROADCAST);
         SCAN_INTENT_FILTER.setPriority(2);
     }
 
-    private ServiceConnection serviceConnection;
+    private ServiceConnection serviceConnection = createServiceConnection();
 
     private Messenger serviceMessenger;
 
-    @InjectView(R.id.toolbar)
-    Toolbar toolbar;
-
-    private final BroadcastReceiver scanReceiver = new ForegrondScanReceiver();
+    private final BroadcastReceiver scanReceiver = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.background_scan_activity);
-        ButterKnife.inject(this);
-
-        setUpActionBar(toolbar);
-        setUpActionBarTitle(getString(R.string.foreground_background_scan));
-
-        serviceConnection = createServiceConnection();
-
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         bindServiceAndStartMonitoring();
     }
 
@@ -66,13 +59,13 @@ public class BackgroundScanActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Utils.cancelNotifications(this, BackgroundScanService.INFO_LIST);
-        registerReceiver(scanReceiver, SCAN_INTENT_FILTER);
+        if (scanReceiver != null) registerReceiver(scanReceiver, SCAN_INTENT_FILTER);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(scanReceiver);
+        if (scanReceiver != null) unregisterReceiver(scanReceiver);
     }
 
     @Override
@@ -95,14 +88,11 @@ public class BackgroundScanActivity extends BaseActivity {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 serviceMessenger = new Messenger(service);
-
                 sendMessage(Message.obtain(null, MESSAGE_START_SCAN));
             }
 
             @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
+            public void onServiceDisconnected(ComponentName name) {}
         };
     }
 
@@ -119,10 +109,45 @@ public class BackgroundScanActivity extends BaseActivity {
     }
 
     private static class ForegrondScanReceiver extends AbstractScanBroadcastReceiver {
-
-        @Override
         protected AbstractBroadcastHandler createBroadcastHandler(Context context) {
             return new ForegroundBroadcastHandler(context);
         }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CODE_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
+            startDwarfServiceOrDieTrying();
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    void stopDwarfService() {
+        Utils.cancelNotifications(this, BackgroundScanService.INFO_LIST);
+        unbindService(serviceConnection);
+    }
+
+    void startDwarfServiceOrDieTrying() { //dont kill. is after midnight
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+        if(bluetoothManager.getAdapter().isEnabled()) {
+            bindServiceAndStartMonitoring();
+        } else {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
+        }
+    }
+
+    protected boolean isDwarfServiceRunning() {
+        Class<?> serviceClass = BackgroundScanService.class;
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

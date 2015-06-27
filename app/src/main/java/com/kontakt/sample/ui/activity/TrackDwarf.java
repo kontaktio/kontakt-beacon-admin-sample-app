@@ -1,23 +1,27 @@
 package com.kontakt.sample.ui.activity;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
+import android.os.Messenger;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.kontakt.sample.App;
 import com.kontakt.sample.R;
 import com.kontakt.sample.ui.KenBurnsNetImageView;
-import com.kontakt.sample.util.Utils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
-public class MainActivity extends DwarfsServiceAwareActivity {
-
+/**
+ * Created by slovic on 27.06.15.
+ */
+public class TrackDwarf extends BaseActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final int MESSAGE_START_SCAN = 16;
+    public static final int MESSAGE_STOP_SCAN = 25;
 
+
+    private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 121;
 
     @InjectView(R.id.banner)
     KenBurnsNetImageView banner;
@@ -39,30 +43,4 @@ public class MainActivity extends DwarfsServiceAwareActivity {
         );
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.reset(this);
-    }
-
-    @OnClick(R.id.range_beacons)
-    void startRanging() {
-        startActivity(new Intent(MainActivity.this, BeaconRangeActivity.class));
-    }
-
-    @OnClick(R.id.monitor_beacons)
-    void startMonitoring() {
-        startActivity(new Intent(MainActivity.this, BeaconMonitorActivity.class));
-    }
-
-    @OnClick(R.id.background_scan)
-    void startDwarfScan() {
-        if(!isDwarfServiceRunning()) {
-            Log.d(TAG, "startDwarfScan: start dwarf service");
-            startDwarfServiceOrDieTrying();
-        } else {
-            Log.d(TAG, "startDwarfScan: stop dwarf service");
-            stopDwarfService();
-        }
-    }
 }
