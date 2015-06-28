@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Button;
 
 import com.kontakt.sample.App;
 import com.kontakt.sample.R;
@@ -22,6 +23,9 @@ public class MainActivity extends DwarfsServiceAwareActivity {
     @InjectView(R.id.banner)
     KenBurnsNetImageView banner;
 
+    @InjectView(R.id.background_scan)
+    Button dwarfScaning;
+
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -37,6 +41,7 @@ public class MainActivity extends DwarfsServiceAwareActivity {
                 "http://krasnale.pl/wp-content/uploads/2012/01/Mi%C5%82os%CC%81nik2-Siem.jpg",
                 ((App) getApplication()).getImageLoader()
         );
+        invalidateIcon(isDwarfServiceRunning());
     }
 
     @Override
@@ -60,9 +65,22 @@ public class MainActivity extends DwarfsServiceAwareActivity {
         if(!isDwarfServiceRunning()) {
             Log.d(TAG, "startDwarfScan: start dwarf service");
             startDwarfServiceOrDieTrying();
+            invalidateIcon(true);
         } else {
             Log.d(TAG, "startDwarfScan: stop dwarf service");
             stopDwarfService();
+            invalidateIcon(false);
         }
+    }
+
+    void invalidateIcon(boolean isServiceTurnedOn) {
+        if (isServiceTurnedOn) {
+            dwarfScaning.setText(R.string.foreground_background_scan_off);
+            dwarfScaning.setBackgroundResource(R.drawable.button_warning);
+        } else {
+            dwarfScaning.setText(R.string.foreground_background_scan_on);
+            dwarfScaning.setBackgroundResource(R.drawable.button_green);
+        }
+
     }
 }

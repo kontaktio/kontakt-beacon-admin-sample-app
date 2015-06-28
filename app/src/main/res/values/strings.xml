@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Sample Beacon Admin</string>
-    <string name="range_beacons">Range beacons</string>
-    <string name="monitor_beacons">Monitor beacons</string>
+    <string name="app_name">Wrocławskie Krasnale</string>
+    <string name="range_beacons">Osiągnięcia</string>
+    <string name="monitor_beacons">Zobacz Na Mapie</string>
     <string name="action_settings">Settings</string>
     <string name="venue">Venue</string>
     <string name="cancel">Cancel</string>
