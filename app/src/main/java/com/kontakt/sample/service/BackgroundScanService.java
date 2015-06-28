@@ -61,16 +61,17 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
         beaconManager.setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT);
         beaconManager.setForceScanConfiguration(ForceScanConfiguration.DEFAULT);
         beaconManager.registerMonitoringListener(this);
+//        beaconManager.addFilter(Filters.newBeaconUniqueIdFilter("so7X"));
+//        beaconManager.addFilter(Filters.newMinorFilter(2217));
+//        beaconManager.addFilter(Filters.newMajorFilter(36861));
+//        beaconManager.addFilter(Filters.newProximityUUIDFilter(UUID.fromString("f7826da6-4fa2-4e98-8024-bc5b71e0893e")));
+        beaconManager.addFilter(Filters.newMultiFilterBuilder()                   //accept Beacon matching constraints specified in MultiFilter
+                .setBeaconUniqueId("so7X")
+                .setMinor(2217)
+                .setMajor(36861)
+                .setProximityUUID(UUID.fromString("f7826da6-4fa2-4e98-8024-bc5b71e0893e"))
+                .build());
 
-        beaconManager.addFilter(new Filters.CustomFilter() {
-            @Override
-            public Boolean apply(AdvertisingPackage object) {
-                final UUID proximityUUID = object.getProximityUUID();
-                final double distance = object.getAccuracy();
-
-                return proximityUUID.equals(BeaconManager.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID) && distance <= ACCEPT_DISTANCE;
-            }
-        });
     }
 
     @Override

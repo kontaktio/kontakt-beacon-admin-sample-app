@@ -17,15 +17,16 @@
 
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.TrackDwarf"/>
-        <activity android:name=".ui.activity.DwarfsServiceAwareActivity"/>
+        <activity android:name=".ui.activity.AchievementsActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.TrackDwarf" android:screenOrientation="portrait"/>
         <service android:name=".service.BackgroundScanService" android:exported="false"/>
 
         <activity android:name=".ui.activity.BeaconMonitorActivity"/>

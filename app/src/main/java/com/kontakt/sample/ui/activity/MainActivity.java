@@ -52,7 +52,7 @@ public class MainActivity extends DwarfsServiceAwareActivity {
 
     @OnClick(R.id.range_beacons)
     void startRanging() {
-        startActivity(new Intent(MainActivity.this, BeaconRangeActivity.class));
+        startActivity(new Intent(MainActivity.this, AchievementsActivity.class));
     }
 
     @OnClick(R.id.monitor_beacons)

@@ -44,12 +44,7 @@ public class DwarfNotificationBroadcastHandler extends NotificationBroadcastHand
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
             .setContentTitle(context.getString(R.string.dwarf_appeared, deviceName))
             .setStyle(new Notification.BigTextStyle().bigText(
-                    context.getString(R.string.appeared_beacon_info, deviceName,
-                            proximityUUID,
-                            major,
-                            minor,
-                            distance,
-                            proximity.name())))
+                    context.getString(R.string.dwarf_appeared_info, deviceName, distance)))
             .setLargeIcon(((BitmapDrawable) context.getResources().getDrawable(R.drawable.ic_launcher)).getBitmap())
             .setSmallIcon(R.drawable.ic_launcher)
             .build();

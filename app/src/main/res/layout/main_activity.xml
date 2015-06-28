@@ -29,7 +29,7 @@
             android:layout_margin="0dp"
             android:padding="22dp"
             android:id="@+id/range_beacons"
-            android:text="@string/range_beacons"
+            android:text="@string/achievements"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

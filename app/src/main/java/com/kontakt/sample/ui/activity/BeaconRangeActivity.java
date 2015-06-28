@@ -52,7 +52,7 @@ public class BeaconRangeActivity extends BaseActivity {
         setContentView(R.layout.beacon_range_activity);
         ButterKnife.inject(this);
         setUpActionBar(toolbar);
-        setUpActionBarTitle(getString(R.string.range_beacons));
+        setUpActionBarTitle(getString(R.string.achievements));
         adapter = new BeaconBaseAdapter(this);
 
         beaconManager = BeaconManager.newInstance(this);

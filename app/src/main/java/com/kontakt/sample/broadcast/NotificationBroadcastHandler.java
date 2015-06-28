@@ -44,12 +44,8 @@ public class NotificationBroadcastHandler extends AbstractBroadcastHandler {
                         redirectIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
                 .setContentTitle(context.getString(R.string.dwarf_appeared, deviceName))
-                .setStyle(new Notification.BigTextStyle().bigText(context.getString(R.string.appeared_beacon_info, deviceName,
-                                                                                                                   proximityUUID,
-                                                                                                                   major,
-                                                                                                                   minor,
-                                                                                                                   distance,
-                                                                                                                   proximity.name())))
+                .setStyle(new Notification.BigTextStyle().bigText(context.getString(R.string.dwarf_appeared_info, deviceName,
+                                                                                                                   distance)))
                 .setSmallIcon(R.drawable.icon_launcher)
                 .build();
 

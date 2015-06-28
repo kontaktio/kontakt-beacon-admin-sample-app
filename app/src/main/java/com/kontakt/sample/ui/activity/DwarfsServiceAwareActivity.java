@@ -71,9 +71,11 @@ public class DwarfsServiceAwareActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sendMessage(Message.obtain(null, MESSAGE_STOP_SCAN));
+        if (serviceMessenger != null) {
+            sendMessage(Message.obtain(null, MESSAGE_STOP_SCAN));
+            unbindService(serviceConnection);
+        }
         serviceMessenger = null;
-        unbindService(serviceConnection);
         serviceConnection = null;
         ButterKnife.reset(this);
     }
