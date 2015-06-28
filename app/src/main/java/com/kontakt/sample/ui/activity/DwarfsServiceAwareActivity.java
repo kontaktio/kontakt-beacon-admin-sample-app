@@ -52,7 +52,7 @@ public class DwarfsServiceAwareActivity extends BaseActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        bindServiceAndStartMonitoring();
+//        bindServiceAndStartMonitoring();
     }
 
     @Override
