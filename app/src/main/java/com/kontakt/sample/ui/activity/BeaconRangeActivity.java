@@ -20,6 +20,8 @@ import com.kontakt.sdk.android.connection.OnServiceBoundListener;
 import com.kontakt.sdk.android.data.RssiCalculators;
 import com.kontakt.sdk.android.device.BeaconDevice;
 import com.kontakt.sdk.android.device.Region;
+import com.kontakt.sdk.android.factory.AdvertisingPackage;
+import com.kontakt.sdk.android.factory.Filters;
 import com.kontakt.sdk.android.manager.BeaconManager;
 import com.kontakt.sdk.core.interfaces.BiConsumer;
 
@@ -50,7 +52,7 @@ public class BeaconRangeActivity extends BaseActivity {
         setContentView(R.layout.beacon_range_activity);
         ButterKnife.inject(this);
         setUpActionBar(toolbar);
-        setUpActionBarTitle(getString(R.string.range_beacons));
+        setUpActionBarTitle(getString(R.string.achievements));
         adapter = new BeaconBaseAdapter(this);
 
         beaconManager = BeaconManager.newInstance(this);
@@ -58,6 +60,15 @@ public class BeaconRangeActivity extends BaseActivity {
         beaconManager.setScanMode(BeaconManager.SCAN_MODE_BALANCED); // Works only for Android L OS version
 
         beaconManager.setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5)); //Calculate rssi value basing on arithmethic mean basing on 5 last notified values
+
+        //accept beacons from distance 1m at most
+        beaconManager.addFilter(new Filters.CustomFilter() {
+            public Boolean apply(AdvertisingPackage advPackage) {
+                return advPackage.getAccuracy() < 1;
+            }
+        });
+
+
 /*
         beaconManager.setRssiCalculator(new RssiCalculators.CustomRssiCalculator() { //Provide your own Rssi Calculator to estimate manipulate Rssi value
             @Override                                                                  //and thus Proximity from Beacon device

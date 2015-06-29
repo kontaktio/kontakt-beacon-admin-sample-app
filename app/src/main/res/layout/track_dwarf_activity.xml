@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <include layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+    <com.flaviofaria.kenburnsview.KenBurnsView
+        android:id="@+id/banner"
+        android:layout_weight="1.7"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/kra_narcyz"/>
+
+    <TextView
+        android:textStyle="bold"
+        android:textSize="17dp"
+        android:text="łącznie znaleziony razy: 145\n\nostatnio: 17 czerwaca 2015r.\n\n"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:textSize="17dp"
+        android:text="Z tym krasnalem wiąże się ciekawa historia miłosna. We Wrocławiu jeszcze za czasów okupacji niemieckiej w miejscu gdzie obecnie znajduje się krasnal mieszkała córka Adolfa Hitlera. Legenda głosi, że zakochała się w jednym polaku lecz gdy dowiedział się o tym jej ojciec kazał jej jak najszybciej się z tąd wyporowadzić, a owego młodzięca kazał rozstrzelać. Na pamiątkę tej miłosnej tragedji rodzina młodzięca ufundowała tego krasnala w 1999r."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

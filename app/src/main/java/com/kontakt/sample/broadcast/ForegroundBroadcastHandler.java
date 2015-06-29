@@ -25,7 +25,7 @@ public class ForegroundBroadcastHandler extends AbstractBroadcastHandler {
         final Proximity proximity = beaconDevice.getProximity();
 
         Context context = getContext();
-        Utils.showToast(context, context.getString(R.string.appeared_beacon_info, deviceName,
+        Utils.showToast(context, context.getString(R.string.dwarf_appeared_info, deviceName,
                                                                                   proximityUUID,
                                                                                   major,
                                                                                   minor,

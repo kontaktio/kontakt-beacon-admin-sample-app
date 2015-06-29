@@ -8,7 +8,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-import com.kontakt.sample.ui.activity.BackgroundScanActivity;
+import com.kontakt.sample.ui.activity.DwarfsServiceAwareActivity;
 import com.kontakt.sdk.android.configuration.BeaconActivityCheckConfiguration;
 import com.kontakt.sdk.android.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.connection.OnServiceBoundListener;
@@ -26,11 +26,8 @@ import java.util.UUID;
 public class BackgroundScanService extends Service implements BeaconManager.MonitoringListener {
 
     public static final String BROADCAST = String.format("%s.%s", BackgroundScanService.class.getName(), "BROADCAST");
-
     public static final String EXTRA_BEACON = "extra_new_beacon";
-
     public static final String EXTRA_INFO = "extra_info";
-
     public static final String EXTRA_REGION = "extra_region";
 
     public static final int INFO_REGION_ENTERED = 100;
@@ -41,7 +38,7 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
 
     public static final List<Integer> INFO_LIST;
 
-    private static final double ACCEPT_DISTANCE = 1.5;//[m]
+    private static final double ACCEPT_DISTANCE = 300;//[m]
 
     static {
         INFO_LIST = Collections.unmodifiableList(Arrays.asList(INFO_BEACON_APPEARED,
@@ -64,16 +61,17 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
         beaconManager.setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT);
         beaconManager.setForceScanConfiguration(ForceScanConfiguration.DEFAULT);
         beaconManager.registerMonitoringListener(this);
+//        beaconManager.addFilter(Filters.newBeaconUniqueIdFilter("so7X"));
+//        beaconManager.addFilter(Filters.newMinorFilter(2217));
+//        beaconManager.addFilter(Filters.newMajorFilter(36861));
+//        beaconManager.addFilter(Filters.newProximityUUIDFilter(UUID.fromString("f7826da6-4fa2-4e98-8024-bc5b71e0893e")));
+        beaconManager.addFilter(Filters.newMultiFilterBuilder()                   //accept Beacon matching constraints specified in MultiFilter
+                .setBeaconUniqueId("so7X")
+                .setMinor(2217)
+                .setMajor(36861)
+                .setProximityUUID(UUID.fromString("f7826da6-4fa2-4e98-8024-bc5b71e0893e"))
+                .build());
 
-        beaconManager.addFilter(new Filters.CustomFilter() {
-            @Override
-            public Boolean apply(AdvertisingPackage object) {
-                final UUID proximityUUID = object.getProximityUUID();
-                final double distance = object.getAccuracy();
-
-                return proximityUUID.equals(BeaconManager.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID) && distance <= ACCEPT_DISTANCE;
-            }
-        });
     }
 
     @Override
@@ -169,11 +167,11 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
 
             switch(messageCode) {
 
-                case BackgroundScanActivity.MESSAGE_START_SCAN:
+                case DwarfsServiceAwareActivity.MESSAGE_START_SCAN:
                     startMonitoring();
                     break;
 
-                case BackgroundScanActivity.MESSAGE_STOP_SCAN:
+                case DwarfsServiceAwareActivity.MESSAGE_STOP_SCAN:
                     stopMonitoring();
                     break;
                 

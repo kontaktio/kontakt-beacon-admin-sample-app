@@ -1,20 +1,30 @@
 package com.kontakt.sample.ui.activity;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.Button;
 
+import com.kontakt.sample.App;
 import com.kontakt.sample.R;
+import com.kontakt.sample.ui.KenBurnsNetImageView;
+import com.kontakt.sample.util.Utils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends DwarfsServiceAwareActivity {
 
-    private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 121;
+    public static final String TAG = MainActivity.class.getSimpleName();
+
+
+    @InjectView(R.id.banner)
+    KenBurnsNetImageView banner;
+
+    @InjectView(R.id.background_scan)
+    Button dwarfScaning;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -27,17 +37,11 @@ public class MainActivity extends BaseActivity {
 
         setUpActionBar(toolbar);
         setUpActionBarTitle(getString(R.string.app_name));
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(requestCode == REQUEST_CODE_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
-            startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
-            return;
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
+        banner.setImageUrl(
+                "http://krasnale.pl/wp-content/uploads/2012/01/Mi%C5%82os%CC%81nik2-Siem.jpg",
+                ((App) getApplication()).getImageLoader()
+        );
+        invalidateIcon(isDwarfServiceRunning());
     }
 
     @Override
@@ -48,7 +52,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.range_beacons)
     void startRanging() {
-        startActivity(new Intent(MainActivity.this, BeaconRangeActivity.class));
+        startActivity(new Intent(MainActivity.this, AchievementsActivity.class));
     }
 
     @OnClick(R.id.monitor_beacons)
@@ -57,13 +61,26 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick(R.id.background_scan)
-    void startForegroundBackgroundScan() {
-        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
-        if(bluetoothManager.getAdapter().isEnabled()) {
-            startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
+    void startDwarfScan() {
+        if(!isDwarfServiceRunning()) {
+            Log.d(TAG, "startDwarfScan: start dwarf service");
+            startDwarfServiceOrDieTrying();
+            invalidateIcon(true);
         } else {
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
+            Log.d(TAG, "startDwarfScan: stop dwarf service");
+            stopDwarfService();
+            invalidateIcon(false);
         }
+    }
+
+    void invalidateIcon(boolean isServiceTurnedOn) {
+        if (isServiceTurnedOn) {
+            dwarfScaning.setText(R.string.foreground_background_scan_off);
+            dwarfScaning.setBackgroundResource(R.drawable.button_warning);
+        } else {
+            dwarfScaning.setText(R.string.foreground_background_scan_on);
+            dwarfScaning.setBackgroundResource(R.drawable.button_green);
+        }
+
     }
 }
