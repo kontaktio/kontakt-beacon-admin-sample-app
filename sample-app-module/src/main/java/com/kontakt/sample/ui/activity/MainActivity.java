@@ -32,7 +32,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_CODE_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
+        if(requestCode == REQUEST_CODE_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
             startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
             return;
         }
@@ -61,10 +61,15 @@ public class MainActivity extends BaseActivity {
         startActivity(new Intent(MainActivity.this, SimultaneousScanActivity.class));
     }
 
+    @OnClick(R.id.syncable_connection)
+    void startRangeWithSyncableConnection(){
+        startActivity(new Intent(MainActivity.this, BeaconRangeSyncableActivity.class));
+    }
+
     @OnClick(R.id.background_scan)
     void startForegroundBackgroundScan() {
 
-        if (!BluetoothUtils.isBluetoothEnabled()) {
+        if(! BluetoothUtils.isBluetoothEnabled()) {
             startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
         } else {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);

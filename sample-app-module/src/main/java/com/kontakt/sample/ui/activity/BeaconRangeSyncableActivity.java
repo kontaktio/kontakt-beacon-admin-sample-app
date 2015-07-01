@@ -17,11 +17,30 @@ import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 
-public class BeaconRangeActivity extends BaseBeaconRangeActivity {
+public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNewScanContext();
+    }
+
+    //todo: remove
+    private void createNewScanContext() {
+        scanContext = new ScanContext.Builder()
+                .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
+                .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
+                .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
+                .setScanPeriod(new ScanPeriod(15000, 5000))
+                .addIBeaconFilter(new CustomFilter() {
+                    @Override
+                    public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
+                        return iBeaconAdvertisingPacket.getBeaconUniqueId().equals("aMUi");
+                    }
+                })
+                .build();
     }
 
     @Override
@@ -37,7 +56,7 @@ public class BeaconRangeActivity extends BaseBeaconRangeActivity {
 
                             beacon.setPassword(password.getBytes());
 
-                            final Intent intent = new Intent(BeaconRangeActivity.this, BeaconManagementActivity.class);
+                            final Intent intent = new Intent(BeaconRangeSyncableActivity.this, SyncableBeaconManagementActivity.class);
                             intent.putExtra(BeaconManagementActivity.EXTRA_BEACON_DEVICE, beacon);
 
                             startActivityForResult(intent, REQUEST_CODE_CONNECT_TO_DEVICE);

@@ -108,8 +108,11 @@ public class SimultaneousScanActivity extends BaseActivity implements ProximityM
     }
 
     @Override
-    public void removeManager(ProximityManagerWrapper proximityManager) {
-        proximityManagerWrapperList.remove(proximityManager);
+    public void removeManager(ProximityManagerWrapper proximityManagerWrapper) {
+
+        proximityManagerWrapper.proximityManager.disconnect();
+
+        proximityManagerWrapperList.remove(proximityManagerWrapper);
         updateList();
         updateProximityManagersCount();
     }

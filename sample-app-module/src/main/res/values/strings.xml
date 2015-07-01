@@ -47,9 +47,9 @@
     <string name="power">Power</string>
     <string name="address">MAC address</string>
     <string name="firmware_version">Firmware version</string>
-    <string name="unexpected_error_monitoring_start">Unexpected error occured during monitoring start</string>
+    <string name="unexpected_error_monitoring_start">Unexpected error occurred during monitoring start</string>
     <string name="bluetooth_not_enabled">Bluetooth not enabled</string>
-    <string name="unexpected_error_connection">Unexpected error occured during establishing connection to Beacon Service</string>
+    <string name="unexpected_error_connection">Unexpected error occurred during establishing connection to Beacon Service</string>
     <string name="background_scan">Background Scan</string>
     <string name="scan_stopped">Scan stopped</string>
     <string name="scan_started">Scan started</string>
@@ -70,4 +70,5 @@
     <string name="beacons_found_count">Beacons found: %1$d</string>
     <string name="distance_filter">Distance &lt; %1$d</string>
     <string name="remove_manager">Remove manager</string>
+    <string name="syncable_connection">Syncable connection</string>
 </resources>
