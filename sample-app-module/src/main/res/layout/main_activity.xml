@@ -35,4 +35,12 @@
         android:layout_height="wrap_content"
         android:text="@string/foreground_background_scan"/>
 
+    <Button
+        android:layout_marginTop="20dp"
+        android:alpha="0.7"
+        android:id="@+id/multiple_proximity_manager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/simultaneous_scans"/>
+
 </LinearLayout>

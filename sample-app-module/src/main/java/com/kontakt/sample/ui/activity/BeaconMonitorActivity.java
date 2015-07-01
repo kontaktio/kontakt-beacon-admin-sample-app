@@ -15,10 +15,10 @@ import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguratio
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
 import com.kontakt.sdk.android.common.ibeacon.Region;
 import com.kontakt.sdk.android.ble.filter.Filters;
-import com.kontakt.sdk.android.ble.manager.BeaconManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 
@@ -28,13 +28,13 @@ import java.util.concurrent.TimeUnit;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class BeaconMonitorActivity extends BaseActivity implements BeaconManager.MonitoringListener {
+public class BeaconMonitorActivity extends BaseActivity implements ProximityManager.MonitoringListener {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
 
     private MonitorSectionAdapter adapter;
 
-    private BeaconManager deviceManager;
+    private ProximityManager deviceManager;
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -56,7 +56,7 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
 
         list.setAdapter(adapter);
 
-        deviceManager = new BeaconManager(this);
+        deviceManager = new ProximityManager(this);
 
         scanContext = createScanContext();
     }
@@ -64,8 +64,8 @@ public class BeaconMonitorActivity extends BaseActivity implements BeaconManager
     private ScanContext createScanContext() {
         return new ScanContext.Builder()
                 .setScanPeriod(new ScanPeriod(TimeUnit.SECONDS.toMillis(5), TimeUnit.SECONDS.toMillis(5)))
-                .addIBeaconFilter(Filters.newProximityUUIDFilter(BeaconManager.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID))
-                .setScanMode(BeaconManager.SCAN_MODE_BALANCED)
+                .addIBeaconFilter(Filters.newProximityUUIDFilter(ProximityManager.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID))
+                .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
                 .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
                 .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
                 .build();

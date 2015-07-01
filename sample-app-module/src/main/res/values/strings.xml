@@ -61,4 +61,13 @@
     <string name="syncing_config">Syncing config…</string>
     <string name="response_status">HttpResponse status: %1$d</string>
     <string name="configuration">Configuration</string>
+    <string name="simultaneous_scans">Simultaneous scan</string>
+    <string name="create_manager">Create manager</string>
+    <string name="count_of_managers">Count of managers: %1$d</string>
+    <string name="distance">Distance &lt; </string>
+    <string name="incorrect_distance">Distance is not a number</string>
+    <string name="manager_id">Manager id: %1$d</string>
+    <string name="beacons_found_count">Beacons found: %1$d</string>
+    <string name="distance_filter">Distance &lt; %1$d</string>
+    <string name="remove_manager">Remove manager</string>
 </resources>

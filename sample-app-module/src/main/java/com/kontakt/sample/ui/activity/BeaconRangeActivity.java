@@ -17,9 +17,9 @@ import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguratio
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
 import com.kontakt.sdk.android.common.ibeacon.Region;
-import com.kontakt.sdk.android.ble.manager.BeaconManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 
-public class BeaconRangeActivity extends BaseActivity implements BeaconManager.RangingListener {
+public class BeaconRangeActivity extends BaseActivity implements ProximityManager.RangingListener {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
 
@@ -44,10 +44,10 @@ public class BeaconRangeActivity extends BaseActivity implements BeaconManager.R
 
     private BeaconBaseAdapter adapter;
 
-    private BeaconManager deviceManager;
+    private ProximityManager deviceManager;
 
     private final ScanContext scanContext = new ScanContext.Builder()
-            .setScanMode(BeaconManager.SCAN_MODE_BALANCED)
+            .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
             .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
             .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
             .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
@@ -63,7 +63,7 @@ public class BeaconRangeActivity extends BaseActivity implements BeaconManager.R
 
         adapter = new BeaconBaseAdapter(this);
 
-        deviceManager = new BeaconManager(this);
+        deviceManager = new ProximityManager(this);
 
         deviceList.setAdapter(adapter);
     }

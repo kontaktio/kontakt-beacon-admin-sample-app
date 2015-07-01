@@ -12,18 +12,18 @@ import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguratio
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
 import com.kontakt.sdk.android.common.ibeacon.Region;
 import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
 import com.kontakt.sdk.android.ble.filter.CustomFilter;
-import com.kontakt.sdk.android.ble.manager.BeaconManager;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class BackgroundScanService extends Service implements BeaconManager.MonitoringListener {
+public class BackgroundScanService extends Service implements ProximityManager.MonitoringListener {
 
     public static final String BROADCAST = String.format("%s.%s", BackgroundScanService.class.getName(), "BROADCAST");
 
@@ -53,10 +53,10 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
 
     private final Messenger serviceMessenger = new Messenger(new ServiceHandler());
 
-    private BeaconManager beaconManger;
+    private ProximityManager beaconManger;
 
     private final ScanContext scanContext = new ScanContext.Builder()
-            .setScanMode(BeaconManager.SCAN_MODE_BALANCED)
+            .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
             .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
             .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
             .addIBeaconFilter(new CustomFilter() {
@@ -65,7 +65,7 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
                     final UUID proximityUUID = iBeaconAdvertisingPacket.getProximityUUID();
                     final double distance = iBeaconAdvertisingPacket.getDistance();
 
-                    return proximityUUID.equals(BeaconManager.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID) && distance <= ACCEPT_DISTANCE;
+                    return proximityUUID.equals(ProximityManager.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID) && distance <= ACCEPT_DISTANCE;
                 }
             }).build();
     ;
@@ -74,7 +74,7 @@ public class BackgroundScanService extends Service implements BeaconManager.Moni
     public void onCreate() {
         super.onCreate();
 
-        beaconManger = new BeaconManager(this);
+        beaconManger = new ProximityManager(this);
     }
 
     @Override
