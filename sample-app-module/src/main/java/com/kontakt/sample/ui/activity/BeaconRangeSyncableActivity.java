@@ -14,7 +14,7 @@ import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
 import com.kontakt.sdk.android.ble.filter.CustomFilter;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
-import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 
 public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {

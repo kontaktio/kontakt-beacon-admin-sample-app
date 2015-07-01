@@ -5,8 +5,8 @@ import android.content.Context;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
-import com.kontakt.sdk.android.common.ibeacon.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.Region;
 import com.kontakt.sdk.android.common.Proximity;
 
 public class ForegroundBroadcastInterceptor extends AbstractBroadcastInterceptor {

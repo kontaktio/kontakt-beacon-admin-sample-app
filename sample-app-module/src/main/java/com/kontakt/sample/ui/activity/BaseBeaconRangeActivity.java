@@ -18,8 +18,8 @@ import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
-import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
-import com.kontakt.sdk.android.common.ibeacon.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.Region;
 
 import java.util.List;
 

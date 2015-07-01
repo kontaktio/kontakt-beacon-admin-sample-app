@@ -13,8 +13,8 @@ import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
-import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
-import com.kontakt.sdk.android.common.ibeacon.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.Region;
 import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
 import com.kontakt.sdk.android.ble.filter.CustomFilter;
 

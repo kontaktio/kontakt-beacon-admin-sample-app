@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.kontakt.sample.R;
 import com.kontakt.sdk.android.ble.device.BeaconDevice;
-import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
-import com.kontakt.sdk.android.common.ibeacon.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.Region;
 import com.kontakt.sdk.android.ble.device.IBeaconRegion;
 
 import java.text.DecimalFormat;

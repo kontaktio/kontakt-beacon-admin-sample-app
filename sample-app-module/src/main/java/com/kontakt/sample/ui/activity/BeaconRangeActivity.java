@@ -6,15 +6,7 @@ import android.os.Bundle;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
-import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
-import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
-import com.kontakt.sdk.android.ble.configuration.ScanContext;
-import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
-import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
-import com.kontakt.sdk.android.ble.filter.CustomFilter;
-import com.kontakt.sdk.android.ble.manager.ProximityManager;
-import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
-import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 
 public class BeaconRangeActivity extends BaseBeaconRangeActivity {

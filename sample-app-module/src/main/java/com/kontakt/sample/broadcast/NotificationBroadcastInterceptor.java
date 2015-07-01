@@ -8,8 +8,8 @@ import android.content.Intent;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.ui.activity.BackgroundScanActivity;
-import com.kontakt.sdk.android.common.ibeacon.IBeaconDevice;
-import com.kontakt.sdk.android.common.ibeacon.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.Region;
 import com.kontakt.sdk.android.common.Proximity;
 
 public class NotificationBroadcastInterceptor extends AbstractBroadcastInterceptor {
