@@ -13,6 +13,7 @@ import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
+import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.Region;
 import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
@@ -65,7 +66,7 @@ public class BackgroundScanService extends Service implements ProximityManager.M
                     final UUID proximityUUID = iBeaconAdvertisingPacket.getProximityUUID();
                     final double distance = iBeaconAdvertisingPacket.getDistance();
 
-                    return proximityUUID.equals(ProximityManager.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID) && distance <= ACCEPT_DISTANCE;
+                    return proximityUUID.equals(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID) && distance <= ACCEPT_DISTANCE;
                 }
             }).build();
     ;

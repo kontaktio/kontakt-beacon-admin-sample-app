@@ -16,6 +16,7 @@ import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
+import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.Region;
 import com.kontakt.sdk.android.ble.filter.Filters;
@@ -64,7 +65,7 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
     private ScanContext createScanContext() {
         return new ScanContext.Builder()
                 .setScanPeriod(new ScanPeriod(TimeUnit.SECONDS.toMillis(5), TimeUnit.SECONDS.toMillis(5)))
-                .addIBeaconFilter(Filters.newProximityUUIDFilter(ProximityManager.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID))
+                .addIBeaconFilter(Filters.newProximityUUIDFilter(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID))
                 .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
                 .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
                 .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
