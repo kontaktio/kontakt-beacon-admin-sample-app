@@ -11,10 +11,14 @@ import android.widget.Toast;
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.MonitorSectionAdapter;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
+import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.device.DeviceProfile;
+import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
+import com.kontakt.sdk.android.ble.discovery.EventType;
+import com.kontakt.sdk.android.ble.discovery.IBeaconDeviceEvent;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
@@ -67,8 +71,15 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
                 .setScanPeriod(new ScanPeriod(TimeUnit.SECONDS.toMillis(5), TimeUnit.SECONDS.toMillis(5)))
                 .addIBeaconFilter(Filters.newProximityUUIDFilter(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID))
                 .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-                .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
+                .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
                 .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                .addDeviceProfile(DeviceProfile.IBEACON)
+                .addEventTypes(new EventType[] {
+                        EventType.DEVICE_DISCOVERED,
+                        EventType.DEVICES_UPDATE,
+                        EventType.SPACE_ENTERED,
+                        EventType.SPACE_ABANDONED
+                })
                 .build();
     }
 
@@ -158,50 +169,70 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
     }
 
     @Override
-    public void onIBeaconsUpdated(final Region region, final List<IBeaconDevice> beacons) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                final int index = adapter.getGroupIndex(region);
-                if (index != -1) {
-                    adapter.replaceChildren(index, beacons);
-                }
-            }
-        });
-    }
+    public void onEvent(BluetoothDeviceEvent event) {
 
-    @Override
-    public void onIBeaconAppeared(final Region region, final IBeaconDevice beacon) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                int index = adapter.getGroupIndex(region);
-                if (index != -1) {
-                    adapter.addOrReplaceChild(index, beacon);
-                }
-            }
-        });
-    }
+        final IBeaconDeviceEvent iBeaconDeviceEvent = (IBeaconDeviceEvent) event;
 
-    @Override
-    public void onRegionEntered(final Region venue) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (! adapter.containsGroup(venue)) {
-                    adapter.addGroup(venue);
-                }
-            }
-        });
-    }
+        final Region region = iBeaconDeviceEvent.getRegion();
 
-    @Override
-    public void onRegionAbandoned(final Region region) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.removeGroup(region);
-            }
-        });
+        final List<IBeaconDevice> deviceList = iBeaconDeviceEvent.getDeviceList();
+
+        switch(iBeaconDeviceEvent.getEventType()) {
+
+            case SPACE_ENTERED:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (! adapter.containsGroup(region)) {
+                            adapter.addGroup(region);
+                        }
+                    }
+                });
+                break;
+
+            case DEVICE_DISCOVERED:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int index = adapter.getGroupIndex(region);
+                        if (index != -1) {
+                            adapter.addOrReplaceChild(index, deviceList.get(0));
+                        }
+                    }
+                });
+                break;
+
+            case DEVICES_UPDATE:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final int index = adapter.getGroupIndex(region);
+                        if (index != -1) {
+                            adapter.replaceChildren(index, deviceList);
+                        }
+                    }
+                });
+                break;
+
+            case SPACE_ABANDONED:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.removeGroup(region);
+                    }
+                });
+                break;
+
+            default:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        throw new IllegalStateException("This event should never occur becuase it is not specified in ScanContext: " + iBeaconDeviceEvent.getEventType().name());
+                    }
+                });
+
+
+        }
+
     }
 }

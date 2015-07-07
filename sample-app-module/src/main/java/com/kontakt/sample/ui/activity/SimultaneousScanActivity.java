@@ -15,17 +15,19 @@ import android.widget.Toast;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.ProximityManagerAdapter;
-import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
+import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.device.DeviceProfile;
+import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
+import com.kontakt.sdk.android.ble.discovery.EventType;
 import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
-import com.kontakt.sdk.android.ble.filter.CustomFilter;
+import com.kontakt.sdk.android.ble.discovery.IBeaconDeviceEvent;
+import com.kontakt.sdk.android.ble.filter.CustomIBeaconFilter;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
-import com.kontakt.sdk.android.common.profile.IBeaconDevice;
-import com.kontakt.sdk.android.common.profile.Region;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,14 +155,15 @@ public class SimultaneousScanActivity extends BaseActivity implements ProximityM
     private ScanContext createScanContext(final int distance) {
         return new ScanContext.Builder()
                 .setScanPeriod(new ScanPeriod(TimeUnit.SECONDS.toMillis(5), TimeUnit.SECONDS.toMillis(5)))
-                .addIBeaconFilter(new CustomFilter() {
+                .addIBeaconFilter(new CustomIBeaconFilter() {
                     @Override
                     public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
                         return iBeaconAdvertisingPacket.getDistance() < distance;
                     }
                 })
                 .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-                .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
+                .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
+                .addDeviceProfile(DeviceProfile.IBEACON)
                 .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
                 .build();
     }
@@ -190,14 +193,29 @@ public class SimultaneousScanActivity extends BaseActivity implements ProximityM
             proximityManager.initializeScan(createScanContext(distance), new OnServiceReadyListener() {
                 @Override
                 public void onServiceReady() {
-                    proximityManager.attachListener(new ProximityManager.RangingListener() {
+                    proximityManager.attachListener(new ProximityManager.MonitoringListener() {
                         @Override
-                        public void onIBeaconsDiscovered(Region region, List<IBeaconDevice> iBeaconDevices) {
-                            int indexOf = proximityManagerWrapperList.indexOf(proximityManagerWrapper);
-                            ProximityManagerWrapper currentWrapper = proximityManagerWrapperList.get(indexOf);
-                            currentWrapper.setFoundBeacons(iBeaconDevices.size());
-                            proximityManagerWrapperList.set(indexOf, currentWrapper);
-                            updateList();
+                        public void onMonitorStart() {
+
+                        }
+
+                        @Override
+                        public void onMonitorStop() {
+
+                        }
+
+                        @Override
+                        public void onEvent(BluetoothDeviceEvent event) {
+                            if(event.getEventType() == EventType.DEVICE_DISCOVERED) {
+
+                                final IBeaconDeviceEvent iBeaconEvent = (IBeaconDeviceEvent) event;
+
+                                int indexOf = proximityManagerWrapperList.indexOf(proximityManagerWrapper);
+                                ProximityManagerWrapper currentWrapper = proximityManagerWrapperList.get(indexOf);
+                                currentWrapper.setFoundBeacons(iBeaconEvent.getDeviceList().size());
+                                proximityManagerWrapperList.set(indexOf, currentWrapper);
+                                updateList();
+                            }
                         }
                     });
                 }

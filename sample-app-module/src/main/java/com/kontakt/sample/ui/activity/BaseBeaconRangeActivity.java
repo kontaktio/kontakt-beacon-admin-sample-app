@@ -11,23 +11,20 @@ import android.widget.Toast;
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.BeaconBaseAdapter;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
+import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
-import com.kontakt.sdk.android.common.profile.IBeaconDevice;
-import com.kontakt.sdk.android.common.profile.Region;
-
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 
-public abstract class BaseBeaconRangeActivity extends BaseActivity implements ProximityManager.RangingListener {
+public abstract class BaseBeaconRangeActivity extends BaseActivity implements ProximityManager.MonitoringListener {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
 
@@ -46,7 +43,7 @@ public abstract class BaseBeaconRangeActivity extends BaseActivity implements Pr
     protected ScanContext scanContext = new ScanContext.Builder()
             .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
             .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
-            .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
+            .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
             .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
             .build();
 
@@ -130,6 +127,21 @@ public abstract class BaseBeaconRangeActivity extends BaseActivity implements Pr
     }
 
     @Override
+    public void onEvent(BluetoothDeviceEvent event) {
+
+    }
+
+    @Override
+    public void onMonitorStop() {
+
+    }
+
+    @Override
+    public void onMonitorStart() {
+
+    }
+
+    /*@Override
     public void onIBeaconsDiscovered(Region region, final List<IBeaconDevice> iBeaconDevices) {
         runOnUiThread(new Runnable() {
             @Override
@@ -137,5 +149,5 @@ public abstract class BaseBeaconRangeActivity extends BaseActivity implements Pr
                 adapter.replaceWith(iBeaconDevices);
             }
         });
-    }
+    }*/
 }

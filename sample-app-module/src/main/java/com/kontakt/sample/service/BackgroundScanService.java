@@ -8,16 +8,20 @@ import android.os.Message;
 import android.os.Messenger;
 
 import com.kontakt.sample.ui.activity.BackgroundScanActivity;
-import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
+import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.device.DeviceProfile;
+import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
+import com.kontakt.sdk.android.ble.discovery.EventType;
+import com.kontakt.sdk.android.ble.discovery.IBeaconDeviceEvent;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.Region;
 import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
-import com.kontakt.sdk.android.ble.filter.CustomFilter;
+import com.kontakt.sdk.android.ble.filter.CustomIBeaconFilter;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,9 +62,15 @@ public class BackgroundScanService extends Service implements ProximityManager.M
 
     private final ScanContext scanContext = new ScanContext.Builder()
             .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-            .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
+            .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
             .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
-            .addIBeaconFilter(new CustomFilter() {
+            .addDeviceProfile(DeviceProfile.IBEACON)
+            .addEventTypes(new EventType[]{
+                    EventType.SPACE_ENTERED,
+                    EventType.DEVICE_DISCOVERED,
+                    EventType.SPACE_ABANDONED
+            })
+            .addIBeaconFilter(new CustomIBeaconFilter() {
                 @Override
                 public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
                     final UUID proximityUUID = iBeaconAdvertisingPacket.getProximityUUID();
@@ -125,34 +135,37 @@ public class BackgroundScanService extends Service implements ProximityManager.M
     }
 
     @Override
-    public void onIBeaconsUpdated(Region region, List<IBeaconDevice> beaconDevices) {
-        /*You can send broadcast with entire list of Beacon devices.
-        * However, please be aware of Bundle limitations.*/
-    }
+    public void onEvent(BluetoothDeviceEvent event) {
 
-    @Override
-    public void onIBeaconAppeared(Region region, IBeaconDevice beaconDevice) {
-        scheduleBroadcast(new BroadcastBuilder()
-                .setInfo(INFO_BEACON_APPEARED)
-                .setBeaconDevice(beaconDevice)
-                .setRegion(region)
-                .build());
-    }
+        final IBeaconDeviceEvent iBeaconDeviceEvent = (IBeaconDeviceEvent) event;
 
-    @Override
-    public void onRegionEntered(Region region) {
-        scheduleBroadcast(new BroadcastBuilder()
-                .setInfo(INFO_REGION_ENTERED)
-                .setRegion(region)
-                .build());
-    }
+        switch (event.getEventType()) {
 
-    @Override
-    public void onRegionAbandoned(Region region) {
-        scheduleBroadcast(new BroadcastBuilder()
-                .setInfo(INFO_REGION_ABANDONED)
-                .setRegion(region)
-                .build());
+            case SPACE_ENTERED:
+                scheduleBroadcast(new BroadcastBuilder()
+                        .setInfo(INFO_REGION_ENTERED)
+                        .setRegion(iBeaconDeviceEvent.getRegion())
+                        .build());
+                break;
+
+            case DEVICE_DISCOVERED:
+                scheduleBroadcast(new BroadcastBuilder()
+                        .setInfo(INFO_BEACON_APPEARED)
+                        .setBeaconDevice(iBeaconDeviceEvent.getDeviceList().get(0))
+                        .setRegion(iBeaconDeviceEvent.getRegion())
+                        .build());
+                break;
+
+            case SPACE_ABANDONED:
+                scheduleBroadcast(new BroadcastBuilder()
+                        .setInfo(INFO_REGION_ABANDONED)
+                        .setRegion(iBeaconDeviceEvent.getRegion())
+                        .build());
+                break;
+
+            default:
+                throw new IllegalStateException("This event should never occur because it is not specified in ScanContext: " + event.getEventType().name());
+        }
     }
 
     private void stopMonitoring() {

@@ -6,12 +6,12 @@ import android.os.Bundle;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
-import com.kontakt.sdk.android.ble.configuration.BeaconActivityCheckConfiguration;
+import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
-import com.kontakt.sdk.android.ble.filter.CustomFilter;
+import com.kontakt.sdk.android.ble.filter.CustomIBeaconFilter;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
@@ -31,10 +31,10 @@ public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {
         scanContext = new ScanContext.Builder()
                 .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
                 .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
-                .setBeaconActivityCheckConfiguration(BeaconActivityCheckConfiguration.DEFAULT)
+                .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
                 .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
                 .setScanPeriod(new ScanPeriod(15000, 5000))
-                .addIBeaconFilter(new CustomFilter() {
+                .addIBeaconFilter(new CustomIBeaconFilter() {
                     @Override
                     public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
                         return iBeaconAdvertisingPacket.getBeaconUniqueId().equals("aMUi");
