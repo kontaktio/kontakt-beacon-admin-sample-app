@@ -17,7 +17,7 @@ import com.kontakt.sample.dialog.PasswordDialogFragment;
 import com.kontakt.sample.ui.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.ble.connection.IBeaconConnection;
+import com.kontakt.sdk.android.ble.connection.ibeacon.IBeaconConnection;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.interfaces.SDKPredicate;

@@ -19,7 +19,7 @@ import com.kontakt.sample.service.SyncService;
 import com.kontakt.sample.ui.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.ble.connection.IBeaconConnection;
+import com.kontakt.sdk.android.ble.connection.ibeacon.IBeaconConnection;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.util.IBeaconPropertyValidator;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;

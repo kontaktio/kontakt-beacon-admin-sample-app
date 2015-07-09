@@ -15,13 +15,13 @@ import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.device.DeviceProfile;
 import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
 import com.kontakt.sdk.android.ble.discovery.EventType;
-import com.kontakt.sdk.android.ble.discovery.IBeaconDeviceEvent;
+import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconDeviceEvent;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.Region;
-import com.kontakt.sdk.android.ble.discovery.IBeaconAdvertisingPacket;
-import com.kontakt.sdk.android.ble.filter.CustomIBeaconFilter;
+import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconAdvertisingPacket;
+import com.kontakt.sdk.android.ble.filter.ibeacon.CustomIBeaconFilter;
 
 import java.util.Arrays;
 import java.util.Collections;
