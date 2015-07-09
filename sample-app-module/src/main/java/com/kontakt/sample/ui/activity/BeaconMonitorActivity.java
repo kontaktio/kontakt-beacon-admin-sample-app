@@ -74,7 +74,7 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
                 .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
                 .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
                 .addDeviceProfile(DeviceProfile.IBEACON)
-                .addEventTypes(new EventType[] {
+                .addIBeaconEventTypes(new EventType[]{
                         EventType.DEVICE_DISCOVERED,
                         EventType.DEVICES_UPDATE,
                         EventType.SPACE_ENTERED,

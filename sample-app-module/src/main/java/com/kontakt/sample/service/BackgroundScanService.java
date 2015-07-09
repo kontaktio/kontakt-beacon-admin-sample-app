@@ -65,7 +65,7 @@ public class BackgroundScanService extends Service implements ProximityManager.M
             .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
             .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
             .addDeviceProfile(DeviceProfile.IBEACON)
-            .addEventTypes(new EventType[]{
+            .addIBeaconEventTypes(new EventType[]{
                     EventType.SPACE_ENTERED,
                     EventType.DEVICE_DISCOVERED,
                     EventType.SPACE_ABANDONED
