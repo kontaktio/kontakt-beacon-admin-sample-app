@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.kontakt.sample.service.BackgroundScanService;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
-import com.kontakt.sdk.android.common.profile.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 
 public abstract class AbstractBroadcastInterceptor {
 
@@ -31,12 +31,12 @@ public abstract class AbstractBroadcastInterceptor {
                 break;
 
             case BackgroundScanService.INFO_REGION_ABANDONED:
-                final Region abandonedRegion = extras.getParcelable(BackgroundScanService.EXTRA_REGION);
-                onRegionAbandoned(info, abandonedRegion);
+                final IBeaconRegion abandonedIBeaconRegion = extras.getParcelable(BackgroundScanService.EXTRA_REGION);
+                onRegionAbandoned(info, abandonedIBeaconRegion);
                 break;
 
             case BackgroundScanService.INFO_REGION_ENTERED:
-                final Region enteredRegion = extras.getParcelable(BackgroundScanService.EXTRA_REGION);
+                final IBeaconRegion enteredRegion = extras.getParcelable(BackgroundScanService.EXTRA_REGION);
                 onRegionEntered(info, enteredRegion);
                 break;
 
@@ -55,9 +55,9 @@ public abstract class AbstractBroadcastInterceptor {
 
     protected abstract void onBeaconAppeared(final int info, final IBeaconDevice beaconDevice);
 
-    protected abstract void onRegionAbandoned(final int info, final Region region);
+    protected abstract void onRegionAbandoned(final int info, final IBeaconRegion region);
 
-    protected abstract void onRegionEntered(final int info, final Region region);
+    protected abstract void onRegionEntered(final int info, final IBeaconRegion region);
 
     protected abstract void onScanStarted(final int info);
 

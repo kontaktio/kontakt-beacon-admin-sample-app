@@ -22,7 +22,7 @@ import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconDeviceEvent;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
-import com.kontakt.sdk.android.common.profile.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.ble.filter.ibeacon.IBeaconFilters;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
@@ -173,7 +173,7 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
 
         final IBeaconDeviceEvent iBeaconDeviceEvent = (IBeaconDeviceEvent) event;
 
-        final Region region = iBeaconDeviceEvent.getRegion();
+        final IBeaconRegion region = iBeaconDeviceEvent.getRegion();
 
         final List<IBeaconDevice> deviceList = iBeaconDeviceEvent.getDeviceList();
 

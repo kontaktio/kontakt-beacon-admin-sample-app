@@ -19,7 +19,7 @@ import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconDeviceEvent;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
-import com.kontakt.sdk.android.common.profile.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconAdvertisingPacket;
 import com.kontakt.sdk.android.ble.filter.ibeacon.CustomIBeaconFilter;
 
@@ -200,7 +200,7 @@ public class BackgroundScanService extends Service implements ProximityManager.M
 
     private static class BroadcastBuilder {
         private int info;
-        private Region region;
+        private IBeaconRegion region;
         private IBeaconDevice beaconDevice;
 
         public BroadcastBuilder setInfo(int info) {
@@ -213,7 +213,7 @@ public class BackgroundScanService extends Service implements ProximityManager.M
             return this;
         }
 
-        public BroadcastBuilder setRegion(Region region) {
+        public BroadcastBuilder setRegion(IBeaconRegion region) {
             this.region = region;
             return this;
         }

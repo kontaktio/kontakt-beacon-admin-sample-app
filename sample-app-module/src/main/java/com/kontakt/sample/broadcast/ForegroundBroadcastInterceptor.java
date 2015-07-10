@@ -6,7 +6,7 @@ import android.content.Context;
 import com.kontakt.sample.R;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
-import com.kontakt.sdk.android.common.profile.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.common.Proximity;
 
 public class ForegroundBroadcastInterceptor extends AbstractBroadcastInterceptor {
@@ -34,14 +34,14 @@ public class ForegroundBroadcastInterceptor extends AbstractBroadcastInterceptor
     }
 
     @Override
-    protected void onRegionAbandoned(int info, Region region) {
+    protected void onRegionAbandoned(int info, IBeaconRegion region) {
         Context context = getContext();
 
         Utils.showToast(context, context.getString(R.string.region_abandoned, region.getName()));
     }
 
     @Override
-    protected void onRegionEntered(int info, Region region) {
+    protected void onRegionEntered(int info, IBeaconRegion region) {
         Context context = getContext();
 
         Utils.showToast(context, context.getString(R.string.region_entered, region.getName()));

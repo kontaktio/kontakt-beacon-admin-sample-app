@@ -9,7 +9,7 @@ import android.content.Intent;
 import com.kontakt.sample.R;
 import com.kontakt.sample.ui.activity.BackgroundScanActivity;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
-import com.kontakt.sdk.android.common.profile.Region;
+import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.common.Proximity;
 
 public class NotificationBroadcastInterceptor extends AbstractBroadcastInterceptor {
@@ -57,7 +57,7 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
     }
 
     @Override
-    protected void onRegionAbandoned(int info, Region region) {
+    protected void onRegionAbandoned(int info, IBeaconRegion region) {
         final Context context = getContext();
         final Intent redirectIntent = new Intent(context, BackgroundScanActivity.class);
         redirectIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -80,7 +80,7 @@ public class NotificationBroadcastInterceptor extends AbstractBroadcastIntercept
     }
 
     @Override
-    protected void onRegionEntered(int info, Region region) {
+    protected void onRegionEntered(int info, IBeaconRegion region) {
         final Context context = getContext();
         final Intent redirectIntent = new Intent(context, BackgroundScanActivity.class);
         redirectIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
