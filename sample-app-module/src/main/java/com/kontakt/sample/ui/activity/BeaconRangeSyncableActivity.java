@@ -32,7 +32,7 @@ public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {
     private void createNewScanContext() {
         scanContext = new ScanContext.Builder()
                 .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-                .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                .setIBeaconRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
                 .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
                 .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
                 .setScanPeriod(new ScanPeriod(15000, 5000))

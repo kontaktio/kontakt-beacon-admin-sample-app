@@ -42,7 +42,7 @@ public abstract class BaseBeaconRangeActivity extends BaseActivity implements Pr
 
     protected ScanContext scanContext = new ScanContext.Builder()
             .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-            .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+            .setIBeaconRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
             .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
             .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
             .build();

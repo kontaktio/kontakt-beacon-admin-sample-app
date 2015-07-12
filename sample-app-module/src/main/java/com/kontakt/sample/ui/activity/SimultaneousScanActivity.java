@@ -166,7 +166,7 @@ public class SimultaneousScanActivity extends BaseActivity implements ProximityM
                 .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
                 .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
                 .enableDeviceProfiles(EnumSet.of(DeviceProfile.IBEACON))
-                .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                .setIBeaconRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
                 .build();
     }
 

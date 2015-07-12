@@ -75,7 +75,7 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
                         IBeaconFilters.newProximityUUIDFilter(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID)))
                         .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
                         .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
-                        .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                        .setIBeaconRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
                         .enableDeviceProfiles(EnumSet.of(DeviceProfile.IBEACON))
                         .setIBeaconEventTypes(EnumSet.of(
                                 EventType.DEVICE_DISCOVERED,
