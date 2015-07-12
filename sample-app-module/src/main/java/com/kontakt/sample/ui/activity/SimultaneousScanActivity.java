@@ -15,11 +15,10 @@ import android.widget.Toast;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.ProximityManagerAdapter;
-import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
-import com.kontakt.sdk.android.ble.configuration.ScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
-import com.kontakt.sdk.android.ble.device.DeviceProfile;
 import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
 import com.kontakt.sdk.android.ble.discovery.EventType;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconAdvertisingPacket;
@@ -157,16 +156,16 @@ public class SimultaneousScanActivity extends BaseActivity implements ProximityM
     private ScanContext createScanContext(final int distance) {
         return new ScanContext.Builder()
                 .setScanPeriod(new ScanPeriod(TimeUnit.SECONDS.toMillis(5), TimeUnit.SECONDS.toMillis(5)))
-                .setIBeaconFilters(Collections.singletonList(new IBeaconFilter() {
-                    @Override
-                    public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
-                        return iBeaconAdvertisingPacket.getDistance() < distance;
-                    }
-                }))
+                .setIBeaconScanContext(new IBeaconScanContext.Builder()
+                        .setIBeaconFilters(Collections.singletonList(new IBeaconFilter() {
+                            @Override
+                            public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
+                                return iBeaconAdvertisingPacket.getDistance() < distance;
+                            }
+                        }))
+                        .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                        .build())
                 .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-                .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
-                .enableDeviceProfiles(EnumSet.of(DeviceProfile.IBEACON))
-                .setIBeaconRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
                 .build();
     }
 
@@ -208,7 +207,7 @@ public class SimultaneousScanActivity extends BaseActivity implements ProximityM
 
                         @Override
                         public void onEvent(BluetoothDeviceEvent event) {
-                            if(event.getEventType() == EventType.DEVICE_DISCOVERED) {
+                            if (event.getEventType() == EventType.DEVICE_DISCOVERED) {
 
                                 final IBeaconDeviceEvent iBeaconEvent = (IBeaconDeviceEvent) event;
 

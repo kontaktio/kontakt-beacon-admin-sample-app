@@ -8,7 +8,8 @@ import com.kontakt.sample.R;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
 import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
-import com.kontakt.sdk.android.ble.configuration.ScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconAdvertisingPacket;
 import com.kontakt.sdk.android.ble.filter.ibeacon.IBeaconFilter;
@@ -32,16 +33,18 @@ public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {
     private void createNewScanContext() {
         scanContext = new ScanContext.Builder()
                 .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-                .setIBeaconRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
                 .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
                 .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
                 .setScanPeriod(new ScanPeriod(15000, 5000))
-                .setIBeaconFilters(Collections.singleton(new IBeaconFilter() {
-                    @Override
-                    public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
-                        return iBeaconAdvertisingPacket.getBeaconUniqueId().equals("aMUi");
-                    }
-                }))
+                .setIBeaconScanContext(new IBeaconScanContext.Builder()
+                        .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                        .setIBeaconFilters(Collections.singleton(new IBeaconFilter() {
+                            @Override
+                            public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
+                                return iBeaconAdvertisingPacket.getBeaconUniqueId().equals("aMUi");
+                            }
+                        }))
+                        .build())
                 .build();
     }
 

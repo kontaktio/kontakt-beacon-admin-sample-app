@@ -10,9 +10,9 @@ import android.os.Messenger;
 import com.kontakt.sample.ui.activity.BackgroundScanActivity;
 import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
-import com.kontakt.sdk.android.ble.configuration.ScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
-import com.kontakt.sdk.android.ble.device.DeviceProfile;
 import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
 import com.kontakt.sdk.android.ble.discovery.EventType;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconDeviceEvent;
@@ -65,21 +65,23 @@ public class BackgroundScanService extends Service implements ProximityManager.M
             .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
             .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
             .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
-            .enableDeviceProfiles(EnumSet.of(DeviceProfile.IBEACON))
-            .setIBeaconEventTypes(EnumSet.of(
-                    EventType.SPACE_ENTERED,
-                    EventType.DEVICE_DISCOVERED,
-                    EventType.SPACE_ABANDONED
-            ))
-            .setIBeaconFilters(Collections.singletonList(new IBeaconFilter() {
-                @Override
-                public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
-                    final UUID proximityUUID = iBeaconAdvertisingPacket.getProximityUUID();
-                    final double distance = iBeaconAdvertisingPacket.getDistance();
+            .setIBeaconScanContext(new IBeaconScanContext.Builder()
+                    .setEventTypes(EnumSet.of(
+                            EventType.SPACE_ENTERED,
+                            EventType.DEVICE_DISCOVERED,
+                            EventType.SPACE_ABANDONED
+                    ))
+                    .setIBeaconFilters(Collections.singleton(new IBeaconFilter() {
+                        @Override
+                        public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
+                            final UUID proximityUUID = iBeaconAdvertisingPacket.getProximityUUID();
+                            final double distance = iBeaconAdvertisingPacket.getDistance();
 
-                    return proximityUUID.equals(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID) && distance <= ACCEPT_DISTANCE;
-                }
-            })).build();
+                            return proximityUUID.equals(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID) && distance <= ACCEPT_DISTANCE;
+                        }
+                    }))
+                    .build())
+            .build();
 
     @Override
     public void onCreate() {

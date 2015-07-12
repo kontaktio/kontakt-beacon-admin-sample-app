@@ -12,12 +12,11 @@ import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.MonitorSectionAdapter;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
-import com.kontakt.sdk.android.ble.configuration.ScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
-import com.kontakt.sdk.android.ble.device.DeviceProfile;
 import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
-import com.kontakt.sdk.android.ble.discovery.EventType;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconDeviceEvent;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.KontaktSDK;
@@ -71,25 +70,21 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
     private ScanContext createScanContext() {
         return new ScanContext.Builder()
                 .setScanPeriod(new ScanPeriod(TimeUnit.SECONDS.toMillis(5), TimeUnit.SECONDS.toMillis(5)))
-                .setIBeaconFilters(Collections.singletonList(
-                        IBeaconFilters.newProximityUUIDFilter(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID)))
-                        .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-                        .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
-                        .setIBeaconRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
-                        .enableDeviceProfiles(EnumSet.of(DeviceProfile.IBEACON))
-                        .setIBeaconEventTypes(EnumSet.of(
-                                EventType.DEVICE_DISCOVERED,
-                                EventType.DEVICES_UPDATE,
-                                EventType.SPACE_ENTERED,
-                                EventType.SPACE_ABANDONED
+                .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
+                .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
+                .setIBeaconScanContext(new IBeaconScanContext.Builder()
+                        .setIBeaconFilters(Collections.singleton(
+                                IBeaconFilters.newProximityUUIDFilter(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID)
                         ))
-                        .build();
+                        .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                        .build())
+                .build();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(! BluetoothUtils.isBluetoothEnabled()) {
+        if (!BluetoothUtils.isBluetoothEnabled()) {
             final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
         } else {
@@ -115,7 +110,7 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
 
-        if(level == TRIM_MEMORY_UI_HIDDEN) {
+        if (level == TRIM_MEMORY_UI_HIDDEN) {
             deviceManager.detachListener(this);
         }
     }
@@ -137,8 +132,8 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == REQUEST_CODE_ENABLE_BLUETOOTH) {
-            if(resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CODE_ENABLE_BLUETOOTH) {
+            if (resultCode == Activity.RESULT_OK) {
                 startMonitoring();
             } else {
                 final String bluetoothNotEnabledInfo = getString(R.string.bluetooth_not_enabled);
@@ -180,13 +175,13 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
 
         final List<IBeaconDevice> deviceList = iBeaconDeviceEvent.getDeviceList();
 
-        switch(iBeaconDeviceEvent.getEventType()) {
+        switch (iBeaconDeviceEvent.getEventType()) {
 
             case SPACE_ENTERED:
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (! adapter.containsGroup(region)) {
+                        if (!adapter.containsGroup(region)) {
                             adapter.addGroup(region);
                         }
                     }

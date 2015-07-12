@@ -13,7 +13,8 @@ import com.kontakt.sample.adapter.BeaconBaseAdapter;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
-import com.kontakt.sdk.android.ble.configuration.ScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
@@ -42,7 +43,9 @@ public abstract class BaseBeaconRangeActivity extends BaseActivity implements Pr
 
     protected ScanContext scanContext = new ScanContext.Builder()
             .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-            .setIBeaconRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+            .setIBeaconScanContext(new IBeaconScanContext.Builder()
+                    .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                    .build())
             .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
             .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
             .build();
