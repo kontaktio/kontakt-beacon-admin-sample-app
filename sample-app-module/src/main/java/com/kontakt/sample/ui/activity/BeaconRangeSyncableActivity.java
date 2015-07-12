@@ -11,11 +11,13 @@ import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanContext;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconAdvertisingPacket;
-import com.kontakt.sdk.android.ble.filter.ibeacon.CustomIBeaconFilter;
+import com.kontakt.sdk.android.ble.filter.ibeacon.IBeaconFilter;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
+
+import java.util.Collections;
 
 public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {
 
@@ -34,12 +36,12 @@ public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {
                 .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
                 .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
                 .setScanPeriod(new ScanPeriod(15000, 5000))
-                .addIBeaconFilter(new CustomIBeaconFilter() {
+                .setIBeaconFilters(Collections.singleton(new IBeaconFilter() {
                     @Override
                     public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
                         return iBeaconAdvertisingPacket.getBeaconUniqueId().equals("aMUi");
                     }
-                })
+                }))
                 .build();
     }
 

@@ -16,15 +16,16 @@ import com.kontakt.sdk.android.ble.device.DeviceProfile;
 import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
 import com.kontakt.sdk.android.ble.discovery.EventType;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconDeviceEvent;
+import com.kontakt.sdk.android.ble.filter.ibeacon.IBeaconFilter;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconAdvertisingPacket;
-import com.kontakt.sdk.android.ble.filter.ibeacon.CustomIBeaconFilter;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,13 +65,13 @@ public class BackgroundScanService extends Service implements ProximityManager.M
             .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
             .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
             .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
-            .addDeviceProfile(DeviceProfile.IBEACON)
-            .addIBeaconEventTypes(new EventType[]{
+            .enableDeviceProfiles(EnumSet.of(DeviceProfile.IBEACON))
+            .setIBeaconEventTypes(EnumSet.of(
                     EventType.SPACE_ENTERED,
                     EventType.DEVICE_DISCOVERED,
                     EventType.SPACE_ABANDONED
-            })
-            .addIBeaconFilter(new CustomIBeaconFilter() {
+            ))
+            .setIBeaconFilters(Collections.singletonList(new IBeaconFilter() {
                 @Override
                 public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
                     final UUID proximityUUID = iBeaconAdvertisingPacket.getProximityUUID();
@@ -78,8 +79,7 @@ public class BackgroundScanService extends Service implements ProximityManager.M
 
                     return proximityUUID.equals(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID) && distance <= ACCEPT_DISTANCE;
                 }
-            }).build();
-    ;
+            })).build();
 
     @Override
     public void onCreate() {

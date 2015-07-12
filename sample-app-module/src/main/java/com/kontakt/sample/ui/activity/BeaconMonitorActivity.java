@@ -27,6 +27,8 @@ import com.kontakt.sdk.android.ble.filter.ibeacon.IBeaconFilters;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -69,18 +71,19 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
     private ScanContext createScanContext() {
         return new ScanContext.Builder()
                 .setScanPeriod(new ScanPeriod(TimeUnit.SECONDS.toMillis(5), TimeUnit.SECONDS.toMillis(5)))
-                .addIBeaconFilter(IBeaconFilters.newProximityUUIDFilter(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID))
-                .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-                .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
-                .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
-                .addDeviceProfile(DeviceProfile.IBEACON)
-                .addIBeaconEventTypes(new EventType[]{
-                        EventType.DEVICE_DISCOVERED,
-                        EventType.DEVICES_UPDATE,
-                        EventType.SPACE_ENTERED,
-                        EventType.SPACE_ABANDONED
-                })
-                .build();
+                .setIBeaconFilters(Collections.singletonList(
+                        IBeaconFilters.newProximityUUIDFilter(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID)))
+                        .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
+                        .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
+                        .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+                        .enableDeviceProfiles(EnumSet.of(DeviceProfile.IBEACON))
+                        .setIBeaconEventTypes(EnumSet.of(
+                                EventType.DEVICE_DISCOVERED,
+                                EventType.DEVICES_UPDATE,
+                                EventType.SPACE_ENTERED,
+                                EventType.SPACE_ABANDONED
+                        ))
+                        .build();
     }
 
     @Override

@@ -140,14 +140,4 @@ public abstract class BaseBeaconRangeActivity extends BaseActivity implements Pr
     public void onMonitorStart() {
 
     }
-
-    /*@Override
-    public void onIBeaconsDiscovered(Region region, final List<IBeaconDevice> iBeaconDevices) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.replaceWith(iBeaconDevices);
-            }
-        });
-    }*/
 }
