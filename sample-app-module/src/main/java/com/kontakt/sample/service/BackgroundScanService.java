@@ -29,7 +29,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
-public class BackgroundScanService extends Service implements ProximityManager.MonitoringListener {
+public class BackgroundScanService extends Service implements ProximityManager.ProximityListener {
 
     public static final String BROADCAST = String.format("%s.%s", BackgroundScanService.class.getName(), "BROADCAST");
 
@@ -123,14 +123,14 @@ public class BackgroundScanService extends Service implements ProximityManager.M
     }
 
     @Override
-    public void onMonitorStart() {
+    public void onScanStart() {
         scheduleBroadcast(new BroadcastBuilder()
                 .setInfo(INFO_SCAN_STARTED)
                 .build());
     }
 
     @Override
-    public void onMonitorStop() {
+    public void onScanStop() {
         scheduleBroadcast(new BroadcastBuilder()
                 .setInfo(INFO_SCAN_STOPPED)
                 .build());

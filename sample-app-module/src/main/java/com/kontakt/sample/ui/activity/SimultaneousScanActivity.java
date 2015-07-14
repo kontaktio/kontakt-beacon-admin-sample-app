@@ -30,7 +30,6 @@ import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -194,14 +193,14 @@ public class SimultaneousScanActivity extends BaseActivity implements ProximityM
             proximityManager.initializeScan(createScanContext(distance), new OnServiceReadyListener() {
                 @Override
                 public void onServiceReady() {
-                    proximityManager.attachListener(new ProximityManager.MonitoringListener() {
+                    proximityManager.attachListener(new ProximityManager.ProximityListener() {
                         @Override
-                        public void onMonitorStart() {
+                        public void onScanStart() {
 
                         }
 
                         @Override
-                        public void onMonitorStop() {
+                        public void onScanStop() {
 
                         }
 

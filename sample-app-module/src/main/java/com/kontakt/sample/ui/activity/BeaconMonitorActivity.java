@@ -27,14 +27,13 @@ import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class BeaconMonitorActivity extends BaseActivity implements ProximityManager.MonitoringListener {
+public class BeaconMonitorActivity extends BaseActivity implements ProximityManager.ProximityListener {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
 
@@ -147,7 +146,7 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
     }
 
     @Override
-    public void onMonitorStart() {
+    public void onScanStart() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -157,7 +156,7 @@ public class BeaconMonitorActivity extends BaseActivity implements ProximityMana
     }
 
     @Override
-    public void onMonitorStop() {
+    public void onScanStop() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

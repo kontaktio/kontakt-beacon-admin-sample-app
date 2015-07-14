@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 
-public abstract class BaseBeaconRangeActivity extends BaseActivity implements ProximityManager.MonitoringListener {
+public abstract class BaseBeaconRangeActivity extends BaseActivity implements ProximityManager.ProximityListener {
 
     private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 1;
 
@@ -135,12 +135,12 @@ public abstract class BaseBeaconRangeActivity extends BaseActivity implements Pr
     }
 
     @Override
-    public void onMonitorStop() {
+    public void onScanStop() {
 
     }
 
     @Override
-    public void onMonitorStart() {
+    public void onScanStart() {
 
     }
 }
