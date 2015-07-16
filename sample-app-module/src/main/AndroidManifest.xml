@@ -15,7 +15,7 @@
 
         <meta-data
             android:name="kontakt.io.API_KEY"
-            android:value="MlucKluKUoTDhpgmmkkOJTOOgeFsdlOp" />
+            android:value="YOURS-API-KEY" />
 
         <activity
             android:name=".ui.activity.MainActivity"
@@ -26,15 +26,18 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.BeaconMonitorActivity" />
+        <activity android:name=".ui.activity.IBeaconMonitorActivity" />
         <activity android:name=".ui.activity.BeaconRangeActivity" />
         <activity android:name=".ui.activity.BeaconManagementActivity" />
         <activity android:name=".ui.activity.BackgroundScanActivity" />
         <activity android:name=".ui.activity.ProfilesActivity" />
         <activity android:name=".ui.activity.ConfigFormActivity" />
         <activity android:name=".ui.activity.SimultaneousScanActivity" />
-        <activity android:name=".ui.activity.BeaconRangeSyncableActivity"/>
-        <activity android:name=".ui.activity.SyncableBeaconManagementActivity"/>
+        <activity android:name=".ui.activity.BeaconRangeSyncableActivity" />
+        <activity android:name=".ui.activity.SyncableBeaconManagementActivity" />
+        <activity android:name=".ui.activity.EddystoneBeaconRangeActivity" />
+        <activity android:name=".ui.activity.EddystoneManagementActivity" />
+        <activity android:name=".ui.activity.EddystoneMonitorActivity" />
 
         <service
             android:name=".service.BackgroundScanService"

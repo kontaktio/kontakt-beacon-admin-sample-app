@@ -1,10 +1,8 @@
-package com.kontakt.sample.adapter;
+package com.kontakt.sample.adapter.range;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.kontakt.sample.R;
@@ -12,27 +10,22 @@ import com.kontakt.sdk.android.ble.device.BeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-public class BeaconBaseAdapter extends BaseAdapter {
+public class IBeaconRangeAdapter extends BaseRangeAdapter<IBeaconDevice> {
 
-    private LayoutInflater layoutInflater;
-    private List<IBeaconDevice> beacons;
+    public IBeaconRangeAdapter(final Context context) {
+        super(context);
+    }
 
-    public BeaconBaseAdapter(final Context context) {
-        layoutInflater = LayoutInflater.from(context);
-        beacons = new ArrayList<>();
+    @Override
+    public IBeaconDevice getItem(int position) {
+        return devices.get(position);
     }
 
     @Override
     public int getCount() {
-        return beacons.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return beacons.get(position);
+        return devices.size();
     }
 
     @Override
@@ -63,19 +56,18 @@ public class BeaconBaseAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void replaceWith(final List<IBeaconDevice> beacons) {
-        this.beacons.clear();
-        this.beacons.addAll(beacons);
+    @Override
+    public void replaceWith(List<IBeaconDevice> devices) {
+        this.devices.clear();
+        this.devices.addAll(devices);
         notifyDataSetChanged();
     }
 
-    private View getTheSameOrInflate(View view, final ViewGroup parent) {
-        if(view == null) {
-            view = layoutInflater.inflate(R.layout.beacon_list_row, parent, false);
-            ViewHolder viewHolder = new ViewHolder(view);
-            view.setTag(viewHolder);
-        }
-
+    @Override
+    View inflate(ViewGroup parent) {
+        View view = inflater.inflate(R.layout.beacon_list_row, parent, false);
+        ViewHolder viewHolder = new ViewHolder(view);
+        view.setTag(viewHolder);
         return view;
     }
 
@@ -93,7 +85,7 @@ public class BeaconBaseAdapter extends BaseAdapter {
         ViewHolder(View view) {
             nameTextView = (TextView) view.findViewById(R.id.device_name);
             majorTextView = (TextView) view.findViewById(R.id.major);
-            minorTextView = (TextView)  view.findViewById(R.id.minor);
+            minorTextView = (TextView) view.findViewById(R.id.minor);
             txPowerTextView = (TextView) view.findViewById(R.id.power);
             rssiTextView = (TextView) view.findViewById(R.id.rssi);
             proximityTextView = (TextView) view.findViewById(R.id.proximity);

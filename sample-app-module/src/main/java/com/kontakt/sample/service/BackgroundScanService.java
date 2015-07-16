@@ -15,13 +15,13 @@ import com.kontakt.sdk.android.ble.configuration.scan.ScanContext;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
 import com.kontakt.sdk.android.ble.discovery.EventType;
+import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconAdvertisingPacket;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconDeviceEvent;
 import com.kontakt.sdk.android.ble.filter.ibeacon.IBeaconFilter;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
-import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconAdvertisingPacket;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +29,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
-public class BackgroundScanService extends Service implements ProximityManager.MonitoringListener {
+public class BackgroundScanService extends Service implements ProximityManager.ProximityListener {
 
     public static final String BROADCAST = String.format("%s.%s", BackgroundScanService.class.getName(), "BROADCAST");
 
@@ -123,14 +123,14 @@ public class BackgroundScanService extends Service implements ProximityManager.M
     }
 
     @Override
-    public void onMonitorStart() {
+    public void onScanStart() {
         scheduleBroadcast(new BroadcastBuilder()
                 .setInfo(INFO_SCAN_STARTED)
                 .build());
     }
 
     @Override
-    public void onMonitorStop() {
+    public void onScanStop() {
         scheduleBroadcast(new BroadcastBuilder()
                 .setInfo(INFO_SCAN_STOPPED)
                 .build());
