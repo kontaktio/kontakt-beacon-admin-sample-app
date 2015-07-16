@@ -28,7 +28,9 @@ import com.kontakt.sdk.android.ble.device.DeviceProfile;
 import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
 import com.kontakt.sdk.android.ble.discovery.EventType;
 import com.kontakt.sdk.android.ble.discovery.eddystone.EddystoneDeviceEvent;
+import com.kontakt.sdk.android.ble.discovery.eddystone.EddystoneURLAdvertisingPacket;
 import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconDeviceEvent;
+import com.kontakt.sdk.android.ble.filter.eddystone.URLFilter;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
@@ -74,6 +76,16 @@ public abstract class BaseBeaconRangeActivity extends BaseActivity implements Pr
         add(EventType.DEVICES_UPDATE);
     }};
 
+    protected List<URLFilter> urlFilters = new ArrayList<URLFilter>() {{
+        add(new URLFilter() {
+            @Override
+            public boolean apply(EddystoneURLAdvertisingPacket eddystoneURLAdvertisingPacket) {
+                return eddystoneURLAdvertisingPacket.getUrl().contains("kontakt.io");
+            }
+        });
+    }};
+
+
     protected IBeaconScanContext beaconScanContext = new IBeaconScanContext.Builder()
             .setEventTypes(eventTypes) //only specified events we be called on callback
             .setDevicesUpdateCallbackInterval(TimeUnit.SECONDS.toMillis(2)) //how often DEVICES_UPDATE will be called
@@ -84,6 +96,7 @@ public abstract class BaseBeaconRangeActivity extends BaseActivity implements Pr
             .setEventTypes(eventTypes)
             .setDevicesUpdateCallbackInterval(TimeUnit.SECONDS.toMillis(2))
             .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+            .setURLFilters(urlFilters)
             .build();
 
 
