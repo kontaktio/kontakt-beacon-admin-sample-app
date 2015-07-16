@@ -1,4 +1,4 @@
-package com.kontakt.sample.ui.activity;
+package com.kontakt.sample.ui.activity.management;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -16,16 +16,18 @@ import com.kontakt.sample.dialog.InputDialogFragment;
 import com.kontakt.sample.dialog.NumericInputDialogFragment;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
 import com.kontakt.sample.service.SyncService;
-import com.kontakt.sample.ui.Entry;
+import com.kontakt.sample.ui.activity.BaseActivity;
+import com.kontakt.sample.ui.activity.ProfilesActivity;
+import com.kontakt.sample.ui.view.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.connection.ibeacon.IBeaconConnection;
-import com.kontakt.sdk.android.common.profile.IBeaconDevice;
-import com.kontakt.sdk.android.common.util.IBeaconPropertyValidator;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.interfaces.SDKPredicate;
 import com.kontakt.sdk.android.common.model.Config;
 import com.kontakt.sdk.android.common.model.Profile;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.util.IBeaconPropertyValidator;
 
 import java.util.UUID;
 

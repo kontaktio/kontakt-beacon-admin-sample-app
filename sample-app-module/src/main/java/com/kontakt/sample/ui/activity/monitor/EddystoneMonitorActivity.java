@@ -1,4 +1,4 @@
-package com.kontakt.sample.ui.activity;
+package com.kontakt.sample.ui.activity.monitor;
 
 import android.os.Bundle;
 

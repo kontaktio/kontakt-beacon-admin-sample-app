@@ -3,9 +3,9 @@ package com.kontakt.sample.adapter.range;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.kontakt.sample.R;
+import com.kontakt.sample.adapter.viewholder.IBeaconItemViewHolder;
 import com.kontakt.sdk.android.ble.device.BeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 
@@ -37,7 +37,7 @@ public class IBeaconRangeAdapter extends BaseRangeAdapter<IBeaconDevice> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         convertView = getTheSameOrInflate(convertView, parent);
-        final ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+        final IBeaconItemViewHolder viewHolder = (IBeaconItemViewHolder) convertView.getTag();
 
         final BeaconDevice beacon = (BeaconDevice) getItem(position);
 
@@ -66,32 +66,9 @@ public class IBeaconRangeAdapter extends BaseRangeAdapter<IBeaconDevice> {
     @Override
     View inflate(ViewGroup parent) {
         View view = inflater.inflate(R.layout.beacon_list_row, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        IBeaconItemViewHolder viewHolder = new IBeaconItemViewHolder(view);
         view.setTag(viewHolder);
         return view;
     }
 
-    static class ViewHolder {
-        final TextView nameTextView;
-        final TextView majorTextView;
-        final TextView minorTextView;
-        final TextView beaconUniqueIdTextView;
-        final TextView firmwareVersionTextView;
-        final TextView txPowerTextView;
-        final TextView rssiTextView;
-        final TextView proximityTextView;
-        final TextView proximityUUIDTextView;
-
-        ViewHolder(View view) {
-            nameTextView = (TextView) view.findViewById(R.id.device_name);
-            majorTextView = (TextView) view.findViewById(R.id.major);
-            minorTextView = (TextView) view.findViewById(R.id.minor);
-            txPowerTextView = (TextView) view.findViewById(R.id.power);
-            rssiTextView = (TextView) view.findViewById(R.id.rssi);
-            proximityTextView = (TextView) view.findViewById(R.id.proximity);
-            beaconUniqueIdTextView = (TextView) view.findViewById(R.id.beacon_unique_id);
-            firmwareVersionTextView = (TextView) view.findViewById(R.id.firmware_version);
-            proximityUUIDTextView = (TextView) view.findViewById(R.id.proximity_uuid);
-        }
-    }
 }

@@ -3,16 +3,13 @@ package com.kontakt.sample.adapter.monitor;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.kontakt.sample.R;
+import com.kontakt.sample.adapter.viewholder.EddystoneItemViewHolder;
 import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
 import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
 
 import java.util.List;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class EddystoneMonitorAdapter extends BaseMonitorAdapter<IEddystoneNamespace, List<IEddystoneDevice>> {
 
@@ -35,13 +32,13 @@ public class EddystoneMonitorAdapter extends BaseMonitorAdapter<IEddystoneNamesp
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         IEddystoneDevice eddystoneDevice = (IEddystoneDevice) getChild(groupPosition, childPosition);
-        if(convertView == null){
+        if (convertView == null) {
             convertView = createView(R.layout.eddystone_list_row);
-            ChildViewHolder childViewHolder = new ChildViewHolder(convertView);
+            EddystoneItemViewHolder childViewHolder = new EddystoneItemViewHolder(convertView);
             convertView.setTag(childViewHolder);
         }
 
-        ChildViewHolder viewHolder = (ChildViewHolder) convertView.getTag();
+        EddystoneItemViewHolder viewHolder = (EddystoneItemViewHolder) convertView.getTag();
         Context context = convertView.getContext();
         viewHolder.namespace.setText(context.getString(R.string.namespace, eddystoneDevice.getNamespaceId()));
         viewHolder.instance.setText(context.getString(R.string.instance, eddystoneDevice.getInstanceId()));
@@ -56,28 +53,4 @@ public class EddystoneMonitorAdapter extends BaseMonitorAdapter<IEddystoneNamesp
         return convertView;
     }
 
-    static class ChildViewHolder {
-        @InjectView(R.id.power)
-        TextView txPowerTextView;
-        @InjectView(R.id.namespace_id)
-        TextView namespace;
-        @InjectView(R.id.instance_id)
-        TextView instance;
-        @InjectView(R.id.url)
-        TextView url;
-        @InjectView(R.id.temperature)
-        TextView temperature;
-        @InjectView(R.id.battery_voltage)
-        TextView batteryVoltage;
-        @InjectView(R.id.pdu_count)
-        TextView pduCount;
-        @InjectView(R.id.time_since_power_up)
-        TextView timeSincePowerUp;
-        @InjectView(R.id.telemetry_version)
-        TextView telemetryVersion;
-
-        ChildViewHolder(View rootView) {
-            ButterKnife.inject(this, rootView);
-        }
-    }
 }

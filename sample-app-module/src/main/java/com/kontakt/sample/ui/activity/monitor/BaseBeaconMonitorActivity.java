@@ -1,4 +1,4 @@
-package com.kontakt.sample.ui.activity;
+package com.kontakt.sample.ui.activity.monitor;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.monitor.BaseMonitorAdapter;
+import com.kontakt.sample.ui.activity.BaseActivity;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;

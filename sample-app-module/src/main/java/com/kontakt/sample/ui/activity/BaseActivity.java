@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
 
     protected void setUpActionBar(final Toolbar toolbar) {
         setSupportActionBar(toolbar);

@@ -6,6 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.kontakt.sample.R;
+import com.kontakt.sample.ui.activity.monitor.AllBeaconsMonitorActivity;
+import com.kontakt.sample.ui.activity.monitor.EddystoneMonitorActivity;
+import com.kontakt.sample.ui.activity.monitor.IBeaconMonitorActivity;
+import com.kontakt.sample.ui.activity.range.BeaconRangeSyncableActivity;
+import com.kontakt.sample.ui.activity.range.EddystoneBeaconRangeActivity;
+import com.kontakt.sample.ui.activity.range.IBeaconRangeActivity;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 
 import butterknife.ButterKnife;
@@ -48,7 +54,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.range_beacons)
     void startRanging() {
-        startActivity(new Intent(MainActivity.this, BeaconRangeActivity.class));
+        startActivity(new Intent(MainActivity.this, IBeaconRangeActivity.class));
     }
 
     @OnClick(R.id.monitor_beacons)
@@ -85,5 +91,10 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.monitor_eddystone)
     void startMonitorEddystone() {
         startActivity(new Intent(MainActivity.this, EddystoneMonitorActivity.class));
+    }
+
+    @OnClick(R.id.range_all_beacons)
+    void startRangingAllBeacons() {
+        startActivity(new Intent(MainActivity.this, AllBeaconsMonitorActivity.class));
     }
 }

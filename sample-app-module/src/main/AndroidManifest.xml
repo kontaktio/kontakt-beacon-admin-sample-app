@@ -26,18 +26,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.IBeaconMonitorActivity" />
-        <activity android:name=".ui.activity.BeaconRangeActivity" />
-        <activity android:name=".ui.activity.BeaconManagementActivity" />
+        <activity android:name=".ui.activity.monitor.IBeaconMonitorActivity" />
+        <activity android:name=".ui.activity.range.IBeaconRangeActivity" />
+        <activity android:name=".ui.activity.management.BeaconManagementActivity" />
         <activity android:name=".ui.activity.BackgroundScanActivity" />
         <activity android:name=".ui.activity.ProfilesActivity" />
-        <activity android:name=".ui.activity.ConfigFormActivity" />
+        <activity android:name=".ui.activity.management.ConfigFormActivity" />
         <activity android:name=".ui.activity.SimultaneousScanActivity" />
-        <activity android:name=".ui.activity.BeaconRangeSyncableActivity" />
-        <activity android:name=".ui.activity.SyncableBeaconManagementActivity" />
-        <activity android:name=".ui.activity.EddystoneBeaconRangeActivity" />
-        <activity android:name=".ui.activity.EddystoneManagementActivity" />
-        <activity android:name=".ui.activity.EddystoneMonitorActivity" />
+        <activity android:name=".ui.activity.range.BeaconRangeSyncableActivity" />
+        <activity android:name=".ui.activity.management.SyncableBeaconManagementActivity" />
+        <activity android:name=".ui.activity.range.EddystoneBeaconRangeActivity" />
+        <activity android:name=".ui.activity.management.EddystoneManagementActivity" />
+        <activity android:name=".ui.activity.monitor.EddystoneMonitorActivity" />
+        <activity android:name=".ui.activity.monitor.AllBeaconsMonitorActivity"/>
 
         <service
             android:name=".service.BackgroundScanService"

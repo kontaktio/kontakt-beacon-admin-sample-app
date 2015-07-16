@@ -1,4 +1,4 @@
-package com.kontakt.sample.ui.activity;
+package com.kontakt.sample.ui.activity.range;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,13 +8,13 @@ import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.range.BaseRangeAdapter;
 import com.kontakt.sample.adapter.range.IBeaconRangeAdapter;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
+import com.kontakt.sample.ui.activity.management.BeaconManagementActivity;
 import com.kontakt.sdk.android.ble.configuration.scan.EddystoneScanContext;
 import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 
-public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {
-
+public class IBeaconRangeActivity extends BaseBeaconRangeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {
 
                             beacon.setPassword(password.getBytes());
 
-                            final Intent intent = new Intent(BeaconRangeSyncableActivity.this, SyncableBeaconManagementActivity.class);
+                            final Intent intent = new Intent(IBeaconRangeActivity.this, BeaconManagementActivity.class);
                             intent.putExtra(BeaconManagementActivity.EXTRA_BEACON_DEVICE, beacon);
 
                             startActivityForResult(intent, REQUEST_CODE_CONNECT_TO_DEVICE);
@@ -44,13 +44,13 @@ public class BeaconRangeSyncableActivity extends BaseBeaconRangeActivity {
     }
 
     @Override
-    IBeaconScanContext getIBeaconScanContext() {
-        return beaconScanContext;
+    EddystoneScanContext getEddystoneScanContext() {
+        return null;
     }
 
     @Override
-    EddystoneScanContext getEddystoneScanContext() {
-        return null;
+    IBeaconScanContext getIBeaconScanContext() {
+        return beaconScanContext;
     }
 
     @Override

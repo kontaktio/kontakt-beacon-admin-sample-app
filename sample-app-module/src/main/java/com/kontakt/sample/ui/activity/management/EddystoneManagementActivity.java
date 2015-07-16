@@ -1,4 +1,4 @@
-package com.kontakt.sample.ui.activity;
+package com.kontakt.sample.ui.activity.management;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -15,7 +15,8 @@ import com.kontakt.sample.dialog.ChoiceDialogFragment;
 import com.kontakt.sample.dialog.InputDialogFragment;
 import com.kontakt.sample.dialog.NumericInputDialogFragment;
 import com.kontakt.sample.dialog.PasswordDialogFragment;
-import com.kontakt.sample.ui.Entry;
+import com.kontakt.sample.ui.activity.BaseActivity;
+import com.kontakt.sample.ui.view.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.connection.eddystone.EddystoneBeaconConnection;
