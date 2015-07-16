@@ -1,4 +1,4 @@
-package com.kontakt.sample.ui;
+package com.kontakt.sample.ui.view;
 
 import android.content.Context;
 import android.content.res.Resources;

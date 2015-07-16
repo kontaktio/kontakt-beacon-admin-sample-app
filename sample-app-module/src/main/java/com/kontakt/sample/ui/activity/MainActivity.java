@@ -6,6 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.kontakt.sample.R;
+import com.kontakt.sample.ui.activity.monitor.AllBeaconsMonitorActivity;
+import com.kontakt.sample.ui.activity.monitor.EddystoneMonitorActivity;
+import com.kontakt.sample.ui.activity.monitor.IBeaconMonitorActivity;
+import com.kontakt.sample.ui.activity.range.BeaconRangeSyncableActivity;
+import com.kontakt.sample.ui.activity.range.EddystoneBeaconRangeActivity;
+import com.kontakt.sample.ui.activity.range.IBeaconRangeActivity;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 
 import butterknife.ButterKnife;
@@ -32,7 +38,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == REQUEST_CODE_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
             startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
             return;
         }
@@ -48,12 +54,12 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.range_beacons)
     void startRanging() {
-        startActivity(new Intent(MainActivity.this, BeaconRangeActivity.class));
+        startActivity(new Intent(MainActivity.this, IBeaconRangeActivity.class));
     }
 
     @OnClick(R.id.monitor_beacons)
     void startMonitoring() {
-        startActivity(new Intent(MainActivity.this, BeaconMonitorActivity.class));
+        startActivity(new Intent(MainActivity.this, IBeaconMonitorActivity.class));
     }
 
     @OnClick(R.id.multiple_proximity_manager)
@@ -62,18 +68,33 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick(R.id.syncable_connection)
-    void startRangeWithSyncableConnection(){
+    void startRangeWithSyncableConnection() {
         startActivity(new Intent(MainActivity.this, BeaconRangeSyncableActivity.class));
     }
 
     @OnClick(R.id.background_scan)
     void startForegroundBackgroundScan() {
 
-        if(! BluetoothUtils.isBluetoothEnabled()) {
+        if (!BluetoothUtils.isBluetoothEnabled()) {
             startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
         } else {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_CODE_ENABLE_BLUETOOTH);
         }
+    }
+
+    @OnClick(R.id.range_eddystone)
+    void startRangingEddystone() {
+        startActivity(new Intent(MainActivity.this, EddystoneBeaconRangeActivity.class));
+    }
+
+    @OnClick(R.id.monitor_eddystone)
+    void startMonitorEddystone() {
+        startActivity(new Intent(MainActivity.this, EddystoneMonitorActivity.class));
+    }
+
+    @OnClick(R.id.range_all_beacons)
+    void startRangingAllBeacons() {
+        startActivity(new Intent(MainActivity.this, AllBeaconsMonitorActivity.class));
     }
 }

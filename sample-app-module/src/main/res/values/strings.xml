@@ -2,8 +2,10 @@
 <resources>
 
     <string name="app_name">Sample Beacon Admin</string>
-    <string name="range_beacons">Range beacons</string>
-    <string name="monitor_beacons">Monitor beacons</string>
+    <string name="range_beacons">Range beacons [iBeacon]</string>
+    <string name="monitor_beacons">Monitor beacons [iBeacon]</string>
+    <string name="range_eddystone">Range beacons [Eddystone]</string>
+    <string name="monitor_eddystone">Monitor beacons [Eddystone]</string>
     <string name="action_settings">Settings</string>
     <string name="venue">Venue</string>
     <string name="cancel">Cancel</string>
@@ -71,4 +73,17 @@
     <string name="distance_filter">Distance &lt; %1$d</string>
     <string name="remove_manager">Remove manager</string>
     <string name="syncable_connection">Syncable connection</string>
+
+    <string name="enable_bluetooth">Enable bluetooth</string>
+    <string name="disable_bluetooth">Disable bluetooth</string>
+    <string name="namespace">Namespace: %1$s</string>
+    <string name="instance">Instance: %1$s</string>
+    <string name="url">Url: %1$s</string>
+    <string name="temperature">Temperature: %1$f \u00b0C</string>
+    <string name="battery_voltage">Battery voltage: %1$d mV</string>
+    <string name="pdu_count">Pdu count: %1$d</string>
+    <string name="time_since_power_up">Time since power up: %1$d seconds</string>
+    <string name="telemetry_version">Telemetry version: %1$d</string>
+    <string name="tx_power_level">Power: %1$d dBm</string>
+    <string name="range_all_beacons">Range all types</string>
 </resources>

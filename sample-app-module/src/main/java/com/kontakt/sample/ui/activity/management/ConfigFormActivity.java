@@ -1,4 +1,4 @@
-package com.kontakt.sample.ui.activity;
+package com.kontakt.sample.ui.activity.management;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.kontakt.sample.R;
+import com.kontakt.sample.ui.activity.BaseActivity;
 import com.kontakt.sdk.android.common.model.Config;
 
 import java.util.UUID;

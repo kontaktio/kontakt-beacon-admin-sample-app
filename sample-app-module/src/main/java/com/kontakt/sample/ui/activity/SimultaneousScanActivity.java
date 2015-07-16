@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 import com.kontakt.sample.R;
 import com.kontakt.sample.adapter.ProximityManagerAdapter;
+import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
 import com.kontakt.sdk.android.ble.configuration.scan.ScanContext;
-import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
 import com.kontakt.sdk.android.ble.discovery.EventType;
@@ -195,18 +195,18 @@ public class SimultaneousScanActivity extends BaseActivity implements ProximityM
                 public void onServiceReady() {
                     proximityManager.attachListener(new ProximityManager.ProximityListener() {
                         @Override
-                        public void onScanStart() {
-
-                        }
-
-                        @Override
                         public void onScanStop() {
 
                         }
 
                         @Override
+                        public void onScanStart() {
+
+                        }
+
+                        @Override
                         public void onEvent(BluetoothDeviceEvent event) {
-                            if (event.getEventType() == EventType.DEVICE_DISCOVERED) {
+                            if (event.getEventType() == EventType.DEVICES_UPDATE) {
 
                                 final IBeaconDeviceEvent iBeaconEvent = (IBeaconDeviceEvent) event;
 
