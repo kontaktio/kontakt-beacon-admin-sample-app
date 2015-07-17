@@ -24,14 +24,14 @@ android {
 
     //Uncomment the Signing configuration once you have all necessary keys generated
     //For more information navigate to http://developer.android.com/tools/publishing/app-signing.html
-    signingConfigs {
-        releaseSigning {
-            storeFile file(RELEASE_ANDROID_KEYSTORE_FILE)
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
-        }
-    }
+//    signingConfigs {
+//        releaseSigning {
+//            storeFile file(RELEASE_ANDROID_KEYSTORE_FILE)
+//            storePassword RELEASE_STORE_PASSWORD
+//            keyAlias RELEASE_KEY_ALIAS
+//            keyPassword RELEASE_KEY_PASSWORD
+//        }
+//    }
 
 
     //Uncomment the Signing configuration once you have all necessary keys generated
@@ -40,7 +40,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.releaseSigning
+//            signingConfig signingConfigs.releaseSigning
         }
     }
 }
