@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.view.Surface;
 import android.widget.Toast;
 
@@ -21,23 +22,28 @@ public final class Utils {
     }
 
     public static void setOrientationChangeEnabled(final boolean state, final Activity activity) {
-        if (!state) {
-            final int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
 
-            switch (rotation) {
-                case Surface.ROTATION_180:
-                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+        if (!state) {
+            int orientation = 0;
+            int tempOrientation = activity.getResources().getConfiguration().orientation;
+            final int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+            switch (tempOrientation) {
+                case Configuration.ORIENTATION_LANDSCAPE:
+                    if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) {
+                        orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                    } else {
+                        orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+                    }
                     break;
-                case Surface.ROTATION_270:
-                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                    break;
-                case Surface.ROTATION_0:
-                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    break;
-                case Surface.ROTATION_90:
-                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                case Configuration.ORIENTATION_PORTRAIT:
+                    if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_270) {
+                        orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                    } else {
+                        orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+                    }
                     break;
             }
+            activity.setRequestedOrientation(orientation);
         } else {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
