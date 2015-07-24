@@ -24,7 +24,7 @@ import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.connection.ibeacon.IBeaconConnection;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.interfaces.SDKPredicate;
-import com.kontakt.sdk.android.common.model.Config;
+import com.kontakt.sdk.android.common.model.ConfigIBeacon;
 import com.kontakt.sdk.android.common.model.Profile;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.util.IBeaconPropertyValidator;
@@ -254,7 +254,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
 
     private void onConfigResultDelivered(final int resultCode, final Intent data) {
         if(resultCode != RESULT_CANCELED) {
-            final Config config = data.getParcelableExtra(ConfigFormActivity.EXTRA_RESULT_CONFIG);
+            final ConfigIBeacon config = data.getParcelableExtra(ConfigFormActivity.EXTRA_RESULT_CONFIG);
             onApplyConfig(config);
         }
     }
@@ -501,17 +501,17 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
         startActivityForResult(new Intent(this, ConfigFormActivity.class), REQUEST_CODE_OBTAIN_CONFIG);
     }
 
-    private void onApplyConfig(final Config config) {
-        beaconConnection.applyConfig(config, new IBeaconConnection.WriteBatchListener<Config>() {
+    private void onApplyConfig(final ConfigIBeacon config) {
+        beaconConnection.applyConfig(config, new IBeaconConnection.WriteBatchListener<ConfigIBeacon>() {
             @Override
-            public void onWriteBatchStart(Config batchHolder) {
+            public void onWriteBatchStart(ConfigIBeacon batchHolder) {
                 progressDialog = ProgressDialog.show(BeaconManagementActivity.this,
-                        "Applying Config",
+                        "Applying ConfigIBeacon",
                         "Please wait...");
             }
 
             @Override
-            public void onWriteBatchFinish(final Config batch) {
+            public void onWriteBatchFinish(final ConfigIBeacon batch) {
                 progressDialog.dismiss();
                 final Intent serviceIntent = new Intent(BeaconManagementActivity.this, SyncService.class);
                 serviceIntent.putExtra(SyncService.EXTRA_REQUEST_CODE, SyncService.REQUEST_SYNC_CONFIG);
