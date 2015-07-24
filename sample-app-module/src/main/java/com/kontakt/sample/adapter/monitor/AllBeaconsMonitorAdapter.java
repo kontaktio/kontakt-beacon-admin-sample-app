@@ -11,7 +11,7 @@ import com.kontakt.sample.adapter.viewholder.EddystoneItemViewHolder;
 import com.kontakt.sample.adapter.viewholder.GroupViewHolder;
 import com.kontakt.sample.adapter.viewholder.IBeaconItemViewHolder;
 import com.kontakt.sample.model.AllBeaconWrapper;
-import com.kontakt.sdk.android.ble.device.DeviceProfile;
+import com.kontakt.sdk.android.common.profile.DeviceProfile;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
 
