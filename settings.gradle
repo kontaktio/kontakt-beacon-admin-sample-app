@@ -1,1 +1,1 @@
-include ':kontakt-beacon-admin-sample-app'
+include ':sample-app-module'
