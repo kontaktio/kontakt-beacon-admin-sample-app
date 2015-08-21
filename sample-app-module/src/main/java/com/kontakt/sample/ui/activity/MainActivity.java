@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.background_scan)
     void startForegroundBackgroundScan() {
 
-        if (!BluetoothUtils.isBluetoothEnabled()) {
+        if (BluetoothUtils.isBluetoothEnabled()) {
             startActivity(new Intent(MainActivity.this, BackgroundScanActivity.class));
         } else {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
