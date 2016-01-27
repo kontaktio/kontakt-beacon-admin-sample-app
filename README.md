@@ -26,6 +26,6 @@ To be able to communicate with your account please change api-key value to yours
 <img src="art/action.png" width="200"/>
 
 
-For more information see: http://docs.kontakt.io/android-sdk/quickstart/
+For more information see: http://developer.kontakt.io/android-sdk/2.1.0/quickstart/
 
 
