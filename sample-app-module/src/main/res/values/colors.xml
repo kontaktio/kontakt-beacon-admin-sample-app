@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#000000</color>
     <color name="grey">#A3A3A3</color>
+
+    <color name="primaryColorDark">#1976D2</color>
+    <color name="primaryColor">#2196F3</color>
+    <color name="primaryColorLight">#BBDEFB</color>
+    <color name="accentColor">#FFC107</color>
+    <color name="textIcons">#FFFFFF</color>
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#727272</color>
+    <color name="dividerColor">#B6B6B6</color>
 </resources>

@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
-import com.kontakt.sample.ui.activity.BackgroundScanActivity;
+import com.kontakt.sample.ui.fragment.BackgroundScanFragment;
 import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
@@ -63,8 +63,8 @@ public class BackgroundScanService extends Service implements ProximityManager.P
 
     private final ScanContext scanContext = new ScanContext.Builder()
             .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-            .setActivityCheckConfiguration(ActivityCheckConfiguration.DEFAULT)
-            .setForceScanConfiguration(ForceScanConfiguration.DEFAULT)
+            .setActivityCheckConfiguration(ActivityCheckConfiguration.MINIMAL)
+            .setForceScanConfiguration(ForceScanConfiguration.MINIMAL)
             .setIBeaconScanContext(new IBeaconScanContext.Builder()
                     .setEventTypes(EnumSet.of(
                             EventType.SPACE_ENTERED,
@@ -186,11 +186,11 @@ public class BackgroundScanService extends Service implements ProximityManager.P
 
             switch (messageCode) {
 
-                case BackgroundScanActivity.MESSAGE_START_SCAN:
+                case BackgroundScanFragment.MESSAGE_START_SCAN:
                     startMonitoring();
                     break;
 
-                case BackgroundScanActivity.MESSAGE_STOP_SCAN:
+                case BackgroundScanFragment.MESSAGE_STOP_SCAN:
                     stopMonitoring();
                     break;
 

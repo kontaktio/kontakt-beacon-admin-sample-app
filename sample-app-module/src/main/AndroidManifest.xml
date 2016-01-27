@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -25,27 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activity.monitor.IBeaconMonitorActivity" />
-        <activity android:name=".ui.activity.range.IBeaconRangeActivity" />
-        <activity android:name=".ui.activity.management.BeaconManagementActivity" />
-        <activity android:name=".ui.activity.BackgroundScanActivity" />
-        <activity android:name=".ui.activity.ProfilesActivity" />
-        <activity android:name=".ui.activity.management.ConfigFormActivity" />
-        <activity android:name=".ui.activity.SimultaneousScanActivity" />
-        <activity android:name=".ui.activity.range.BeaconRangeSyncableActivity" />
-        <activity android:name=".ui.activity.management.SyncableBeaconManagementActivity" />
-        <activity android:name=".ui.activity.range.EddystoneBeaconRangeActivity" />
         <activity android:name=".ui.activity.management.EddystoneManagementActivity" />
-        <activity android:name=".ui.activity.monitor.EddystoneMonitorActivity" />
-        <activity android:name=".ui.activity.monitor.AllBeaconsMonitorActivity"/>
+        <activity android:name=".ui.activity.management.BeaconManagementActivity" />
+        <activity android:name=".ui.activity.management.SyncableBeaconManagementActivity" />
 
         <service
             android:name=".service.BackgroundScanService"
-            android:exported="false" />
-
-        <service
-            android:name=".service.SyncService"
             android:exported="false" />
 
         <service

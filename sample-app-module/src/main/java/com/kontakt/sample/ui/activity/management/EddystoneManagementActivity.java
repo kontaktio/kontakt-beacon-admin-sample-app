@@ -11,15 +11,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.kontakt.sample.R;
-import com.kontakt.sample.dialog.ChoiceDialogFragment;
-import com.kontakt.sample.dialog.InputDialogFragment;
-import com.kontakt.sample.dialog.NumericInputDialogFragment;
-import com.kontakt.sample.dialog.PasswordDialogFragment;
+import com.kontakt.sample.ui.dialog.ChoiceDialogFragment;
+import com.kontakt.sample.ui.dialog.InputDialogFragment;
+import com.kontakt.sample.ui.dialog.NumericInputDialogFragment;
+import com.kontakt.sample.ui.dialog.PasswordDialogFragment;
 import com.kontakt.sample.ui.activity.BaseActivity;
 import com.kontakt.sample.ui.view.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.ble.connection.eddystone.EddystoneBeaconConnection;
+import com.kontakt.sdk.android.ble.connection.KontaktDeviceConnection;
+import com.kontakt.sdk.android.ble.connection.WriteListener;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.interfaces.SDKPredicate;
 import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
@@ -29,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class EddystoneManagementActivity extends BaseActivity implements EddystoneBeaconConnection.ConnectionListener {
+public class EddystoneManagementActivity extends BaseActivity implements KontaktDeviceConnection.ConnectionListener {
 
     public static final String EXTRA_FAILURE_MESSAGE = "extra_failure_message";
 
@@ -59,7 +60,7 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
     @InjectView(R.id.hardware_revision)
     Entry hardwareRevision;
 
-    private EddystoneBeaconConnection eddystoneBeaconConnection;
+    private KontaktDeviceConnection eddystoneBeaconConnection;
     private IEddystoneDevice eddystoneDevice;
 
     private int animationDuration;
@@ -101,7 +102,7 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
 
     private void getEddystone() {
         eddystoneDevice = getIntent().getParcelableExtra(EDDYSTONE_DEVICE);
-        eddystoneBeaconConnection = new EddystoneBeaconConnection(this, eddystoneDevice, this);
+        eddystoneBeaconConnection = new KontaktDeviceConnection(this, eddystoneDevice, this);
         setUpActionBarTitle(String.format("%s (%s)", eddystoneDevice.getUrl(), eddystoneDevice.getAddress()));
     }
 
@@ -135,7 +136,7 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteUrl(result);
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.reset_device)
@@ -147,18 +148,18 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
                     public void onClick(DialogInterface dialog, int which) {
                         onResetDevice();
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     private void onResetDevice() {
-        eddystoneBeaconConnection.resetDevice(new EddystoneBeaconConnection.WriteListener() {
+        eddystoneBeaconConnection.resetDevice(new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteListener.WriteResponse response) {
                 showToast("Reset device success");
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 showToast("Reset device failure");
             }
         });
@@ -185,7 +186,7 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwritePowerLevel(Integer.parseInt(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.namespace_id)
@@ -198,7 +199,7 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteNamespaceId(result);
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.instance_id)
@@ -211,7 +212,7 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteInstanceId(result);
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.default_settings)
@@ -224,7 +225,7 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
                     public void accept(DialogInterface dialogInterface, String masterPassword) {
                         onRestoreDefaultSettings(masterPassword);
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.set_password)
@@ -238,32 +239,32 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
                         onOverwritePassword(result);
                     }
                 }
-        ).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+        ).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     private void onOverwritePassword(String result) {
-        eddystoneBeaconConnection.overwritePassword(result, new EddystoneBeaconConnection.WriteListener() {
+        eddystoneBeaconConnection.overwritePassword(result, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 showToast("New password set");
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 showToast("New password set failed");
             }
         });
     }
 
     private void onRestoreDefaultSettings(String masterPassword) {
-        eddystoneBeaconConnection.restoreDefaultSettings(masterPassword, new EddystoneBeaconConnection.WriteListener() {
+        eddystoneBeaconConnection.restoreDefaultSettings(masterPassword, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 showToast("Restore default settings success");
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 showToast("Restore default settings failed");
             }
         });
@@ -271,56 +272,56 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
 
 
     private void onOverwriteInstanceId(String result) {
-        eddystoneBeaconConnection.overwriteInstanceId(result, new EddystoneBeaconConnection.WriteListener() {
+        eddystoneBeaconConnection.overwriteInstanceId(result, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 showToast("Overwrite instance id success");
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 showToast("Overwrite instance id failure");
             }
         });
     }
 
     private void onOverwriteNamespaceId(String result) {
-        eddystoneBeaconConnection.overwriteNamespaceId(result, new EddystoneBeaconConnection.WriteListener() {
+        eddystoneBeaconConnection.overwriteNamespaceId(result, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 showToast("Overwrite namespace id success");
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 showToast("Overwrite namespace id failure");
             }
         });
     }
 
     private void onOverwritePowerLevel(int i) {
-        eddystoneBeaconConnection.overwritePowerLevel(i, new EddystoneBeaconConnection.WriteListener() {
+        eddystoneBeaconConnection.overwritePowerLevel(i, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 showToast("Overwrite power level success");
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 showToast("Overwrite power level failure");
             }
         });
     }
 
     private void onOverwriteUrl(String result) {
-        eddystoneBeaconConnection.overwriteUrl(result, new EddystoneBeaconConnection.WriteListener() {
+        eddystoneBeaconConnection.overwriteUrl(result, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 showToast("Overwrite url success");
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 showToast("Overwrite url failure");
             }
         });
@@ -346,10 +347,10 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
             public void run() {
                 final Intent intent = getIntent();
                 switch (failureCode) {
-                    case EddystoneBeaconConnection.FAILURE_UNKNOWN_BEACON:
+                    case KontaktDeviceConnection.FAILURE_UNKNOWN_BEACON:
                         intent.putExtra(EXTRA_FAILURE_MESSAGE, String.format("Unknown beacon: %s", eddystoneDevice.getAddress()));
                         break;
-                    case EddystoneBeaconConnection.FAILURE_WRONG_PASSWORD:
+                    case KontaktDeviceConnection.FAILURE_WRONG_PASSWORD:
                         intent.putExtra(EXTRA_FAILURE_MESSAGE, "Wrong password. Beacon will be disabled for about 20 mins.");
                         break;
                     default:
@@ -370,20 +371,24 @@ public class EddystoneManagementActivity extends BaseActivity implements Eddysto
     @Override
     public void onErrorOccured(int errorCode) {
         switch (errorCode) {
-            case EddystoneBeaconConnection.ERROR_OVERWRITE_REQUEST:
+            case KontaktDeviceConnection.ERROR_OVERWRITE_REQUEST:
                 showToast("Overwrite request error");
                 break;
 
-            case EddystoneBeaconConnection.ERROR_SERVICES_DISCOVERY:
+            case KontaktDeviceConnection.ERROR_SERVICES_DISCOVERY:
                 showToast("Services discovery error");
                 break;
 
-            case EddystoneBeaconConnection.ERROR_AUTHENTICATION:
+            case KontaktDeviceConnection.ERROR_AUTHENTICATION:
                 showToast("Authentication error");
                 break;
 
             default:
-                throw new IllegalStateException("Unexpected connection error occured: " + errorCode);
+                if (KontaktDeviceConnection.isGattError(errorCode)) {
+                    showToast("Gatt error " + KontaktDeviceConnection.getGattError(errorCode));
+                } else {
+                    throw new IllegalStateException("Unexpected connection error occured: " + errorCode);
+                }
         }
     }
 

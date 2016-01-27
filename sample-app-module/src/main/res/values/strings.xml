@@ -59,7 +59,7 @@
     <string name="region_abandoned">%1$s abandoned</string>
     <string name="beacon_appeared">%1$s appeared</string>
     <string name="appeared_beacon_info">Device found:\n%1$s\nProximityUUID:\n%2$s\nMajor:\n%3$d\nMinor:\n%4$d\nDistance:\n%5$.1f m (%6$s)</string>
-    <string name="foreground_background_scan">foreground/background scan</string>
+    <string name="foreground_background_scan">Foreground/background scan</string>
     <string name="syncing_config">Syncing config…</string>
     <string name="response_status">HttpResponse status: %1$d</string>
     <string name="configuration">Configuration</string>
@@ -73,6 +73,7 @@
     <string name="distance_filter">Distance &lt; %1$d</string>
     <string name="remove_manager">Remove manager</string>
     <string name="syncable_connection">Syncable connection</string>
+    <string name="shuffled_beacons">Scanning shuffled beacons</string>
 
     <string name="enable_bluetooth">Enable bluetooth</string>
     <string name="disable_bluetooth">Disable bluetooth</string>
@@ -86,4 +87,15 @@
     <string name="telemetry_version">Telemetry version: %1$d</string>
     <string name="tx_power_level">Power: %1$d dBm</string>
     <string name="range_all_beacons">Range all types</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="permission_request_title">Permission needed</string>
+    <string name="permission_request_message">For scan beacons permission Location is required. Without granting scan would not work</string>
+    <string name="permission_rejected_message">Scanning beacons not possible</string>
+    <string name="actions">Actions</string>
+    <string name="unique_id_hint">Type device unique id</string>
+    <string name="browser_actions">Browser actions</string>
+    <string name="content_actions">Content actions</string>
+    <string name="action_display">Popup will show after scanning beacon with associated action in Web Panel</string>
 </resources>

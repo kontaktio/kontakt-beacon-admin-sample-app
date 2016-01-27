@@ -4,15 +4,8 @@
     android:layout_height="match_parent">
 
     <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize" />
-
-    <include
         layout="@layout/simultaneous_scan"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

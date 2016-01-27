@@ -1,78 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:layout_margin="@dimen/default_margin"
-              android:weightSum="8"
-              android:animateLayoutChanges="true">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_margin"
+    android:animateLayoutChanges="true"
+    android:orientation="horizontal"
+    android:weightSum="8">
 
     <ImageView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="2"
         android:scaleType="centerInside"
-        android:src="@drawable/beacon"/>
+        android:layout_marginRight="@dimen/default_margin"
+        android:src="@drawable/beacon" />
 
-    <LinearLayout android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="6"
-                  android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="6"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/device_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="@string/device_name"/>
+            android:text="@string/device_name"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/proximity_uuid"
-            android:text="@string/proximity_uuid"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/proximity_uuid" />
 
         <TextView
             android:id="@+id/major"
-            android:text="@string/major"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/major" />
 
         <TextView
             android:id="@+id/minor"
-            android:text="@string/minor"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/minor" />
 
         <TextView
             android:id="@+id/beacon_unique_id"
-            android:text="@string/beacon_unique_id"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/beacon_unique_id" />
 
         <TextView
             android:id="@+id/firmware_version"
-            android:text="@string/firmware_version"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/firmware_version" />
 
         <TextView
             android:id="@+id/rssi"
-            android:text="@string/rssi"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/rssi" />
 
         <TextView
             android:id="@+id/power"
-            android:text="@string/power"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/power" />
 
         <TextView
             android:id="@+id/proximity"
-            android:text="@string/proximity"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/proximity" />
     </LinearLayout>
 </LinearLayout>

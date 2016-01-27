@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_range_beacons"
+            android:checked="true"
+            android:title="@string/range_beacons" />
+
+        <item
+            android:id="@+id/drawer_monitor_beacons"
+            android:title="@string/monitor_beacons" />
+
+        <item
+            android:id="@+id/drawer_range_eddystone"
+            android:title="@string/range_eddystone" />
+
+        <item
+            android:id="@+id/drawer_monitor_eddystone"
+            android:title="@string/monitor_eddystone" />
+
+        <item
+            android:id="@+id/drawer_range_all_types"
+            android:title="@string/range_all_beacons" />
+
+        <item
+            android:id="@+id/drawer_foreground_background"
+            android:title="@string/foreground_background_scan" />
+
+        <item
+            android:id="@+id/drawer_simultineaus_scan"
+            android:title="@string/simultaneous_scans" />
+
+        <item
+            android:id="@+id/drawer_syncable_connection"
+            android:title="@string/syncable_connection" />
+
+        <item
+            android:id="@+id/drawer_shuffled"
+            android:title="@string/shuffled_beacons" />
+
+        <item
+            android:id="@+id/drawer_actions"
+            android:title="@string/actions" />
+
+    </group>
+
+</menu>

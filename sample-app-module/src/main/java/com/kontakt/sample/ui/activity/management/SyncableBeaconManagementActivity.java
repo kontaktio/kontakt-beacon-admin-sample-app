@@ -10,23 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kontakt.sample.R;
-import com.kontakt.sample.dialog.ChoiceDialogFragment;
-import com.kontakt.sample.dialog.InputDialogFragment;
-import com.kontakt.sample.dialog.NumericInputDialogFragment;
-import com.kontakt.sample.dialog.PasswordDialogFragment;
 import com.kontakt.sample.ui.activity.BaseActivity;
-import com.kontakt.sample.ui.activity.ProfilesActivity;
+import com.kontakt.sample.ui.dialog.ChoiceDialogFragment;
+import com.kontakt.sample.ui.dialog.InputDialogFragment;
+import com.kontakt.sample.ui.dialog.NumericInputDialogFragment;
+import com.kontakt.sample.ui.dialog.PasswordDialogFragment;
 import com.kontakt.sample.ui.view.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.ble.connection.ibeacon.IBeaconConnection;
+import com.kontakt.sdk.android.ble.connection.IKontaktDeviceConnection;
+import com.kontakt.sdk.android.ble.connection.KontaktDeviceConnection;
+import com.kontakt.sdk.android.ble.connection.WriteListener;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.interfaces.SDKPredicate;
-import com.kontakt.sdk.android.common.model.Config;
-import com.kontakt.sdk.android.common.model.Profile;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.util.IBeaconPropertyValidator;
-import com.kontakt.sdk.android.connection.SyncableIBeaconConnection;
+import com.kontakt.sdk.android.connection.SyncableKontaktDeviceConnection;
 import com.kontakt.sdk.android.http.exception.ClientException;
 
 import java.util.UUID;
@@ -35,7 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class SyncableBeaconManagementActivity extends BaseActivity implements IBeaconConnection.ConnectionListener {
+public class SyncableBeaconManagementActivity extends BaseActivity implements IKontaktDeviceConnection.ConnectionListener {
 
     private static final String TAG = SyncableBeaconManagementActivity.class.getSimpleName();
 
@@ -43,51 +42,30 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
 
     public static final String EXTRA_FAILURE_MESSAGE = "extra_failure_message";
 
-    public static final int REQUEST_CODE_OBTAIN_CONFIG = 1;
-
-    public static final int REQUEST_CODE_OBTAIN_PROFILE = 2;
-
     private IBeaconDevice beacon;
 
     @InjectView(R.id.beacon_form)
     ViewGroup beaconForm;
-
     @InjectView(R.id.proximity_uuid)
     Entry proximityUuidEntry;
-
     @InjectView(R.id.major)
     Entry majorEntry;
-
     @InjectView(R.id.minor)
     Entry minorEntry;
-
     @InjectView(R.id.power_level)
     Entry powerLevelEntry;
-
     @InjectView(R.id.advertising_interval)
     Entry advertisingIntervalEntry;
-
     @InjectView(R.id.battery_level)
     Entry batteryLevelEntry;
-
     @InjectView(R.id.manufacturer_name)
     Entry manufacturerNameEntry;
-
     @InjectView(R.id.model_name)
     Entry modelNameEntry;
-
     @InjectView(R.id.firmware_revision)
     Entry firmwareRevisionEntry;
-
     @InjectView(R.id.hardware_revision)
     Entry hardwareRevisionEntry;
-
-    @InjectView(R.id.accept_profile)
-    Entry acceptProfileEntry;
-
-    @InjectView(R.id.apply_config)
-    Entry applyConfigEntry;
-
     @InjectView(R.id.loading_spinner)
     View progressBar;
 
@@ -96,7 +74,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
 
     private int animationDuration;
 
-    private SyncableIBeaconConnection syncableIBeaconConnection;
+    private SyncableKontaktDeviceConnection syncableIBeaconConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +89,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
         beacon = getIntent().getParcelableExtra(EXTRA_BEACON_DEVICE);
         setUpActionBarTitle(String.format("%s (%s)", beacon.getName(), beacon.getAddress()));
 
-        syncableIBeaconConnection = new SyncableIBeaconConnection(this, beacon, this);
+        syncableIBeaconConnection = new SyncableKontaktDeviceConnection(this, beacon, this);
     }
 
 
@@ -140,20 +118,6 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
         clearConnection();
         super.onDestroy();
         ButterKnife.reset(this);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CODE_OBTAIN_CONFIG:
-                onConfigResultDelivered(resultCode, data);
-                break;
-            case REQUEST_CODE_OBTAIN_PROFILE:
-                onProfileResultDelivered(resultCode, data);
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override
@@ -191,10 +155,10 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
             public void run() {
                 final Intent intent = getIntent();
                 switch (failureCode) {
-                    case IBeaconConnection.FAILURE_UNKNOWN_BEACON:
+                    case KontaktDeviceConnection.FAILURE_UNKNOWN_BEACON:
                         intent.putExtra(EXTRA_FAILURE_MESSAGE, String.format("Unknown beacon: %s", beacon.getName()));
                         break;
-                    case IBeaconConnection.FAILURE_WRONG_PASSWORD:
+                    case KontaktDeviceConnection.FAILURE_WRONG_PASSWORD:
                         intent.putExtra(EXTRA_FAILURE_MESSAGE, String.format("Wrong password. Beacon will be disabled for about 20 mins."));
                         break;
                     default:
@@ -223,20 +187,24 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
             public void run() {
                 switch (errorCode) {
 
-                    case IBeaconConnection.ERROR_OVERWRITE_REQUEST:
+                    case KontaktDeviceConnection.ERROR_OVERWRITE_REQUEST:
                         Utils.showToast(SyncableBeaconManagementActivity.this, "Overwrite request error");
                         break;
 
-                    case IBeaconConnection.ERROR_SERVICES_DISCOVERY:
+                    case KontaktDeviceConnection.ERROR_SERVICES_DISCOVERY:
                         Utils.showToast(SyncableBeaconManagementActivity.this, "Services discovery error");
                         break;
 
-                    case IBeaconConnection.ERROR_AUTHENTICATION:
+                    case KontaktDeviceConnection.ERROR_AUTHENTICATION:
                         Utils.showToast(SyncableBeaconManagementActivity.this, "Authentication error");
                         break;
 
                     default:
-                        throw new IllegalStateException("Unexpected connection error occured: " + errorCode);
+                        if (KontaktDeviceConnection.isGattError(errorCode)) {
+                            Utils.showToast(SyncableBeaconManagementActivity.this, "Gatt error " + KontaktDeviceConnection.getGattError(errorCode));
+                        } else {
+                            throw new IllegalStateException("Unexpected connection error occured: " + errorCode);
+                        }
                 }
             }
         });
@@ -253,19 +221,6 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
         });
     }
 
-    private void onConfigResultDelivered(final int resultCode, final Intent data) {
-        if (resultCode != RESULT_CANCELED) {
-            final Config config = data.getParcelableExtra(ConfigFormActivity.EXTRA_RESULT_CONFIG);
-            onApplyConfig(config);
-        }
-    }
-
-    private void onProfileResultDelivered(final int resultCode, final Intent data) {
-        if (resultCode != RESULT_CANCELED) {
-            final Profile profile = data.getParcelableExtra(ProfilesActivity.EXTRA_PROFILE);
-            onAcceptProfile(profile);
-        }
-    }
 
     private void fillEntries(IBeaconDevice.Characteristics characteristics) {
         proximityUuidEntry.setValue(characteristics.getProximityUUID().toString());
@@ -282,9 +237,6 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
 
     private void setUpView() {
         batteryLevelEntry.setEnabled(false);
-
-        acceptProfileEntry = (Entry) beaconForm.findViewById(R.id.accept_profile);
-        applyConfigEntry = (Entry) beaconForm.findViewById(R.id.apply_config);
 
         manufacturerNameEntry.setEnabled(false);
 
@@ -342,7 +294,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteProximityUUID(UUID.fromString(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.major)
@@ -366,7 +318,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteMajor(Integer.parseInt(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.minor)
@@ -390,7 +342,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteMinor(Integer.parseInt(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
 
     }
 
@@ -415,7 +367,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwritePowerLevel(Integer.parseInt(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.advertising_interval)
@@ -439,7 +391,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteAdvertisingInterval(Long.parseLong(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.set_password)
@@ -453,7 +405,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
                         onOverwritePassword(result);
                     }
                 }
-        ).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+        ).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.model_name)
@@ -466,7 +418,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteModelName(result);
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.reset_device)
@@ -478,7 +430,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
                     public void onClick(DialogInterface dialog, int which) {
                         onResetDevice();
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.default_settings)
@@ -491,73 +443,30 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
                     public void accept(DialogInterface dialogInterface, String masterPassword) {
                         onRestoreDefaultSettings(masterPassword);
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
-    @OnClick(R.id.accept_profile)
-    void acceptProfile() {
-        startActivityForResult(new Intent(this, ProfilesActivity.class), REQUEST_CODE_OBTAIN_PROFILE);
-    }
-
-    @OnClick(R.id.apply_config)
-    void applyConfig() {
-        startActivityForResult(new Intent(this, ConfigFormActivity.class), REQUEST_CODE_OBTAIN_CONFIG);
-    }
-
-    private void onApplyConfig(final Config config) {
-        syncableIBeaconConnection.applyConfig(config, new SyncableIBeaconConnection.SyncWriteBatchListener<Config>() {
-            @Override
-            public void onSyncWriteBatchStart(Config batchHolder) {
-                showToast("write config batch start");
-            }
-
-            @Override
-            public void onWriteFailed() {
-                showToast("write config failed");
-            }
-
-            @Override
-            public void onBatchWriteError(int errorCode) {
-                showToast("config batch write error " + errorCode);
-            }
-
-            @Override
-            public void onSyncFailed(ClientException e) {
-                showToast("sync config failed");
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onSuccess(Config batchHolder) {
-                showToast("config write and sync succeed");
-            }
-        });
-    }
-
-    private void onAcceptProfile(final Profile profile) {
-        //todo: accept profile
-    }
 
     private void onRestoreDefaultSettings(final String masterPassword) {
 
     }
 
     private void onResetDevice() {
-        syncableIBeaconConnection.resetDevice(new IBeaconConnection.WriteListener() {
+        syncableIBeaconConnection.resetDevice(new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse writeResponse) {
                 showToast("Device reset success");
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 showToast("Device reset failure");
             }
         });
     }
 
     private void onOverwriteModelName(String result) {
-        syncableIBeaconConnection.overwriteModelName(result, new SyncableIBeaconConnection.SyncWriteListener() {
+        syncableIBeaconConnection.overwriteModelName(result, new SyncableKontaktDeviceConnection.SyncWriteListener() {
             @Override
             public void onWriteFailed() {
                 showToast("Overwrite model name failed");
@@ -577,7 +486,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
     }
 
     private void onOverwritePassword(String result) {
-        syncableIBeaconConnection.overwritePassword(result, new SyncableIBeaconConnection.SyncWriteListener() {
+        syncableIBeaconConnection.overwritePassword(result, new SyncableKontaktDeviceConnection.SyncWriteListener() {
             @Override
             public void onWriteFailed() {
                 showToast("Overwrite password failed");
@@ -597,7 +506,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
     }
 
     private void onOverwriteAdvertisingInterval(long value) {
-        syncableIBeaconConnection.overwriteAdvertisingInterval(value, new SyncableIBeaconConnection.SyncWriteListener() {
+        syncableIBeaconConnection.overwriteAdvertisingInterval(value, new SyncableKontaktDeviceConnection.SyncWriteListener() {
             @Override
             public void onWriteFailed() {
                 showToast("Overwrite interval failed");
@@ -617,7 +526,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
     }
 
     private void onOverwritePowerLevel(int newPowerLevel) {
-        syncableIBeaconConnection.overwritePowerLevel(newPowerLevel, new SyncableIBeaconConnection.SyncWriteListener() {
+        syncableIBeaconConnection.overwritePowerLevel(newPowerLevel, new SyncableKontaktDeviceConnection.SyncWriteListener() {
             @Override
             public void onWriteFailed() {
                 showToast("Overwrite power level failed");
@@ -636,7 +545,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
     }
 
     private void onOverwriteMinor(int newMinor) {
-        syncableIBeaconConnection.overwriteMinor(newMinor, new SyncableIBeaconConnection.SyncWriteListener() {
+        syncableIBeaconConnection.overwriteMinor(newMinor, new SyncableKontaktDeviceConnection.SyncWriteListener() {
             @Override
             public void onWriteFailed() {
                 showToast("Overwrite minor failed");
@@ -656,7 +565,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
     }
 
     private void onOverwriteMajor(int newMajor) {
-        syncableIBeaconConnection.overwriteMajor(newMajor, new SyncableIBeaconConnection.SyncWriteListener() {
+        syncableIBeaconConnection.overwriteMajor(newMajor, new SyncableKontaktDeviceConnection.SyncWriteListener() {
             @Override
             public void onWriteFailed() {
                 showToast("Overwrite major failed");
@@ -676,7 +585,7 @@ public class SyncableBeaconManagementActivity extends BaseActivity implements IB
     }
 
     private void onOverwriteProximityUUID(UUID uuid) {
-        syncableIBeaconConnection.overwriteProximityUUID(uuid, new SyncableIBeaconConnection.SyncWriteListener() {
+        syncableIBeaconConnection.overwriteProximityUUID(uuid, new SyncableKontaktDeviceConnection.SyncWriteListener() {
             @Override
             public void onWriteFailed() {
                 showToast("Overwrite proximity failed");

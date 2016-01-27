@@ -1,78 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:layout_margin="@dimen/default_margin"
-              android:weightSum="8"
-              android:animateLayoutChanges="true">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_margin"
+    android:animateLayoutChanges="true"
+    android:orientation="horizontal"
+    android:weightSum="8">
 
     <ImageView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="2"
         android:scaleType="centerInside"
-        android:src="@drawable/beacon"/>
+        android:layout_marginRight="@dimen/default_margin"
+        android:src="@drawable/beacon" />
 
-    <LinearLayout android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="6"
-                  android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="6"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/namespace_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="@string/namespace"/>
+            android:text="@string/namespace"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/instance_id"
-            android:text="@string/instance"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/instance" />
 
         <TextView
             android:id="@+id/url"
-            android:text="@string/url"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/url" />
 
         <TextView
             android:id="@+id/power"
-            android:text="@string/tx_power_level"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/tx_power_level" />
 
         <TextView
             android:id="@+id/temperature"
-            android:text="@string/temperature"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/temperature" />
 
         <TextView
             android:id="@+id/battery_voltage"
-            android:text="@string/battery_voltage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/battery_voltage" />
 
         <TextView
             android:id="@+id/pdu_count"
-            android:text="@string/pdu_count"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/pdu_count" />
 
         <TextView
             android:id="@+id/time_since_power_up"
-            android:text="@string/time_since_power_up"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/time_since_power_up" />
 
         <TextView
             android:id="@+id/telemetry_version"
-            android:text="@string/telemetry_version"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/telemetry_version" />
     </LinearLayout>
 </LinearLayout>

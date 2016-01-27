@@ -11,21 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kontakt.sample.R;
-import com.kontakt.sample.dialog.ChoiceDialogFragment;
-import com.kontakt.sample.dialog.InputDialogFragment;
-import com.kontakt.sample.dialog.NumericInputDialogFragment;
-import com.kontakt.sample.dialog.PasswordDialogFragment;
-import com.kontakt.sample.service.SyncService;
+import com.kontakt.sample.ui.dialog.ChoiceDialogFragment;
+import com.kontakt.sample.ui.dialog.InputDialogFragment;
+import com.kontakt.sample.ui.dialog.NumericInputDialogFragment;
+import com.kontakt.sample.ui.dialog.PasswordDialogFragment;
 import com.kontakt.sample.ui.activity.BaseActivity;
-import com.kontakt.sample.ui.activity.ProfilesActivity;
 import com.kontakt.sample.ui.view.Entry;
 import com.kontakt.sample.util.Constants;
 import com.kontakt.sample.util.Utils;
-import com.kontakt.sdk.android.ble.connection.ibeacon.IBeaconConnection;
+import com.kontakt.sdk.android.ble.connection.KontaktDeviceConnection;
+import com.kontakt.sdk.android.ble.connection.WriteListener;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.interfaces.SDKPredicate;
-import com.kontakt.sdk.android.common.model.Config;
-import com.kontakt.sdk.android.common.model.Profile;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.util.IBeaconPropertyValidator;
 
@@ -35,58 +32,36 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class BeaconManagementActivity extends BaseActivity implements IBeaconConnection.ConnectionListener {
+public class BeaconManagementActivity extends BaseActivity implements KontaktDeviceConnection.ConnectionListener {
 
     public static final String EXTRA_BEACON_DEVICE = "extra_beacon_device";
 
     public static final String EXTRA_FAILURE_MESSAGE = "extra_failure_message";
 
-    public static final int REQUEST_CODE_OBTAIN_CONFIG = 1;
 
-    public static final int REQUEST_CODE_OBTAIN_PROFILE = 2;
-
-    private IBeaconDevice beacon;
-
-    private IBeaconConnection beaconConnection;
 
     @InjectView(R.id.beacon_form)
     ViewGroup beaconForm;
-
     @InjectView(R.id.proximity_uuid)
     Entry proximityUuidEntry;
-
     @InjectView(R.id.major)
     Entry majorEntry;
-
     @InjectView(R.id.minor)
     Entry minorEntry;
-
     @InjectView(R.id.power_level)
     Entry powerLevelEntry;
-
     @InjectView(R.id.advertising_interval)
     Entry advertisingIntervalEntry;
-
     @InjectView(R.id.battery_level)
     Entry batteryLevelEntry;
-
     @InjectView(R.id.manufacturer_name)
     Entry manufacturerNameEntry;
-
     @InjectView(R.id.model_name)
     Entry modelNameEntry;
-
     @InjectView(R.id.firmware_revision)
     Entry firmwareRevisionEntry;
-
     @InjectView(R.id.hardware_revision)
     Entry hardwareRevisionEntry;
-
-    @InjectView(R.id.accept_profile)
-    Entry acceptProfileEntry;
-
-    @InjectView(R.id.apply_config)
-    Entry applyConfigEntry;
 
     @InjectView(R.id.loading_spinner)
     View progressBar;
@@ -94,8 +69,10 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
 
+    private IBeaconDevice beacon;
     private ProgressDialog progressDialog;
 
+    private KontaktDeviceConnection kontaktDeviceConnection;
     private int animationDuration;
 
     @Override
@@ -103,29 +80,20 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
         super.onCreate(savedInstanceState);
         setContentView(R.layout.beacon_activity);
         ButterKnife.inject(this);
-        setUpActionBar(toolbar);
-
-        beaconForm.setVisibility(View.GONE);
+        setUpToolbarBack(toolbar);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        beaconForm.setVisibility(View.GONE);
         setUpView();
         beacon = getIntent().getParcelableExtra(EXTRA_BEACON_DEVICE);
         setUpActionBarTitle(String.format("%s (%s)", beacon.getName(), beacon.getAddress()));
-
-        beaconConnection = new IBeaconConnection(this, beacon, this);
+        kontaktDeviceConnection = new KontaktDeviceConnection(this, beacon, this);
+        kontaktDeviceConnection.connect();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Utils.setOrientationChangeEnabled(false, this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(! beaconConnection.isConnected()) {
-            beaconConnection.connect();
-        }
     }
 
     @Override
@@ -136,23 +104,9 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
 
     @Override
     protected void onDestroy() {
-        clearConnection();
+        clearConnections();
         super.onDestroy();
         ButterKnife.reset(this);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
-            case REQUEST_CODE_OBTAIN_CONFIG:
-                onConfigResultDelivered(resultCode, data);
-                break;
-            case REQUEST_CODE_OBTAIN_PROFILE:
-                onProfileResultDelivered(resultCode, data);
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override
@@ -190,10 +144,10 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             public void run() {
                 final Intent intent = getIntent();
                 switch (failureCode) {
-                    case IBeaconConnection.FAILURE_UNKNOWN_BEACON:
+                    case KontaktDeviceConnection.FAILURE_UNKNOWN_BEACON:
                         intent.putExtra(EXTRA_FAILURE_MESSAGE, String.format("Unknown beacon: %s", beacon.getName()));
                         break;
-                    case IBeaconConnection.FAILURE_WRONG_PASSWORD:
+                    case KontaktDeviceConnection.FAILURE_WRONG_PASSWORD:
                         intent.putExtra(EXTRA_FAILURE_MESSAGE, String.format("Wrong password. Beacon will be disabled for about 20 mins."));
                         break;
                     default:
@@ -220,22 +174,26 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                switch(errorCode) {
+                switch (errorCode) {
 
-                    case IBeaconConnection.ERROR_OVERWRITE_REQUEST:
+                    case KontaktDeviceConnection.ERROR_OVERWRITE_REQUEST:
                         Utils.showToast(BeaconManagementActivity.this, "Overwrite request error");
                         break;
 
-                    case IBeaconConnection.ERROR_SERVICES_DISCOVERY:
+                    case KontaktDeviceConnection.ERROR_SERVICES_DISCOVERY:
                         Utils.showToast(BeaconManagementActivity.this, "Services discovery error");
                         break;
 
-                    case IBeaconConnection.ERROR_AUTHENTICATION:
+                    case KontaktDeviceConnection.ERROR_AUTHENTICATION:
                         Utils.showToast(BeaconManagementActivity.this, "Authentication error");
                         break;
 
                     default:
-                        throw new IllegalStateException("Unexpected connection error occured: " + errorCode);
+                        if (KontaktDeviceConnection.isGattError(errorCode)) {
+                            Utils.showToast(BeaconManagementActivity.this, "Gatt error " + KontaktDeviceConnection.getGattError(errorCode));
+                        } else {
+                            throw new IllegalStateException("Unexpected connection error occured: " + errorCode);
+                        }
                 }
             }
         });
@@ -243,28 +201,8 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
 
     @Override
     public void onDisconnected() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Utils.showToast(BeaconManagementActivity.this, "Disconnected");
-                setBeaconFormVisible(false);
-            }
-        });
     }
 
-    private void onConfigResultDelivered(final int resultCode, final Intent data) {
-        if(resultCode != RESULT_CANCELED) {
-            final Config config = data.getParcelableExtra(ConfigFormActivity.EXTRA_RESULT_CONFIG);
-            onApplyConfig(config);
-        }
-    }
-
-    private void onProfileResultDelivered(final int resultCode, final Intent data) {
-        if(resultCode != RESULT_CANCELED) {
-            final Profile profile = data.getParcelableExtra(ProfilesActivity.EXTRA_PROFILE);
-            onAcceptProfile(profile);
-        }
-    }
 
     private void fillEntries(IBeaconDevice.Characteristics characteristics) {
         proximityUuidEntry.setValue(characteristics.getProximityUUID().toString());
@@ -281,22 +219,17 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
 
     private void setUpView() {
         batteryLevelEntry.setEnabled(false);
-
-        acceptProfileEntry = (Entry) beaconForm.findViewById(R.id.accept_profile);
-        applyConfigEntry = (Entry) beaconForm.findViewById(R.id.apply_config);
-
         manufacturerNameEntry.setEnabled(false);
-
         firmwareRevisionEntry.setEnabled(false);
-
         hardwareRevisionEntry.setEnabled(false);
     }
+
     private void setBeaconFormVisible(final boolean state) {
 
         final View showView;
         final View hideView;
 
-        if(state) {
+        if (state) {
             showView = beaconForm;
             hideView = progressBar;
         } else {
@@ -304,7 +237,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             hideView = beaconForm;
         }
 
-        if(showView != null && hideView != null) {
+        if (showView != null && hideView != null) {
             showView.setAlpha(0f);
             showView.setVisibility(View.VISIBLE);
             showView.animate()
@@ -324,9 +257,11 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
         }
     }
 
-    private void clearConnection() {
-        beaconConnection.close();
-        beaconConnection = null;
+    private void clearConnections() {
+        if (kontaktDeviceConnection != null) {
+            kontaktDeviceConnection.close();
+            kontaktDeviceConnection = null;
+        }
     }
 
     @OnClick(R.id.proximity_uuid)
@@ -339,7 +274,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteProximityUUID(UUID.fromString(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager(), Constants.DIALOG);
     }
 
     @OnClick(R.id.major)
@@ -353,7 +288,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                         try {
                             IBeaconPropertyValidator.validateMajor(target);
                             return true;
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             return false;
                         }
                     }
@@ -363,7 +298,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteMajor(Integer.parseInt(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager(), Constants.DIALOG);
     }
 
     @OnClick(R.id.minor)
@@ -377,7 +312,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                         try {
                             IBeaconPropertyValidator.validateMinor(target);
                             return true;
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             return false;
                         }
                     }
@@ -387,7 +322,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteMinor(Integer.parseInt(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager(), Constants.DIALOG);
 
     }
 
@@ -402,7 +337,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                         try {
                             IBeaconPropertyValidator.validatePowerLevel(target);
                             return true;
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             return false;
                         }
                     }
@@ -412,7 +347,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwritePowerLevel(Integer.parseInt(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager(), Constants.DIALOG);
     }
 
     @OnClick(R.id.advertising_interval)
@@ -426,7 +361,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                         try {
                             IBeaconPropertyValidator.validateAdvertisingInterval(target);
                             return true;
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             return false;
                         }
                     }
@@ -436,7 +371,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteAdvertisingInterval(Long.parseLong(result));
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager(), Constants.DIALOG);
     }
 
     @OnClick(R.id.set_password)
@@ -450,7 +385,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                         onOverwritePassword(result);
                     }
                 }
-        ).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+        ).show(getSupportFragmentManager(), Constants.DIALOG);
     }
 
     @OnClick(R.id.model_name)
@@ -463,7 +398,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                     public void accept(DialogInterface dialogInterface, String result) {
                         onOverwriteModelName(result);
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager(), Constants.DIALOG);
     }
 
     @OnClick(R.id.reset_device)
@@ -475,7 +410,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                     public void onClick(DialogInterface dialog, int which) {
                         onResetDevice();
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     @OnClick(R.id.default_settings)
@@ -488,126 +423,13 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
                     public void accept(DialogInterface dialogInterface, String masterPassword) {
                         onRestoreDefaultSettings(masterPassword);
                     }
-                }).show(getFragmentManager().beginTransaction(), Constants.DIALOG);
-    }
-
-    @OnClick(R.id.accept_profile)
-    void acceptProfile() {
-        startActivityForResult(new Intent(this, ProfilesActivity.class), REQUEST_CODE_OBTAIN_PROFILE);
-    }
-
-    @OnClick(R.id.apply_config)
-    void applyConfig() {
-        startActivityForResult(new Intent(this, ConfigFormActivity.class), REQUEST_CODE_OBTAIN_CONFIG);
-    }
-
-    private void onApplyConfig(final Config config) {
-        beaconConnection.applyConfig(config, new IBeaconConnection.WriteBatchListener<Config>() {
-            @Override
-            public void onWriteBatchStart(Config batchHolder) {
-                progressDialog = ProgressDialog.show(BeaconManagementActivity.this,
-                        "Applying Config",
-                        "Please wait...");
-            }
-
-            @Override
-            public void onWriteBatchFinish(final Config batch) {
-                progressDialog.dismiss();
-                final Intent serviceIntent = new Intent(BeaconManagementActivity.this, SyncService.class);
-                serviceIntent.putExtra(SyncService.EXTRA_REQUEST_CODE, SyncService.REQUEST_SYNC_CONFIG);
-                serviceIntent.putExtra(SyncService.EXTRA_ITEM, batch);
-                startService(serviceIntent);
-            }
-
-            @Override
-            public void onErrorOccured(int errorCode) {
-                progressDialog.dismiss();
-
-                switch(errorCode) {
-                    case IBeaconConnection.ERROR_BATCH_WRITE_TX_POWER:
-                        Utils.showToast(BeaconManagementActivity.this,
-                                "Error during Batch write operation - could not write Tx Power");
-                        break;
-                    case IBeaconConnection.ERROR_BATCH_WRITE_INTERVAL:
-                        Utils.showToast(BeaconManagementActivity.this,
-                                "Error during Batch write operation - could not write Interval");
-                        break;
-                    case IBeaconConnection.ERROR_BATCH_WRITE_MAJOR:
-                        Utils.showToast(BeaconManagementActivity.this,
-                                "Error during Batch write operation - could not write Major value");
-                        break;
-                    case IBeaconConnection.ERROR_BATCH_WRITE_MINOR:
-                        Utils.showToast(BeaconManagementActivity.this,
-                                "Error during Batch write operation - could not write Minor value");
-                        break;
-                    case IBeaconConnection.ERROR_BATCH_WRITE_PROXIMITY_UUID:
-                        Utils.showToast(BeaconManagementActivity.this,
-                                "Error during Batch write operation - could not write Proximity UUID");
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Unknown error code: " + errorCode);
-                }
-            }
-
-            @Override
-            public void onWriteFailure() {
-
-            }
-        });
-    }
-
-    private void onAcceptProfile(final Profile profile) {
-        beaconConnection.acceptProfile(profile, new IBeaconConnection.WriteBatchListener<Profile>() {
-            @Override
-            public void onWriteBatchStart(Profile batchHolder) {
-                progressDialog = ProgressDialog.show(BeaconManagementActivity.this,
-                        String.format("Accepting profile - %s", profile.getName()),
-                        "Please wait...");
-            }
-
-            @Override
-            public void onWriteBatchFinish(Profile batchHolder) {
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onErrorOccured(int errorCode) {
-                progressDialog.dismiss();
-
-                switch(errorCode) {
-                    case IBeaconConnection.ERROR_BATCH_WRITE_TX_POWER:
-                        Utils.showToast(BeaconManagementActivity.this,
-                                "Error during Batch write operation - could not write Tx Power");
-                        break;
-                    case IBeaconConnection.ERROR_BATCH_WRITE_INTERVAL:
-                        Utils.showToast(BeaconManagementActivity.this,
-                                "Error during Batch write operation - could not write Interval");
-                        break;
-                    case IBeaconConnection.ERROR_BATCH_WRITE_PROXIMITY_UUID:
-                        Utils.showToast(BeaconManagementActivity.this,
-                                "Error during Batch write operation - could not write Proximity UUID");
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Unknown error code: " + errorCode);
-                }
-            }
-
-            @Override
-            public void onWriteFailure() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utils.showToast(BeaconManagementActivity.this, "Profile writing failed");
-                    }
-                });
-            }
-        });
+                }).show(getSupportFragmentManager().beginTransaction(), Constants.DIALOG);
     }
 
     private void onRestoreDefaultSettings(final String masterPassword) {
-        beaconConnection.restoreDefaultSettings(masterPassword, new IBeaconConnection.WriteListener() {
+        kontaktDeviceConnection.restoreDefaultSettings(masterPassword, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -617,7 +439,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -630,20 +452,20 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
     }
 
     private void onResetDevice() {
-        beaconConnection.resetDevice(new IBeaconConnection.WriteListener() {
+        kontaktDeviceConnection.resetDevice(new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Utils.showToast(BeaconManagementActivity.this, "Device reset successfully");
-                        beaconConnection.connect();
+                        kontaktDeviceConnection.connect();
                     }
                 });
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -655,9 +477,9 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
     }
 
     private void onOverwriteModelName(String result) {
-        beaconConnection.overwriteModelName(result, new IBeaconConnection.WriteListener() {
+        kontaktDeviceConnection.overwriteModelName(result, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse writeResponse) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -667,7 +489,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -679,9 +501,9 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
     }
 
     private void onOverwritePassword(String result) {
-        beaconConnection.overwritePassword(result, new IBeaconConnection.WriteListener() {
+        kontaktDeviceConnection.overwritePassword(result, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -691,7 +513,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -703,9 +525,9 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
     }
 
     private void onOverwriteAdvertisingInterval(long value) {
-        beaconConnection.overwriteAdvertisingInterval(value, new IBeaconConnection.WriteListener() {
+        kontaktDeviceConnection.overwriteAdvertisingInterval(value, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -715,7 +537,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -727,9 +549,9 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
     }
 
     private void onOverwritePowerLevel(int newPowerLevel) {
-        beaconConnection.overwritePowerLevel(newPowerLevel, new IBeaconConnection.WriteListener() {
+        kontaktDeviceConnection.overwritePowerLevel(newPowerLevel, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -739,7 +561,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -751,9 +573,9 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
     }
 
     private void onOverwriteMinor(int newMinor) {
-        beaconConnection.overwriteMinor(newMinor, new IBeaconConnection.WriteListener() {
+        kontaktDeviceConnection.overwriteMinor(newMinor, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -763,7 +585,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -775,9 +597,9 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
     }
 
     private void onOverwriteMajor(int newMajor) {
-        beaconConnection.overwriteMajor(newMajor, new IBeaconConnection.WriteListener() {
+        kontaktDeviceConnection.overwriteMajor(newMajor, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -787,7 +609,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -799,9 +621,9 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
     }
 
     private void onOverwriteProximityUUID(UUID uuid) {
-        beaconConnection.overwriteProximity(uuid, new IBeaconConnection.WriteListener() {
+        kontaktDeviceConnection.overwriteProximityUUID(uuid, new WriteListener() {
             @Override
-            public void onWriteSuccess() {
+            public void onWriteSuccess(WriteResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -811,7 +633,7 @@ public class BeaconManagementActivity extends BaseActivity implements IBeaconCon
             }
 
             @Override
-            public void onWriteFailure() {
+            public void onWriteFailure(Cause cause) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
