@@ -17,17 +17,15 @@ import java.util.Map;
 
 public class DrawerFragmentFactory {
 
-  private static final String TAG = DrawerFragmentFactory.class.getSimpleName();
-
   private Map<String, BaseFragment> baseFragmentMap = new HashMap<>();
+
+  public DrawerFragmentFactory() {
+    createFragments();
+  }
 
   @IdRes
   public int getLastFragmentOrDefault() {
     return R.id.drawer_range_beacons;
-  }
-
-  public void onCreate() {
-    createFragments();
   }
 
   @Nullable
@@ -61,6 +59,10 @@ public class DrawerFragmentFactory {
         break;
       case R.id.drawer_actions:
         fragment = getFragment(ActionFragment.TAG);
+        break;
+      case R.id.drawer_cloud:
+        fragment = getFragment(CloudFragment.TAG);
+        break;
     }
     return fragment;
   }
@@ -75,6 +77,7 @@ public class DrawerFragmentFactory {
     putFragment(SyncableRangeFragment.TAG, SyncableRangeFragment.newInstance());
     putFragment(ShuffledScanFragment.TAG, ShuffledScanFragment.newInstance());
     putFragment(ActionFragment.TAG, ActionFragment.newInstance());
+    putFragment(CloudFragment.TAG, CloudFragment.newInstance());
   }
 
   private void putFragment(@NonNull String tag, @NonNull BaseFragment baseFragment) {

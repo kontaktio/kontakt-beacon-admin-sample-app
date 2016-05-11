@@ -19,10 +19,6 @@ import com.kontakt.sample.ui.fragment.DrawerFragmentFactory;
 
 public class MainActivity extends BaseActivity implements PermissionCheckerHoster {
 
-  private static final String TAG = MainActivity.class.getSimpleName();
-
-  private static final int REQUEST_CODE_ENABLE_BLUETOOTH = 121;
-
   @InjectView(R.id.toolbar) Toolbar toolbar;
   @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
   @InjectView(R.id.navigation_view) NavigationView navigationView;
@@ -39,7 +35,6 @@ public class MainActivity extends BaseActivity implements PermissionCheckerHoste
     setContentView(R.layout.main_activity);
     ButterKnife.inject(this);
     drawerFragmentFactory = new DrawerFragmentFactory();
-    drawerFragmentFactory.onCreate();
     permissionChecker = new PermissionChecker();
     setUpActionBar(toolbar);
     setUpActionBarTitle(getString(R.string.app_name));
@@ -61,6 +56,11 @@ public class MainActivity extends BaseActivity implements PermissionCheckerHoste
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     actionBarDrawerToggle.onConfigurationChanged(newConfig);
+  }
+
+  @Override
+  public void requestPermission(PermissionChecker.Callback callback) {
+    permissionChecker.requestLocationPermission(this, callback);
   }
 
   @Override
@@ -94,10 +94,5 @@ public class MainActivity extends BaseActivity implements PermissionCheckerHoste
       fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
       setUpActionBarTitle(fragment.getTitle());
     }
-  }
-
-  @Override
-  public void requestPermission(PermissionChecker.Callback callback) {
-    permissionChecker.requestLocationPermission(this, callback);
   }
 }

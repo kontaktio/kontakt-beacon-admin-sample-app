@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_cloud_top_Layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:padding="20dp"
+      >
+
+    <TextView
+        android:id="@+id/fragment_cloud_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="An example of communication with Kontakt Cloud using a SDK built-in API client."
+        android:textSize="12sp"
+        />
+
+    <Button
+        android:id="@+id/fragment_cloud_fetch_devices_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Fetch all my devices"
+        />
+
+    <Button
+        android:id="@+id/fragment_cloud_fetch_presets_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="Fetch Presets"
+        />
+
+    <ProgressBar
+        android:id="@+id/fragment_cloud_progress"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/fragment_cloud_results_text"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+  </LinearLayout>
+</ScrollView>

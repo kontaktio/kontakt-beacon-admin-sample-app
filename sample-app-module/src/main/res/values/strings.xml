@@ -94,6 +94,7 @@
     <string name="permission_request_message">For scan beacons permission Location is required. Without granting scan would not work</string>
     <string name="permission_rejected_message">Scanning beacons not possible</string>
     <string name="actions">Actions</string>
+    <string name="cloud">Kontakt Cloud</string>
     <string name="unique_id_hint">Type device unique id</string>
     <string name="browser_actions">Browser actions</string>
     <string name="content_actions">Content actions</string>
