@@ -17,71 +17,69 @@ import java.util.List;
 
 public class SyncableRangeFragment extends BaseRangeFragment {
 
-    public static SyncableRangeFragment newInstance() {
-        Bundle args = new Bundle();
-        SyncableRangeFragment fragment = new SyncableRangeFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+  public static SyncableRangeFragment newInstance() {
+    Bundle args = new Bundle();
+    SyncableRangeFragment fragment = new SyncableRangeFragment();
+    fragment.setArguments(args);
+    return fragment;
+  }
 
-    public static final String TAG = SyncableRangeFragment.class.getSimpleName();
+  public static final String TAG = SyncableRangeFragment.class.getSimpleName();
 
-    @Override
-    public int getTitle() {
-        return R.string.syncable_connection;
-    }
+  @Override
+  public int getTitle() {
+    return R.string.syncable_connection;
+  }
 
-    @Override
-    public String getFragmentTag() {
-        return TAG;
-    }
+  @Override
+  public String getFragmentTag() {
+    return TAG;
+  }
 
-    @Override
-    void callOnListItemClick(int position) {
-        final IBeaconDevice beacon = (IBeaconDevice) adapter.getItem(position);
-        if (beacon != null) {
-            PasswordDialogFragment.newInstance(getString(R.string.format_connect, beacon.getAddress()),
-                    getString(R.string.password),
-                    getString(R.string.connect),
-                    new SDKBiConsumer<DialogInterface, String>() {
-                        @Override
-                        public void accept(DialogInterface dialogInterface, String password) {
-
-                            beacon.setPassword(password.getBytes());
-
-                            final Intent intent = new Intent(getContext(), SyncableBeaconManagementActivity.class);
-                            intent.putExtra(BeaconManagementActivity.EXTRA_BEACON_DEVICE, beacon);
-
-                            startActivityForResult(intent, REQUEST_CODE_CONNECT_TO_DEVICE);
-                        }
-                    }).show(getActivity().getSupportFragmentManager(), "dialog");
-        }
-    }
-
-    @Override
-    BaseRangeAdapter getAdapter() {
-        return new IBeaconRangeAdapter(getContext());
-    }
-
-    @Override
-    void configureListeners() {
-        proximityManager.attachIBeaconListener(new SimpleIBeaconListener() {
+  @Override
+  void callOnListItemClick(int position) {
+    final IBeaconDevice beacon = (IBeaconDevice) adapter.getItem(position);
+    if (beacon != null) {
+      PasswordDialogFragment.newInstance(getString(R.string.format_connect, beacon.getAddress()), getString(R.string.password),
+          getString(R.string.connect), new SDKBiConsumer<DialogInterface, String>() {
             @Override
-            public void onIBeaconsUpdated(List<IBeaconDevice> ibeacons, IBeaconRegion region) {
-                onIBeaconDevicesList(ibeacons);
-            }
-        });
-    }
+            public void accept(DialogInterface dialogInterface, String password) {
 
-    private void onIBeaconDevicesList(final List<IBeaconDevice> devices) {
-        if (getActivity() == null) {
-            return;
-        }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.replaceWith(devices);
+              beacon.setPassword(password.getBytes());
+
+              final Intent intent = new Intent(getContext(), SyncableBeaconManagementActivity.class);
+              intent.putExtra(BeaconManagementActivity.EXTRA_BEACON_DEVICE, beacon);
+
+              startActivityForResult(intent, REQUEST_CODE_CONNECT_TO_DEVICE);
             }
-        });
+          }).show(getActivity().getSupportFragmentManager(), "dialog");
     }
+  }
+
+  @Override
+  BaseRangeAdapter getAdapter() {
+    return new IBeaconRangeAdapter(getContext());
+  }
+
+  @Override
+  void configureListeners() {
+    proximityManager.attachIBeaconListener(new SimpleIBeaconListener() {
+      @Override
+      public void onIBeaconsUpdated(List<IBeaconDevice> ibeacons, IBeaconRegion region) {
+        onIBeaconDevicesList(ibeacons);
+      }
+    });
+  }
+
+  private void onIBeaconDevicesList(final List<IBeaconDevice> devices) {
+    if (getActivity() == null) {
+      return;
+    }
+    getActivity().runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        adapter.replaceWith(devices);
+      }
+    });
+  }
 }

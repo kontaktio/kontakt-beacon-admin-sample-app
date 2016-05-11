@@ -70,7 +70,6 @@ public class RangeEddystoneFragment extends BaseRangeFragment {
     });
   }
 
-
   private void onEddystoneDevicesList(final List<IEddystoneDevice> devices) {
     if (getActivity() == null) {
       return;

@@ -172,7 +172,7 @@ public class ActionFragment extends BaseFragment {
       }
     }
 
-    if(targetAction == null) {
+    if (targetAction == null) {
       return;
     }
 

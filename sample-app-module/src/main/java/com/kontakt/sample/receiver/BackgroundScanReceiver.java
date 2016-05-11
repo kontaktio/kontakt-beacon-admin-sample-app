@@ -4,8 +4,8 @@ import android.content.Context;
 
 public final class BackgroundScanReceiver extends AbstractScanBroadcastReceiver {
 
-    @Override
-    protected AbstractBroadcastInterceptor createBroadcastHandler(Context context) {
-        return new NotificationBroadcastInterceptor(context);
-    }
+  @Override
+  protected AbstractBroadcastInterceptor createBroadcastHandler(Context context) {
+    return new NotificationBroadcastInterceptor(context);
+  }
 }

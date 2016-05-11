@@ -31,122 +31,122 @@ import java.util.List;
 
 public abstract class BaseRangeAllFragment extends BaseFragment {
 
-    @InjectView(R.id.list) protected ExpandableListView list;
+  @InjectView(R.id.list) protected ExpandableListView list;
 
-    protected AllBeaconsMonitorAdapter allBeaconsRangeAdapter;
-    protected ProximityManagerContract proximityManager;
+  protected AllBeaconsMonitorAdapter allBeaconsRangeAdapter;
+  protected ProximityManagerContract proximityManager;
 
-    abstract ProximityManagerContract getProximityManager();
+  abstract ProximityManagerContract getProximityManager();
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.beacon_monitor_list_activity, container, false);
+  @Nullable
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.beacon_monitor_list_activity, container, false);
+  }
+
+  @Override
+  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    ButterKnife.inject(this, getView());
+    allBeaconsRangeAdapter = new AllBeaconsMonitorAdapter(getActivity());
+    proximityManager = getProximityManager();
+    configureProximityManager();
+    list.setAdapter(allBeaconsRangeAdapter);
+  }
+
+  @Override
+  public void onDestroy() {
+    proximityManager.disconnect();
+    super.onDestroy();
+  }
+
+  @Override
+  public void onDestroyView() {
+    ButterKnife.reset(this);
+    super.onDestroyView();
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    if (!BluetoothUtils.isBluetoothEnabled()) {
+      Utils.showToast(getContext(), "Please enable bluetooth");
+    } else {
+      startScan();
     }
+  }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ButterKnife.inject(this, getView());
-        allBeaconsRangeAdapter = new AllBeaconsMonitorAdapter(getActivity());
-        proximityManager = getProximityManager();
-        configureProximityManager();
-        list.setAdapter(allBeaconsRangeAdapter);
+  @Override
+  public void onPause() {
+    proximityManager.stopScanning();
+    super.onPause();
+  }
+
+  private void configureProximityManager() {
+    proximityManager.configuration()
+        .scanMode(ScanMode.BALANCED)
+        .rssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+        .activityCheckConfiguration(ActivityCheckConfiguration.MINIMAL)
+        .forceScanConfiguration(ForceScanConfiguration.MINIMAL)
+        .apply();
+    proximityManager.attachIBeaconListener(new SimpleIBeaconListener() {
+      @Override
+      public void onIBeaconsUpdated(List<IBeaconDevice> ibeacons, IBeaconRegion region) {
+        onIBeaconDevicesList(ibeacons);
+      }
+    });
+    proximityManager.attachEddystoneListener(new SimpleEddystoneListener() {
+      @Override
+      public void onEddystonesUpdated(List<IEddystoneDevice> eddystones, IEddystoneNamespace namespace) {
+        onEddystoneDevicesList(eddystones);
+      }
+    });
+  }
+
+  private void startScan() {
+    permissionCheckerHoster.requestPermission(new PermissionChecker.Callback() {
+      @Override
+      public void onPermissionGranted() {
+        start();
+      }
+
+      @Override
+      public void onPermissionRejected() {
+        Snackbar.make(getView(), R.string.permission_rejected_message, Snackbar.LENGTH_SHORT).show();
+      }
+    });
+  }
+
+  private void start() {
+    proximityManager.connect(new OnServiceReadyListener() {
+      @Override
+      public void onServiceReady() {
+        proximityManager.startScanning();
+      }
+    });
+  }
+
+  private void onEddystoneDevicesList(final List<IEddystoneDevice> eddystones) {
+    if (getActivity() == null) {
+      return;
     }
+    getActivity().runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        allBeaconsRangeAdapter.replaceEddystoneBeacons(eddystones);
+      }
+    });
+  }
 
-    @Override
-    public void onDestroy() {
-        proximityManager.disconnect();
-        super.onDestroy();
+  private void onIBeaconDevicesList(final List<IBeaconDevice> ibeacons) {
+    if (getActivity() == null) {
+      return;
     }
-
-    @Override
-    public void onDestroyView() {
-        ButterKnife.reset(this);
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!BluetoothUtils.isBluetoothEnabled()) {
-            Utils.showToast(getContext(), "Please enable bluetooth");
-        } else {
-            startScan();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        proximityManager.stopScanning();
-        super.onPause();
-    }
-
-    private void configureProximityManager() {
-        proximityManager.configuration()
-            .scanMode(ScanMode.BALANCED)
-            .rssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
-            .activityCheckConfiguration(ActivityCheckConfiguration.MINIMAL)
-            .forceScanConfiguration(ForceScanConfiguration.MINIMAL)
-            .apply();
-        proximityManager.attachIBeaconListener(new SimpleIBeaconListener() {
-            @Override
-            public void onIBeaconsUpdated(List<IBeaconDevice> ibeacons, IBeaconRegion region) {
-                onIBeaconDevicesList(ibeacons);
-            }
-        });
-        proximityManager.attachEddystoneListener(new SimpleEddystoneListener() {
-            @Override
-            public void onEddystonesUpdated(List<IEddystoneDevice> eddystones, IEddystoneNamespace namespace) {
-                onEddystoneDevicesList(eddystones);
-            }
-        });
-    }
-
-    private void startScan() {
-        permissionCheckerHoster.requestPermission(new PermissionChecker.Callback() {
-            @Override
-            public void onPermissionGranted() {
-                start();
-            }
-
-            @Override
-            public void onPermissionRejected() {
-                Snackbar.make(getView(), R.string.permission_rejected_message, Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void start() {
-        proximityManager.connect(new OnServiceReadyListener() {
-            @Override
-            public void onServiceReady() {
-                proximityManager.startScanning();
-            }
-        });
-    }
-
-    private void onEddystoneDevicesList(final List<IEddystoneDevice> eddystones) {
-        if (getActivity() == null) {
-            return;
-        }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                allBeaconsRangeAdapter.replaceEddystoneBeacons(eddystones);
-            }
-        });
-    }
-
-    private void onIBeaconDevicesList(final List<IBeaconDevice> ibeacons) {
-        if (getActivity() == null) {
-            return;
-        }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                allBeaconsRangeAdapter.replaceIBeacons(ibeacons);
-            }
-        });
-    }
+    getActivity().runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        allBeaconsRangeAdapter.replaceIBeacons(ibeacons);
+      }
+    });
+  }
 }

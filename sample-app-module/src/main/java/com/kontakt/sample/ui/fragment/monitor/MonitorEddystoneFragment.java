@@ -81,6 +81,4 @@ public class MonitorEddystoneFragment extends BaseMonitorFragment {
       }
     };
   }
-
-
 }

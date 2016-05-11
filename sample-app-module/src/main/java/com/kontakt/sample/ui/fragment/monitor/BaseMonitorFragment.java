@@ -228,5 +228,4 @@ public abstract class BaseMonitorFragment extends BaseFragment implements OnBlue
     proximityManager.stopScanning();
     changeBluetoothTitle(false);
   }
-
 }

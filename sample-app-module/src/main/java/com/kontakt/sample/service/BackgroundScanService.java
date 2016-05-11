@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-
 public class BackgroundScanService extends Service implements ScanStatusListener {
 
   public static final String BROADCAST = String.format("%s.%s", BackgroundScanService.class.getName(), "BROADCAST");
@@ -118,10 +117,7 @@ public class BackgroundScanService extends Service implements ScanStatusListener
     return new SimpleIBeaconListener() {
       @Override
       public void onIBeaconDiscovered(IBeaconDevice ibeacon, IBeaconRegion region) {
-        scheduleBroadcast(new BroadcastBuilder().setInfo(INFO_BEACON_APPEARED)
-            .setBeaconDevice(ibeacon)
-            .setRegion(region)
-            .build());
+        scheduleBroadcast(new BroadcastBuilder().setInfo(INFO_BEACON_APPEARED).setBeaconDevice(ibeacon).setRegion(region).build());
       }
     };
   }
