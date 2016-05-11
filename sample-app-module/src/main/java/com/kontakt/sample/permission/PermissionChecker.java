@@ -26,7 +26,7 @@ public class PermissionChecker {
     }
 
     public interface Callback {
-        void onPermisionGranted();
+        void onPermissionGranted();
 
         void onPermissionRejected();
     }
@@ -49,7 +49,7 @@ public class PermissionChecker {
                 requestPermission();
             }
         } else {
-            callback.onPermisionGranted();
+            callback.onPermissionGranted();
         }
     }
 
@@ -61,7 +61,7 @@ public class PermissionChecker {
             return;
         }
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            callback.get().onPermisionGranted();
+            callback.get().onPermissionGranted();
         } else {
             callback.get().onPermissionRejected();
         }

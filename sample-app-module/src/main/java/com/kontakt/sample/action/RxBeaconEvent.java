@@ -1,44 +1,38 @@
 package com.kontakt.sample.action;
 
 import android.support.annotation.Nullable;
-
-import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
+import com.kontakt.sdk.android.common.profile.RemoteBluetoothDevice;
 import com.kontakt.sdk.android.common.util.SDKOptional;
 
 public class RxBeaconEvent {
 
-    public enum Type {
-        SCAN_START,
-        SCAN_STOP,
-        BLUETOOTH_EVENT
-    }
+  public enum Type {
+    SCAN_START,
+    SCAN_STOP,
+    IBEACON_DISCOVERED,
+    EDDYSTONE_DISCOVERED
+  }
 
-    private SDKOptional<BluetoothDeviceEvent> bluetoothDeviceEventSDKOptional;
+  private final SDKOptional<RemoteBluetoothDevice> device;
+  private final Type type;
 
-    private Type type;
+  public RxBeaconEvent(Type type, @Nullable RemoteBluetoothDevice bluetoothDevice) {
+    this.type = type;
+    this.device = bluetoothDevice == null ? SDKOptional.<RemoteBluetoothDevice>absent() : SDKOptional.of(bluetoothDevice);
+  }
 
-    public RxBeaconEvent(Type type, @Nullable BluetoothDeviceEvent bluetoothDeviceEvent) {
-        this.type = type;
-        bluetoothDeviceEventSDKOptional = bluetoothDeviceEvent == null ? SDKOptional.<BluetoothDeviceEvent>absent() : SDKOptional.of(bluetoothDeviceEvent);
-    }
+  public boolean hasDevice() {
+    return device.isPresent();
+  }
 
+  public RemoteBluetoothDevice getDevice() {
+    return device.get();
+  }
 
-    public Type getType() {
-        return type;
-    }
-
-    public boolean hasBluetoothDeviceEvent() {
-        return bluetoothDeviceEventSDKOptional.isPresent();
-    }
-
-    public BluetoothDeviceEvent getBluetoothDeviceEvent() {
-        return bluetoothDeviceEventSDKOptional.get();
-    }
-
-    @Override
-    public String toString() {
-        return "RxBeaconEvent{" +
-                "type=" + type +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "RxBeaconEvent{" +
+        "type=" + type +
+        '}';
+  }
 }

@@ -55,9 +55,6 @@ public class DrawerFragmentFactory {
             case R.id.drawer_foreground_background:
                 fragment = getFragment(BackgroundScanFragment.TAG);
                 break;
-            case R.id.drawer_simultineaus_scan:
-                fragment = getFragment(SimultaneousFragment.TAG);
-                break;
             case R.id.drawer_syncable_connection:
                 fragment = getFragment(SyncableRangeFragment.TAG);
                 break;
@@ -78,7 +75,6 @@ public class DrawerFragmentFactory {
         putFragment(MonitorEddystoneFragment.TAG, MonitorEddystoneFragment.newInstance());
         putFragment(RangeAllDevicesFragment.TAG, RangeAllDevicesFragment.newInstance());
         putFragment(BackgroundScanFragment.TAG, BackgroundScanFragment.newInstance());
-        putFragment(SimultaneousFragment.TAG, SimultaneousFragment.newInstance());
         putFragment(SyncableRangeFragment.TAG, SyncableRangeFragment.newInstance());
         putFragment(ShuffledScanFragment.TAG, ShuffledScanFragment.newInstance());
         putFragment(ActionFragment.TAG, ActionFragment.newInstance());

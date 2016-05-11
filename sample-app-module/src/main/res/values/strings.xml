@@ -2,10 +2,10 @@
 <resources>
 
     <string name="app_name">Sample Beacon Admin</string>
-    <string name="range_beacons">Range beacons [iBeacon]</string>
-    <string name="monitor_beacons">Monitor beacons [iBeacon]</string>
-    <string name="range_eddystone">Range beacons [Eddystone]</string>
-    <string name="monitor_eddystone">Monitor beacons [Eddystone]</string>
+    <string name="range_beacons">Range Devices [iBeacon]</string>
+    <string name="monitor_beacons">Monitor Devices [iBeacon]</string>
+    <string name="range_eddystone">Range Devices [Eddystone]</string>
+    <string name="monitor_eddystone">Monitor Devices [Eddystone]</string>
     <string name="action_settings">Settings</string>
     <string name="venue">Venue</string>
     <string name="cancel">Cancel</string>

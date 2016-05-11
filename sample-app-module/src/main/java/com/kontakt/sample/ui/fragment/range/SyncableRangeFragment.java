@@ -3,17 +3,17 @@ package com.kontakt.sample.ui.fragment.range;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.kontakt.sample.R;
-import com.kontakt.sample.ui.dialog.PasswordDialogFragment;
 import com.kontakt.sample.ui.activity.management.BeaconManagementActivity;
 import com.kontakt.sample.ui.activity.management.SyncableBeaconManagementActivity;
 import com.kontakt.sample.ui.adapter.range.BaseRangeAdapter;
 import com.kontakt.sample.ui.adapter.range.IBeaconRangeAdapter;
-import com.kontakt.sdk.android.ble.configuration.scan.EddystoneScanContext;
-import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
+import com.kontakt.sample.ui.dialog.PasswordDialogFragment;
+import com.kontakt.sdk.android.ble.manager.listeners.SimpleIBeaconListener;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.IBeaconRegion;
+import java.util.List;
 
 public class SyncableRangeFragment extends BaseRangeFragment {
 
@@ -59,17 +59,29 @@ public class SyncableRangeFragment extends BaseRangeFragment {
     }
 
     @Override
-    IBeaconScanContext getIBeaconScanContext() {
-        return beaconScanContext;
-    }
-
-    @Override
-    EddystoneScanContext getEddystoneScanContext() {
-        return null;
-    }
-
-    @Override
     BaseRangeAdapter getAdapter() {
         return new IBeaconRangeAdapter(getContext());
+    }
+
+    @Override
+    void configureListeners() {
+        proximityManager.attachIBeaconListener(new SimpleIBeaconListener() {
+            @Override
+            public void onIBeaconsUpdated(List<IBeaconDevice> ibeacons, IBeaconRegion region) {
+                onIBeaconDevicesList(ibeacons);
+            }
+        });
+    }
+
+    private void onIBeaconDevicesList(final List<IBeaconDevice> devices) {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.replaceWith(devices);
+            }
+        });
     }
 }

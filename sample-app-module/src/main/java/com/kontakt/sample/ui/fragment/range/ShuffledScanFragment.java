@@ -3,10 +3,8 @@ package com.kontakt.sample.ui.fragment.range;
 import android.os.Bundle;
 
 import com.kontakt.sample.R;
+import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
-import com.kontakt.sdk.android.configuration.KontaktProximityManagerConfiguration;
-import com.kontakt.sdk.android.http.KontaktApiClient;
-import com.kontakt.sdk.android.manager.KontaktProximityManager;
 
 public class ShuffledScanFragment extends BaseRangeAllFragment {
 
@@ -32,12 +30,13 @@ public class ShuffledScanFragment extends BaseRangeAllFragment {
     @Override
     ProximityManagerContract getProximityManager() {
         //To resolve shuffled beacons you need to put your api key into AndroidManifest. Only your beacons will be resolved
-        KontaktProximityManagerConfiguration kontaktProximityManagerConfiguration = new KontaktProximityManagerConfiguration.Builder()
-                .setCacheFileName("shuffled_file_cache")
-                .setMonitoringEnabled(true)
-                .setMonitoringSyncInterval(10)
-                .setResolveInterval(5)
-                .build();
-        return new KontaktProximityManager(getContext(), new KontaktApiClient(), kontaktProximityManagerConfiguration);
+        ProximityManagerContract proximityManager = new ProximityManager(getContext());
+        proximityManager.configuration()
+            .cacheFileName("shuffled_file_cache")
+            .monitoringEnabled(true)
+            .monitoringSyncInterval(10)
+            .resolveShuffledInterval(5)
+            .apply();
+        return proximityManager;
     }
 }

@@ -28,10 +28,6 @@
             android:title="@string/foreground_background_scan" />
 
         <item
-            android:id="@+id/drawer_simultineaus_scan"
-            android:title="@string/simultaneous_scans" />
-
-        <item
             android:id="@+id/drawer_syncable_connection"
             android:title="@string/syncable_connection" />
 

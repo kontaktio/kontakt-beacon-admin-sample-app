@@ -17,7 +17,8 @@
 
         <meta-data
             android:name="kontakt.io.API_KEY"
-            android:value="YOURS-API-KEY" />
+            android:value="FJJsqLkUnRcRQrzSNdJWivnmpwsCMHMQ"
+            />
 
         <activity
             android:name=".ui.activity.MainActivity"

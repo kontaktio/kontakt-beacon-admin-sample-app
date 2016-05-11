@@ -6,11 +6,11 @@ buildscript {
 
 apply plugin: 'com.android.application'
 
-def androidToolsVersion = '23.1.1'
+def androidToolsVersion = '23.3.0'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "com.kontakt.sample"
@@ -32,13 +32,19 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url  "http://dl.bintray.com/michaldrabik/maven"
+    }
+}
+
 dependencies {
     compile 'com.jakewharton:butterknife:6.1.0'
     compile "com.android.support:appcompat-v7:$androidToolsVersion"
     compile "com.android.support:design:$androidToolsVersion"
     compile "com.android.support:recyclerview-v7:$androidToolsVersion"
 
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'com.kontakt.sdk.android:kontakt.io-android-sdk:2.1.1'
+    compile 'io.reactivex:rxjava:1.1.4'
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'com.kontaktio:sdk:3.0.2'
 }

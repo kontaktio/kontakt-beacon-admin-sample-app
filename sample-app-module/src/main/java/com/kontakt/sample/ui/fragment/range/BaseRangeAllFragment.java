@@ -7,7 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.kontakt.sample.R;
 import com.kontakt.sample.permission.PermissionChecker;
 import com.kontakt.sample.ui.adapter.monitor.AllBeaconsMonitorAdapter;
@@ -15,49 +16,27 @@ import com.kontakt.sample.ui.fragment.BaseFragment;
 import com.kontakt.sample.util.Utils;
 import com.kontakt.sdk.android.ble.configuration.ActivityCheckConfiguration;
 import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
-import com.kontakt.sdk.android.ble.configuration.scan.EddystoneScanContext;
-import com.kontakt.sdk.android.ble.configuration.scan.IBeaconScanContext;
-import com.kontakt.sdk.android.ble.configuration.scan.ScanContext;
+import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
-import com.kontakt.sdk.android.ble.discovery.BluetoothDeviceEvent;
-import com.kontakt.sdk.android.ble.discovery.EventType;
-import com.kontakt.sdk.android.ble.discovery.eddystone.EddystoneDeviceEvent;
-import com.kontakt.sdk.android.ble.discovery.ibeacon.IBeaconDeviceEvent;
-import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
+import com.kontakt.sdk.android.ble.manager.listeners.SimpleEddystoneListener;
+import com.kontakt.sdk.android.ble.manager.listeners.SimpleIBeaconListener;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
-import com.kontakt.sdk.android.common.profile.DeviceProfile;
-
-import java.util.ArrayList;
+import com.kontakt.sdk.android.common.profile.IBeaconDevice;
+import com.kontakt.sdk.android.common.profile.IBeaconRegion;
+import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
+import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+public abstract class BaseRangeAllFragment extends BaseFragment {
 
-public abstract class BaseRangeAllFragment extends BaseFragment implements ProximityManager.ProximityListener {
-
-    @InjectView(R.id.list)
-    protected ExpandableListView list;
+    @InjectView(R.id.list) protected ExpandableListView list;
 
     protected AllBeaconsMonitorAdapter allBeaconsRangeAdapter;
     protected ProximityManagerContract proximityManager;
 
-    protected ScanContext scanContext;
-
-    private List<EventType> eventTypes = new ArrayList<EventType>() {{
-        add(EventType.DEVICES_UPDATE);
-    }};
-
-    private IBeaconScanContext beaconScanContext = new IBeaconScanContext.Builder()
-            .setEventTypes(eventTypes) //only specified events we be called on callback
-            .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
-            .build();
-
-    private EddystoneScanContext eddystoneScanContext = new EddystoneScanContext.Builder()
-            .setEventTypes(eventTypes)
-            .setRssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
-            .build();
+    abstract ProximityManagerContract getProximityManager();
 
     @Nullable
     @Override
@@ -71,19 +50,20 @@ public abstract class BaseRangeAllFragment extends BaseFragment implements Proxi
         ButterKnife.inject(this, getView());
         allBeaconsRangeAdapter = new AllBeaconsMonitorAdapter(getActivity());
         proximityManager = getProximityManager();
+        configureProximityManager();
         list.setAdapter(allBeaconsRangeAdapter);
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         proximityManager.disconnect();
+        super.onDestroy();
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         ButterKnife.reset(this);
+        super.onDestroyView();
     }
 
     @Override
@@ -98,51 +78,35 @@ public abstract class BaseRangeAllFragment extends BaseFragment implements Proxi
 
     @Override
     public void onPause() {
+        proximityManager.stopScanning();
         super.onPause();
-        proximityManager.detachListener(this);
-        proximityManager.finishScan();
     }
 
-
-    abstract ProximityManagerContract getProximityManager();
-
-    ScanContext getOrCreateScanContext() {
-        if (scanContext == null) {
-            scanContext = new ScanContext.Builder()
-                    .setScanMode(ProximityManager.SCAN_MODE_BALANCED)
-                    .setIBeaconScanContext(beaconScanContext)
-                    .setEddystoneScanContext(eddystoneScanContext)
-                    .setActivityCheckConfiguration(ActivityCheckConfiguration.MINIMAL)
-                    .setForceScanConfiguration(ForceScanConfiguration.MINIMAL)
-                    .build();
-        }
-
-        return scanContext;
-    }
-
-    @Override
-    public void onScanStart() {
-
-    }
-
-    @Override
-    public void onScanStop() {
-
-    }
-
-    @Override
-    public void onEvent(BluetoothDeviceEvent event) {
-        switch (event.getEventType()) {
-            case DEVICES_UPDATE:
-                onDevicesUpdateEvent(event);
-                break;
-        }
+    private void configureProximityManager() {
+        proximityManager.configuration()
+            .scanMode(ScanMode.BALANCED)
+            .rssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
+            .activityCheckConfiguration(ActivityCheckConfiguration.MINIMAL)
+            .forceScanConfiguration(ForceScanConfiguration.MINIMAL)
+            .apply();
+        proximityManager.attachIBeaconListener(new SimpleIBeaconListener() {
+            @Override
+            public void onIBeaconsUpdated(List<IBeaconDevice> ibeacons, IBeaconRegion region) {
+                onIBeaconDevicesList(ibeacons);
+            }
+        });
+        proximityManager.attachEddystoneListener(new SimpleEddystoneListener() {
+            @Override
+            public void onEddystonesUpdated(List<IEddystoneDevice> eddystones, IEddystoneNamespace namespace) {
+                onEddystoneDevicesList(eddystones);
+            }
+        });
     }
 
     private void startScan() {
         permissionCheckerHoster.requestPermission(new PermissionChecker.Callback() {
             @Override
-            public void onPermisionGranted() {
+            public void onPermissionGranted() {
                 start();
             }
 
@@ -154,51 +118,34 @@ public abstract class BaseRangeAllFragment extends BaseFragment implements Proxi
     }
 
     private void start() {
-        proximityManager.initializeScan(getOrCreateScanContext(), new OnServiceReadyListener() {
+        proximityManager.connect(new OnServiceReadyListener() {
             @Override
             public void onServiceReady() {
-                proximityManager.attachListener(BaseRangeAllFragment.this);
-            }
-
-            @Override
-            public void onConnectionFailure() {
-                Utils.showToast(getContext(), getString(R.string.unexpected_error_connection));
+                proximityManager.startScanning();
             }
         });
     }
 
-    private void onDevicesUpdateEvent(BluetoothDeviceEvent event) {
-        DeviceProfile deviceProfile = event.getDeviceProfile();
-        switch (deviceProfile) {
-            case IBEACON:
-                onIBeaconDevicesList((IBeaconDeviceEvent) event);
-                break;
-            case EDDYSTONE:
-                onEddystoneDevicesList((EddystoneDeviceEvent) event);
-                break;
-        }
-    }
-
-    private void onEddystoneDevicesList(final EddystoneDeviceEvent event) {
+    private void onEddystoneDevicesList(final List<IEddystoneDevice> eddystones) {
         if (getActivity() == null) {
             return;
         }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                allBeaconsRangeAdapter.replaceEddystoneBeacons(event.getDeviceList());
+                allBeaconsRangeAdapter.replaceEddystoneBeacons(eddystones);
             }
         });
     }
 
-    private void onIBeaconDevicesList(final IBeaconDeviceEvent event) {
+    private void onIBeaconDevicesList(final List<IBeaconDevice> ibeacons) {
         if (getActivity() == null) {
             return;
         }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                allBeaconsRangeAdapter.replaceIBeacons(event.getDeviceList());
+                allBeaconsRangeAdapter.replaceIBeacons(ibeacons);
             }
         });
     }

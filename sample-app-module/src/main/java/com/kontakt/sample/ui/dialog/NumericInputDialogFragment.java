@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.interfaces.SDKPredicate;
 
