@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Sample Beacon Admin</string>
+    <string name="app_name">Kontakt.io Samples</string>
     <string name="range_beacons">Range Devices [iBeacon]</string>
     <string name="monitor_beacons">Monitor Devices [iBeacon]</string>
     <string name="range_eddystone">Range Devices [Eddystone]</string>
