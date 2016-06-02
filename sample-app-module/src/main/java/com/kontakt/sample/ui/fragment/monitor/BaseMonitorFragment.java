@@ -123,8 +123,7 @@ public abstract class BaseMonitorFragment extends BaseFragment implements OnBlue
   private void configureProximityManager() {
     proximityManager.configuration()
         .scanPeriod(ScanPeriod.create(TimeUnit.SECONDS.toMillis(5), TimeUnit.SECONDS.toMillis(10)))
-        .activityCheckConfiguration(ActivityCheckConfiguration.MINIMAL)
-        .apply();
+        .activityCheckConfiguration(ActivityCheckConfiguration.MINIMAL);
 
     proximityManager.setScanStatusListener(this);
   }
@@ -227,5 +226,15 @@ public abstract class BaseMonitorFragment extends BaseFragment implements OnBlue
   public void onBluetoothDisconnected() {
     proximityManager.stopScanning();
     changeBluetoothTitle(false);
+  }
+
+  @Override
+  public void onMonitoringCycleStart() {
+
+  }
+
+  @Override
+  public void onMonitoringCycleStop() {
+
   }
 }

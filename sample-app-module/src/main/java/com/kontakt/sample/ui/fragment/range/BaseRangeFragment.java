@@ -180,8 +180,7 @@ public abstract class BaseRangeFragment extends BaseFragment implements OnBlueto
         .activityCheckConfiguration(ActivityCheckConfiguration.MINIMAL)
         .forceScanConfiguration(ForceScanConfiguration.MINIMAL)
         .deviceUpdateCallbackInterval(2000)
-        .rssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
-        .apply();
+        .rssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5));
   }
 
   @Override

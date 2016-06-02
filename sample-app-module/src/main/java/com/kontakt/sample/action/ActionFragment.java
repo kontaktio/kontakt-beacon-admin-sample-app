@@ -137,7 +137,7 @@ public class ActionFragment extends BaseFragment {
   private List<Action> getActions(RxBeaconEvent rxBeaconEvent) {
     String uniqueId = rxBeaconEvent.getDevice().getUniqueId();
     try {
-      Actions actions = kontaktCloud.actionsApi().reader().actions().forDevices(uniqueId).get();
+      Actions actions = kontaktCloud.actions().fetch().forDevices(uniqueId).execute();
       return actions.getContent();
     } catch (IOException | KontaktCloudException e) {
       return null;

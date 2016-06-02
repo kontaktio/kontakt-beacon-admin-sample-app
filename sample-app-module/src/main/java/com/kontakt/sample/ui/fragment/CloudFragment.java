@@ -75,7 +75,7 @@ public class CloudFragment extends BaseFragment {
   @OnClick(R.id.fragment_cloud_fetch_presets_button)
   public void onFetchPresetsButtonClicked() {
     showProgressBar(true);
-    kontaktCloud.presetsApi().reader().presets().get(new CloudCallback<Presets>() {
+    kontaktCloud.presets().fetch().execute(new CloudCallback<Presets>() {
       @Override
       public void onSuccess(Presets response, CloudHeaders headers) {
         showSuccessSnackbar();
@@ -97,7 +97,7 @@ public class CloudFragment extends BaseFragment {
   @OnClick(R.id.fragment_cloud_fetch_devices_button)
   public void onFetchDevicesButtonClicked() {
     showProgressBar(true);
-    kontaktCloud.devicesApi().reader().devices().get(new CloudCallback<Devices>() {
+    kontaktCloud.devices().fetch().execute(new CloudCallback<Devices>() {
       @Override
       public void onSuccess(Devices response, CloudHeaders headers) {
         showSuccessSnackbar();

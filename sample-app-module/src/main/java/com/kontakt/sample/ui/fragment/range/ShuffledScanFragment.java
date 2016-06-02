@@ -34,8 +34,7 @@ public class ShuffledScanFragment extends BaseRangeAllFragment {
         .cacheFileName("shuffled_file_cache")
         .monitoringEnabled(true)
         .monitoringSyncInterval(10)
-        .resolveShuffledInterval(5)
-        .apply();
+        .resolveShuffledInterval(5);
     return proximityManager;
   }
 }

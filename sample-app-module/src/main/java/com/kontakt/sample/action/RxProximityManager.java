@@ -31,10 +31,9 @@ public class RxProximityManager {
     proximityManager = new ProximityManager(context);
     proximityManager.configuration()
         .scanMode(ScanMode.BALANCED)
-        .scanPeriod(ScanPeriod.create(TimeUnit.SECONDS.toMillis(5), TimeUnit.SECONDS.toMillis(5)))
+        .scanPeriod(ScanPeriod.create(TimeUnit.SECONDS.toMillis(15), TimeUnit.SECONDS.toMillis(5)))
         .forceScanConfiguration(ForceScanConfiguration.MINIMAL)
-        .rssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
-        .apply();
+        .rssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5));
   }
 
   public Observable<RxBeaconEvent> scan() {
@@ -42,8 +41,8 @@ public class RxProximityManager {
     return Observable.create(new Observable.OnSubscribe<RxBeaconEvent>() {
       @Override
       public void call(final Subscriber<? super RxBeaconEvent> subscriber) {
-        proximityManager.attachIBeaconListener(rxProximityListener);
-        proximityManager.attachEddystoneListener(rxProximityListener);
+        proximityManager.setIBeaconListener(rxProximityListener);
+        proximityManager.setEddystoneListener(rxProximityListener);
         proximityManager.setScanStatusListener(rxProximityListener);
         proximityManager.connect(new OnServiceReadyListener() {
           @Override
@@ -92,6 +91,16 @@ public class RxProximityManager {
         return;
       }
       subscriber.onError(new Throwable(exception.getMessage()));
+    }
+
+    @Override
+    public void onMonitoringCycleStart() {
+
+    }
+
+    @Override
+    public void onMonitoringCycleStop() {
+
     }
 
     @Override

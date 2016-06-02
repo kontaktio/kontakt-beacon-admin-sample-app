@@ -32,12 +32,6 @@ android {
     }
 }
 
-repositories {
-    maven {
-        url  "http://dl.bintray.com/michaldrabik/maven"
-    }
-}
-
 dependencies {
     compile 'com.jakewharton:butterknife:6.1.0'
     compile "com.android.support:appcompat-v7:$androidToolsVersion"
@@ -46,5 +40,5 @@ dependencies {
 
     compile 'io.reactivex:rxjava:1.1.4'
     compile 'io.reactivex:rxandroid:1.2.0'
-    compile 'com.kontaktio:sdk:3.0.2'
+    compile 'com.kontaktio:sdk:3.0.0'
 }

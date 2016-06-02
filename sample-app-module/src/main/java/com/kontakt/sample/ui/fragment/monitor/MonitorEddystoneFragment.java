@@ -5,9 +5,9 @@ import com.kontakt.sample.R;
 import com.kontakt.sample.ui.adapter.monitor.BaseMonitorAdapter;
 import com.kontakt.sample.ui.adapter.monitor.EddystoneMonitorAdapter;
 import com.kontakt.sdk.android.ble.manager.listeners.EddystoneListener;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleEddystoneListener;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleSpaceListener;
 import com.kontakt.sdk.android.ble.manager.listeners.SpaceListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleEddystoneListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleSpaceListener;
 import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
 import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
 import java.util.List;
@@ -41,7 +41,7 @@ public class MonitorEddystoneFragment extends BaseMonitorFragment {
 
   @Override
   void configureListeners() {
-    proximityManager.attachEddystoneListener(createEddystoneListener());
+    proximityManager.setEddystoneListener(createEddystoneListener());
     proximityManager.setSpaceListener(createSpaceListener());
   }
 
@@ -81,4 +81,5 @@ public class MonitorEddystoneFragment extends BaseMonitorFragment {
       }
     };
   }
+
 }

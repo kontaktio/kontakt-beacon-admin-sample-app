@@ -19,8 +19,8 @@ import com.kontakt.sdk.android.ble.configuration.ForceScanConfiguration;
 import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleEddystoneListener;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleIBeaconListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleEddystoneListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener;
 import com.kontakt.sdk.android.ble.rssi.RssiCalculators;
 import com.kontakt.sdk.android.ble.util.BluetoothUtils;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
@@ -87,15 +87,15 @@ public abstract class BaseRangeAllFragment extends BaseFragment {
         .scanMode(ScanMode.BALANCED)
         .rssiCalculator(RssiCalculators.newLimitedMeanRssiCalculator(5))
         .activityCheckConfiguration(ActivityCheckConfiguration.MINIMAL)
-        .forceScanConfiguration(ForceScanConfiguration.MINIMAL)
-        .apply();
-    proximityManager.attachIBeaconListener(new SimpleIBeaconListener() {
+        .forceScanConfiguration(ForceScanConfiguration.MINIMAL);
+
+    proximityManager.setIBeaconListener(new SimpleIBeaconListener() {
       @Override
       public void onIBeaconsUpdated(List<IBeaconDevice> ibeacons, IBeaconRegion region) {
         onIBeaconDevicesList(ibeacons);
       }
     });
-    proximityManager.attachEddystoneListener(new SimpleEddystoneListener() {
+    proximityManager.setEddystoneListener(new SimpleEddystoneListener() {
       @Override
       public void onEddystonesUpdated(List<IEddystoneDevice> eddystones, IEddystoneNamespace namespace) {
         onEddystoneDevicesList(eddystones);

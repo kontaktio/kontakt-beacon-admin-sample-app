@@ -11,6 +11,7 @@ Sample application demonstrating kontakt.io' Android SDK functionalities. The ap
 - Background scanning
 - Actions
 - Runtime permission managing
+- Kontakt Cloud API samples
 
 To be able to communicate with your account please change api-key value to yours api-key in <b>AndroidManifest.xml</b>
 ```
@@ -26,6 +27,6 @@ To be able to communicate with your account please change api-key value to yours
 <img src="art/action.png" width="200"/>
 
 
-For more information see: http://developer.kontakt.io/android-sdk/2.1.0/quickstart/
+For more information see: http://developer.kontakt.io/android-sdk/3.0.0/quickstart/
 
 

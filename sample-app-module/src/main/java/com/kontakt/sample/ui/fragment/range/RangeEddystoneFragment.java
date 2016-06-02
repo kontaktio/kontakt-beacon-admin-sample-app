@@ -8,7 +8,7 @@ import com.kontakt.sample.ui.activity.management.EddystoneManagementActivity;
 import com.kontakt.sample.ui.adapter.range.BaseRangeAdapter;
 import com.kontakt.sample.ui.adapter.range.EddystoneRangeAdapter;
 import com.kontakt.sample.ui.dialog.PasswordDialogFragment;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleEddystoneListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleEddystoneListener;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
 import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
@@ -62,7 +62,7 @@ public class RangeEddystoneFragment extends BaseRangeFragment {
 
   @Override
   void configureListeners() {
-    proximityManager.attachEddystoneListener(new SimpleEddystoneListener() {
+    proximityManager.setEddystoneListener(new SimpleEddystoneListener() {
       @Override
       public void onEddystonesUpdated(List<IEddystoneDevice> eddystones, IEddystoneNamespace namespace) {
         onEddystoneDevicesList(eddystones);

@@ -8,7 +8,7 @@ import com.kontakt.sample.ui.activity.management.BeaconManagementActivity;
 import com.kontakt.sample.ui.adapter.range.BaseRangeAdapter;
 import com.kontakt.sample.ui.adapter.range.IBeaconRangeAdapter;
 import com.kontakt.sample.ui.dialog.PasswordDialogFragment;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleIBeaconListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener;
 import com.kontakt.sdk.android.common.interfaces.SDKBiConsumer;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
@@ -63,7 +63,7 @@ public class RangeIBeaconsFragment extends BaseRangeFragment {
 
   @Override
   void configureListeners() {
-    proximityManager.attachIBeaconListener(new SimpleIBeaconListener() {
+    proximityManager.setIBeaconListener(new SimpleIBeaconListener() {
       @Override
       public void onIBeaconsUpdated(List<IBeaconDevice> ibeacons, IBeaconRegion region) {
         onIBeaconDevicesList(ibeacons);

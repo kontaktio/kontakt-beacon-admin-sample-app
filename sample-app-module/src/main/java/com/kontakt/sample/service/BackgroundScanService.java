@@ -17,9 +17,9 @@ import com.kontakt.sdk.android.ble.filter.ibeacon.IBeaconFilter;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener;
 import com.kontakt.sdk.android.ble.manager.listeners.ScanStatusListener;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleIBeaconListener;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleSpaceListener;
 import com.kontakt.sdk.android.ble.manager.listeners.SpaceListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleSpaceListener;
 import com.kontakt.sdk.android.common.KontaktSDK;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
@@ -55,20 +55,20 @@ public class BackgroundScanService extends Service implements ScanStatusListener
     super.onCreate();
     proximityManager = new ProximityManager(this);
     proximityManager.setScanStatusListener(this);
-    proximityManager.attachIBeaconListener(createIBeaconListener());
+    proximityManager.setIBeaconListener(createIBeaconListener());
     proximityManager.setSpaceListener(createSpaceListener());
     proximityManager.configuration()
         .scanMode(ScanMode.BALANCED)
         .activityCheckConfiguration(ActivityCheckConfiguration.MINIMAL)
-        .forceScanConfiguration(ForceScanConfiguration.MINIMAL)
-        .apply();
-    proximityManager.filters().addIBeaconFilter(new IBeaconFilter() {
+        .forceScanConfiguration(ForceScanConfiguration.MINIMAL);
+
+    proximityManager.filters().iBeaconFilter(new IBeaconFilter() {
       @Override
       public boolean apply(IBeaconAdvertisingPacket iBeaconAdvertisingPacket) {
         final UUID proximityUUID = iBeaconAdvertisingPacket.getProximityUUID();
         return proximityUUID.equals(KontaktSDK.DEFAULT_KONTAKT_BEACON_PROXIMITY_UUID);
       }
-    }).apply();
+    });
   }
 
   @Override
@@ -111,6 +111,16 @@ public class BackgroundScanService extends Service implements ScanStatusListener
   @Override
   public void onScanError(ScanError exception) {
     //Ignore
+  }
+
+  @Override
+  public void onMonitoringCycleStart() {
+    //Ignore
+  }
+
+  @Override
+  public void onMonitoringCycleStop() {
+    //Igonre
   }
 
   private IBeaconListener createIBeaconListener() {

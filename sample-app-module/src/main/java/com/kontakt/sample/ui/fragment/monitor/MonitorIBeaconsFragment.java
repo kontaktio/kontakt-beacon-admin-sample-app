@@ -5,9 +5,9 @@ import com.kontakt.sample.R;
 import com.kontakt.sample.ui.adapter.monitor.BaseMonitorAdapter;
 import com.kontakt.sample.ui.adapter.monitor.IBeaconMonitorAdapter;
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleIBeaconListener;
-import com.kontakt.sdk.android.ble.manager.listeners.SimpleSpaceListener;
 import com.kontakt.sdk.android.ble.manager.listeners.SpaceListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener;
+import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleSpaceListener;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import java.util.List;
@@ -41,7 +41,7 @@ public class MonitorIBeaconsFragment extends BaseMonitorFragment {
 
   @Override
   protected void configureListeners() {
-    proximityManager.attachIBeaconListener(createIBeaconListener());
+    proximityManager.setIBeaconListener(createIBeaconListener());
     proximityManager.setSpaceListener(createSpaceListener());
   }
 
