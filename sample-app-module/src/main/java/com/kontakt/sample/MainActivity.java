@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import com.kontakt.sample.samples.BeaconEddystoneScanActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private void checkPermissions() {
     int checkSelfPermissionResult = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
     if (PackageManager.PERMISSION_GRANTED != checkSelfPermissionResult) {
-      //Permission not granted so we ask for it.
+      //Permission not granted so we ask for it. Results are handled in onRequestPermissionsResult() callback.
       ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, PERMISSION_REQUEST_CODE);
     }
   }
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.button_scan_beacons:
+        startActivity(BeaconEddystoneScanActivity.createIntent(this));
         break;
       case R.id.button_scan_beacons_pro:
         break;

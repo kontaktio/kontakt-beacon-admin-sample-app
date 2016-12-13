@@ -11,7 +11,8 @@ public class App extends Application {
     initializeDependencies();
   }
 
+  //Initializing Kontakt SDK. Insert your API key here to allow all samples to work correctly
   private void initializeDependencies() {
-    KontaktSDK.initialize("");
+    KontaktSDK.initialize("Put your API key here");
   }
 }
