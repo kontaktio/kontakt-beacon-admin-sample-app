@@ -27,6 +27,9 @@ import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This sample performs basic iBeacon and Eddystone foreground scanning.
+ */
 public class BeaconEddystoneScanActivity extends AppCompatActivity implements View.OnClickListener {
 
   public static Intent createIntent(@NonNull Context context) {
