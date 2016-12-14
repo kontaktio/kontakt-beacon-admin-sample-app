@@ -28,6 +28,9 @@
     <activity
         android:name=".samples.BeaconProScanActivity"
         android:screenOrientation="portrait"/>
+    <activity
+        android:name=".samples.ScanFiltersActivity"
+        android:screenOrientation="portrait"/>
 
     <service
         android:name="com.kontakt.sdk.android.ble.service.ProximityService"
