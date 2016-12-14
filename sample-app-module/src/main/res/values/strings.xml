@@ -3,6 +3,10 @@
 
   <string name="app_name">Kontakt SDK Samples</string>
   <string name="ibeacon_eddystone_scan_description">This sample runs basic iBeacon and Eddystone foreground scanning and displays results as logs in Android Studio logcat.\n\nCheck BeaconEddystoneScanActivity.class for implementation.</string>
+  <string name="beacon_pro_scan_description">Beacon Pro devices, additionally to non-connectable iBeacon and Eddystone frames, also broadcast a 3rd frame called \'Secure Profile frame\'.\n\n
+    This frame is used to connect with Beacon Pro to change its properties. It also contains device\'s Unique ID and Mac address which are not available in iBeacon/Eddystone frames as they were in Smart and Card beacons case.\n\n
+    This sample scans specifically for Secure Profile frames and displays results as logs in Android Studio logcat.\n\nCheck BeaconProScanActivity.class for implementation.
+  </string>
   <string name="start_scanning">Start Scanning</string>
   <string name="stop_scanning">Stop Scanning</string>
 

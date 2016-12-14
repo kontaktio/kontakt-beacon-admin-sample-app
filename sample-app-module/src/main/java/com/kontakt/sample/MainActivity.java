@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import com.kontakt.sample.samples.BeaconEddystoneScanActivity;
+import com.kontakt.sample.samples.BeaconProScanActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(BeaconEddystoneScanActivity.createIntent(this));
         break;
       case R.id.button_scan_beacons_pro:
+        startActivity(BeaconProScanActivity.createIntent(this));
         break;
     }
   }

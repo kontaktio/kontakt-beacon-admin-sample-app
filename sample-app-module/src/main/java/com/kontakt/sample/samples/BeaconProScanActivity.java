@@ -18,22 +18,18 @@ import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
-import com.kontakt.sdk.android.ble.manager.listeners.EddystoneListener;
-import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener;
-import com.kontakt.sdk.android.common.profile.IBeaconDevice;
-import com.kontakt.sdk.android.common.profile.IBeaconRegion;
-import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
-import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
+import com.kontakt.sdk.android.ble.manager.listeners.SecureProfileListener;
+import com.kontakt.sdk.android.common.profile.ISecureProfile;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
  * This sample performs basic iBeacon and Eddystone foreground scanning.
  */
-public class BeaconEddystoneScanActivity extends AppCompatActivity implements View.OnClickListener {
+public class BeaconProScanActivity extends AppCompatActivity implements View.OnClickListener {
 
   public static Intent createIntent(@NonNull Context context) {
-    return new Intent(context, BeaconEddystoneScanActivity.class);
+    return new Intent(context, BeaconProScanActivity.class);
   }
 
   public static final String TAG = "ProximityManager";
@@ -44,7 +40,7 @@ public class BeaconEddystoneScanActivity extends AppCompatActivity implements Vi
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_beacon_eddystone_scan);
+    setContentView(R.layout.activity_beacon_pro_scan);
     progressBar = (ProgressBar) findViewById(R.id.scanning_progress);
 
     //Setup Toolbar
@@ -83,9 +79,8 @@ public class BeaconEddystoneScanActivity extends AppCompatActivity implements Vi
         //OnDeviceUpdate callback will be received with 5 seconds interval
         .deviceUpdateCallbackInterval(TimeUnit.SECONDS.toMillis(5));
 
-    //Setting up iBeacon and Eddystone listeners
-    proximityManager.setIBeaconListener(createIBeaconListener());
-    proximityManager.setEddystoneListener(createEddystoneListener());
+    //Setting up Secure Profile listener
+    proximityManager.setKontaktSecureProfileListener(createSecureProfileListener());
   }
 
   private void startScanning() {
@@ -95,12 +90,12 @@ public class BeaconEddystoneScanActivity extends AppCompatActivity implements Vi
       public void onServiceReady() {
         //Check if proximity manager is already scanning
         if (proximityManager.isScanning()) {
-          Toast.makeText(BeaconEddystoneScanActivity.this, "Already scanning", Toast.LENGTH_SHORT).show();
+          Toast.makeText(BeaconProScanActivity.this, "Already scanning", Toast.LENGTH_SHORT).show();
           return;
         }
         proximityManager.startScanning();
         progressBar.setVisibility(View.VISIBLE);
-        Toast.makeText(BeaconEddystoneScanActivity.this, "Scanning started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(BeaconProScanActivity.this, "Scanning started", Toast.LENGTH_SHORT).show();
       }
     });
   }
@@ -114,40 +109,21 @@ public class BeaconEddystoneScanActivity extends AppCompatActivity implements Vi
     }
   }
 
-  private IBeaconListener createIBeaconListener() {
-    return new IBeaconListener() {
+  private SecureProfileListener createSecureProfileListener() {
+    return new SecureProfileListener() {
       @Override
-      public void onIBeaconDiscovered(IBeaconDevice iBeacon, IBeaconRegion region) {
-        Log.i(TAG, "onIBeaconDiscovered: " + iBeacon.toString());
+      public void onProfileDiscovered(ISecureProfile iSecureProfile) {
+        Log.i(TAG, "onProfileDiscovered: " + iSecureProfile.toString());
       }
 
       @Override
-      public void onIBeaconsUpdated(List<IBeaconDevice> iBeacons, IBeaconRegion region) {
-        Log.i(TAG, "onIBeaconsUpdated: " + iBeacons.size());
+      public void onProfilesUpdated(List<ISecureProfile> list) {
+        Log.i(TAG, "onProfilesUpdated: " + list.size());
       }
 
       @Override
-      public void onIBeaconLost(IBeaconDevice iBeacon, IBeaconRegion region) {
-        Log.e(TAG, "onIBeaconLost: " + iBeacon.toString());
-      }
-    };
-  }
-
-  private EddystoneListener createEddystoneListener() {
-    return new EddystoneListener() {
-      @Override
-      public void onEddystoneDiscovered(IEddystoneDevice eddystone, IEddystoneNamespace namespace) {
-        Log.i(TAG, "onEddystoneDiscovered: " + eddystone.toString());
-      }
-
-      @Override
-      public void onEddystonesUpdated(List<IEddystoneDevice> eddystones, IEddystoneNamespace namespace) {
-        Log.i(TAG, "onEddystonesUpdated: " + eddystones.size());
-      }
-
-      @Override
-      public void onEddystoneLost(IEddystoneDevice eddystone, IEddystoneNamespace namespace) {
-        Log.e(TAG, "onEddystoneLost: " + eddystone.toString());
+      public void onProfileLost(ISecureProfile iSecureProfile) {
+        Log.e(TAG, "onProfileLost: " + iSecureProfile.toString());
       }
     };
   }
