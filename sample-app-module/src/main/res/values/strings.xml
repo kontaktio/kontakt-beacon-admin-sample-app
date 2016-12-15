@@ -7,7 +7,10 @@
     This frame is used to connect with Beacon Pro to change its properties. It also contains device\'s Unique ID and Mac address which are not available in iBeacon/Eddystone frames as they were in Smart and Card beacons case.\n\n
     This sample scans specifically for Secure Profile frames and displays results as logs in Android Studio logcat.\n\nCheck BeaconProScanActivity.class for implementation.
   </string>
-    <string name="filters_description">This sample runs basic iBeacon and Eddystone foreground scanning and utilizes filters option of ProximityManager. Results are displayed as logs in Android Studio logcat.
+  <string name="regions_description">This sample runs basic iBeacon and Eddystone foreground scanning and utilizes regions/namespaces option of ProximityManager.\n\n
+  Go to ScanRegionsActivity.class to see implementation and set your own regions.
+  </string>
+  <string name="filters_description">This sample runs basic iBeacon and Eddystone foreground scanning and utilizes filters option of ProximityManager. Results are displayed as logs in Android Studio logcat.
       \n\nIBeacons with major and minor values higher than 100 will be omitted. Only Eddystones with URL that contains word \'google\' will be reported.
       \n\nCheck ScanFiltersActivity.class for implementation.
   </string>

@@ -31,6 +31,9 @@
         android:name=".samples.BeaconProScanActivity"
         android:screenOrientation="portrait"/>
     <activity
+        android:name=".samples.ScanRegionsActivity"
+        android:screenOrientation="portrait"/>
+    <activity
         android:name=".samples.ScanFiltersActivity"
         android:screenOrientation="portrait"/>
     <activity

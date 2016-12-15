@@ -27,6 +27,14 @@
       />
 
   <android.support.v7.widget.AppCompatButton
+      android:id="@+id/button_scan_regions"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="4dp"
+      android:text="Scanning Regions"
+      />
+
+  <android.support.v7.widget.AppCompatButton
       android:id="@+id/button_scan_filters"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
