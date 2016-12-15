@@ -1,7 +1,7 @@
-Kontakt Android SDK Samples
+Kontakt.io Android SDK Samples
 ===============================
 
-Sample application demonstrating Kontakt.io Android SDK features and implementations.
+Simple application for developers, demonstrating Kontakt.io Android SDK features and sample implementations.
 
 ##Setup
 
