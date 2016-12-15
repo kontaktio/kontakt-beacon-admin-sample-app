@@ -13,15 +13,17 @@
       android:label="@string/app_name"
       android:theme="@style/AppTheme">
 
+    <!-- Activities -->
+
     <activity
         android:name=".MainActivity"
         android:label="@string/app_name">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
+
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-
     <activity
         android:name=".samples.BeaconEddystoneScanActivity"
         android:screenOrientation="portrait"/>
@@ -31,10 +33,20 @@
     <activity
         android:name=".samples.ScanFiltersActivity"
         android:screenOrientation="portrait"/>
+    <activity
+        android:name=".samples.BackgroundScanActivity"
+        android:screenOrientation="portrait"/>
+
+    <!-- Services -->
 
     <service
         android:name="com.kontakt.sdk.android.ble.service.ProximityService"
         android:exported="false"/>
+    <service
+        android:name=".service.BackgroundScanService"
+        android:enabled="true"
+        android:exported="false">
+    </service>
 
   </application>
 

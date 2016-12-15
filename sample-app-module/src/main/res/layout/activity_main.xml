@@ -14,6 +14,7 @@
       android:id="@+id/button_scan_beacons"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="4dp"
       android:text="iBeacon / Eddystone Scanning"
       />
 
@@ -21,6 +22,7 @@
       android:id="@+id/button_scan_beacons_pro"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="4dp"
       android:text="Beacon Pro Scanning"
       />
 
@@ -28,7 +30,16 @@
       android:id="@+id/button_scan_filters"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="4dp"
       android:text="Scanning Filters"
+      />
+
+  <android.support.v7.widget.AppCompatButton
+      android:id="@+id/button_scan_background"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="4dp"
+      android:text="Background Scanning"
       />
 
 </LinearLayout>
