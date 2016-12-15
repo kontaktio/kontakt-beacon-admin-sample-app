@@ -5,19 +5,19 @@
   <string name="ibeacon_eddystone_scan_description">This sample runs basic iBeacon and Eddystone foreground scanning and displays results as logs in Android Studio logcat.\n\nCheck BeaconEddystoneScanActivity.class for implementation.</string>
   <string name="beacon_pro_scan_description">Beacon Pro devices, additionally to non-connectable iBeacon and Eddystone frames, also broadcast a 3rd frame called \'Secure Profile frame\'.\n\n
     This frame is used to connect with Beacon Pro to change its properties. It also contains device\'s Unique ID and Mac address which are not available in iBeacon/Eddystone frames as they were in Smart and Card beacons case.\n\n
-    This sample scans specifically for Secure Profile frames and displays results as logs in Android Studio logcat.\n\nCheck BeaconProScanActivity.class for implementation.
+    This sample scans specifically for Secure Profile frames and displays results as logs in Android Studio logcat.\n\nCheck BeaconProScanActivity class for implementation.
   </string>
   <string name="regions_description">This sample runs basic iBeacon and Eddystone foreground scanning and utilizes regions/namespaces option of ProximityManager.\n\n
-  Go to ScanRegionsActivity.class to see implementation and set your own regions.
+  Go to ScanRegionsActivity class to see implementation and set your own regions.
   </string>
   <string name="filters_description">This sample runs basic iBeacon and Eddystone foreground scanning and utilizes filters option of ProximityManager. Results are displayed as logs in Android Studio logcat.
       \n\nIBeacons with major and minor values higher than 100 will be omitted. Only Eddystones with URL that contains word \'google\' will be reported.
-      \n\nCheck ScanFiltersActivity.class for implementation.
+      \n\nCheck ScanFiltersActivity class for implementation.
   </string>
   <string name="background_scan_description">This sample presents how one can achieve a background scanning using Android\'s Service\n\n
     Service will run for 30 seconds and terminate itself after.\n\n
     During the scan a broadcast is sent whenever a device is discovered. Activity is registered for those broadcasts and displays scanning results.\n\n
-  Check BackgroundScanActivity.class for implementation.
+  Check BackgroundScanActivity class for implementation.
   </string>
 
   <string name="start_scanning">Start Scanning</string>

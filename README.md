@@ -1,32 +1,31 @@
-kontakt-beacon-admin-sample-app
+Kontakt Android SDK Samples
 ===============================
 
-Sample application demonstrating kontakt.io' Android SDK functionalities. The application comprises:
-- Beacons ranging,
-- Beacons monitoring,
-- Beacons management
-- kontakt.io's API Client usage.
-- RxJava integration
-- Scanning shuffled beacons
-- Background scanning
-- Actions
-- Runtime permission managing
-- Kontakt Cloud API samples
+Sample application demonstrating Kontakt.io Android SDK features and implementations.
 
-To be able to communicate with your account please change api-key value to yours api-key in <b>AndroidManifest.xml</b>
+##Setup
+
+1. Clone or download this repository.
+2. Open project in Android Studio. Select top `build.gradle` file when opening the project.
+3. Install any missing dependencies that Android Studio might ask you for.
+4. Remember to put your API key in `KontaktSDK.initialize()` method located in `App.java` file.
 ```
-<meta-data
-        android:name="kontakt.io.API_KEY"
-        android:value="YOURS-API-KEY" />
+public class App extends Application {
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    initializeDependencies();
+  }
+
+  private void initializeDependencies() {
+    KontaktSDK.initialize("Put your API key here");
+  }
+}
 ```
 
+Run the application to see if everything is set up correctly.
 
-<img src="art/menu.png" width="200"/>
-<img src="art/range_beacons.png" width="200"/>
-<img src="art/actions_1.png" width="200"/>
-<img src="art/action.png" width="200"/>
-
-
-For more information see: http://developer.kontakt.io/android-sdk/3.0.0/quickstart/
+For full information see: https://developer.kontakt.io/android-sdk/3.2.0/quickstart/
 
 
