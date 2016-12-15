@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This sample performs basic iBeacon and Eddystone foreground scanning.
+ * This is an example of using Proximity Manager's filters option.
  */
 public class ScanFiltersActivity extends AppCompatActivity implements View.OnClickListener {
 

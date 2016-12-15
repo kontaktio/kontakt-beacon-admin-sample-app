@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This sample performs basic iBeacon and Eddystone foreground scanning.
+ * This is a sample of scanning for Beacon Pro specific frame called 'Secure Profile frame'.
+ * This frame can be used to connect with Beacon Pro or acquire values like Unique ID that are not available in Beacon's Pro iBeacon/Eddystone frames.
  */
 public class BeaconProScanActivity extends AppCompatActivity implements View.OnClickListener {
 

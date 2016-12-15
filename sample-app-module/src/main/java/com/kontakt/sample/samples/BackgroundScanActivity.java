@@ -14,9 +14,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.kontakt.sample.R;
 import com.kontakt.sample.service.BackgroundScanService;
+import com.kontakt.sdk.android.common.profile.RemoteBluetoothDevice;
 
 /**
- * This sample performs basic iBeacon and Eddystone foreground scanning.
+ * This is an example of implementing a background scan using Android's Service component.
  */
 public class BackgroundScanActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -105,7 +106,8 @@ public class BackgroundScanActivity extends AppCompatActivity implements View.On
     public void onReceive(Context context, Intent intent) {
       //Device discovered!
       int devicesCount = intent.getIntExtra(BackgroundScanService.EXTRA_DEVICES_COUNT, 0);
-      statusText.setText(String.format("Total discovered devices: %d", devicesCount));
+      RemoteBluetoothDevice device = intent.getParcelableExtra(BackgroundScanService.EXTRA_DEVICE);
+      statusText.setText(String.format("Total discovered devices: %d\n\nLast scanned device:\n%s", devicesCount, device.toString()));
     }
   };
 }

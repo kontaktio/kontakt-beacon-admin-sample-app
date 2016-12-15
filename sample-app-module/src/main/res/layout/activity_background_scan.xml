@@ -47,7 +47,7 @@
       android:layout_marginTop="16dp"
       android:layout_gravity="center_horizontal"
       android:gravity="center"
-      tools:text="Devices discovered: 18"
+      tools:text="Devices discovered: 0"
       />
 
 </LinearLayout>

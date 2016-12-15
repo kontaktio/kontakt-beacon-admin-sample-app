@@ -29,7 +29,7 @@ public class BackgroundScanService extends Service {
   public static final String EXTRA_DEVICE = "DeviceExtra";
   public static final String EXTRA_DEVICES_COUNT = "DevicesCountExtra";
 
-  private static final long TIMEOUT = TimeUnit.SECONDS.toMillis(20);
+  private static final long TIMEOUT = TimeUnit.SECONDS.toMillis(30);
 
   private final Handler handler = new Handler();
   private ProximityManagerContract proximityManager;

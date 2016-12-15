@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This sample performs basic iBeacon and Eddystone foreground scanning.
+ * This is a sample of simple iBeacon and Eddystone foreground scanning.
  */
 public class BeaconEddystoneScanActivity extends AppCompatActivity implements View.OnClickListener {
 

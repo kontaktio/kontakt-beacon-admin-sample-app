@@ -12,7 +12,8 @@
       \n\nCheck ScanFiltersActivity.class for implementation.
   </string>
   <string name="background_scan_description">This sample presents how one can achieve a background scanning using Android\'s Service\n\n
-    Service will run for 20 seconds and terminate itself after.\n\n
+    Service will run for 30 seconds and terminate itself after.\n\n
+    During the scan a broadcast is sent whenever a device is discovered. Activity is registered for those broadcasts and displays scanning results.\n\n
   Check BackgroundScanActivity.class for implementation.
   </string>
 
