@@ -39,6 +39,9 @@
     <activity
         android:name=".samples.BackgroundScanActivity"
         android:screenOrientation="portrait"/>
+    <activity
+        android:name=".samples.BeaconConfigurationActivity"
+        android:screenOrientation="portrait"/>
 
     <!-- Services -->
 

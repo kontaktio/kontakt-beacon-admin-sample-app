@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import com.kontakt.sample.samples.BackgroundScanActivity;
+import com.kontakt.sample.samples.BeaconConfigurationActivity;
 import com.kontakt.sample.samples.BeaconEddystoneScanActivity;
 import com.kontakt.sample.samples.BeaconProScanActivity;
 import com.kontakt.sample.samples.ScanFiltersActivity;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private Button scanRegionsButton;
   private Button scanFiltersButton;
   private Button backgroundScanButton;
+  private Button configurationButton;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     scanRegionsButton = (Button) findViewById(R.id.button_scan_regions);
     scanFiltersButton = (Button) findViewById(R.id.button_scan_filters);
     backgroundScanButton = (Button) findViewById(R.id.button_scan_background);
+    configurationButton = (Button) findViewById(R.id.button_beacon_config);
 
     beaconsScanningButton.setOnClickListener(this);
     beaconsProScanningButton.setOnClickListener(this);
     scanRegionsButton.setOnClickListener(this);
     scanFiltersButton.setOnClickListener(this);
     backgroundScanButton.setOnClickListener(this);
+    configurationButton.setOnClickListener(this);
   }
 
   //Since Android Marshmallow starting a Bluetooth Low Energy scan requires permission from location group.
@@ -88,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       case R.id.button_scan_background:
         startActivity(BackgroundScanActivity.createIntent(this));
         break;
+      case R.id.button_beacon_config:
+        startActivity(BeaconConfigurationActivity.createIntent(this));
+        break;
     }
   }
 
@@ -97,5 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     scanRegionsButton.setEnabled(false);
     scanFiltersButton.setEnabled(false);
     backgroundScanButton.setEnabled(false);
+    configurationButton.setEnabled(false);
   }
 }
