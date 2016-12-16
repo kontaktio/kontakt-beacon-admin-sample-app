@@ -17,13 +17,24 @@ import android.widget.Toast;
 import com.kontakt.sample.R;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
 import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
+import com.kontakt.sdk.android.ble.connection.IKontaktDeviceConnection;
+import com.kontakt.sdk.android.ble.connection.KontaktDeviceConnection;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
+import com.kontakt.sdk.android.ble.connection.WriteListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
 import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener;
 import com.kontakt.sdk.android.ble.manager.listeners.SecureProfileListener;
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener;
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleSecureProfileListener;
+import com.kontakt.sdk.android.cloud.IKontaktCloud;
+import com.kontakt.sdk.android.cloud.KontaktCloud;
+import com.kontakt.sdk.android.cloud.response.CloudCallback;
+import com.kontakt.sdk.android.cloud.response.CloudError;
+import com.kontakt.sdk.android.cloud.response.CloudHeaders;
+import com.kontakt.sdk.android.cloud.response.paginated.Configs;
+import com.kontakt.sdk.android.common.model.Config;
+import com.kontakt.sdk.android.common.model.DeviceType;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.common.profile.ISecureProfile;
@@ -44,7 +55,9 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
   public static final int MIN_MINOR_MAJOR = 1;
   public static final int MAX_MINOR_MAJOR = 65535;
 
+  private final IKontaktCloud kontaktCloud = KontaktCloud.newInstance();
   private ProximityManagerContract proximityManager;
+  private IKontaktDeviceConnection deviceConnection;
 
   private TextView statusText;
   private EditText uniqueIdInput;
@@ -52,6 +65,8 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
   private EditText minorInput;
   private Button startButton;
   private String targetUniqueId;
+  private Config targetConfiguration;
+  private RemoteBluetoothDevice targetDevice;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +85,12 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
 
   @Override
   protected void onStop() {
-    proximityManager.disconnect();
+    if (proximityManager != null) {
+      proximityManager.disconnect();
+    }
+    if (deviceConnection != null) {
+      deviceConnection.close();
+    }
     super.onStop();
   }
 
@@ -106,8 +126,7 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
   private void startConfiguration() {
     //First validate user's input.
     if (!areInputsValid()) {
-      setStatus("Invalid input.");
-      Toast.makeText(this, "At least one of inserted values is invalid.", Toast.LENGTH_SHORT).show();
+      showError("At least one of inserted values is invalid.");
       return;
     }
     //If everything is OK start the scanning.
@@ -147,10 +166,91 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
     //Check if this is our target beacon.
     if (targetUniqueId.equalsIgnoreCase(device.getUniqueId())) {
       proximityManager.disconnect();
+      targetDevice = device;
+      prepareConfiguration();
+
       String status = "Device discovered! Unique ID: " + device.getUniqueId();
       setStatus(status);
       Log.i(TAG, status);
     }
+  }
+
+  private void prepareConfiguration() {
+    //Prepare configuration
+    setStatus("Preparing configuration...");
+    Config config = new Config.Builder().major(Integer.parseInt(majorInput.getText().toString()))
+        .minor(Integer.parseInt(minorInput.getText().toString()))
+        .build();
+
+    //Use KontaktCloud to create config and request encrypted version that will be send to the device.
+    kontaktCloud.configs().create(config).forDevices(targetDevice.getUniqueId()).withType(DeviceType.BEACON).execute(new CloudCallback<Config[]>() {
+      @Override
+      public void onSuccess(Config[] response, CloudHeaders headers) {
+        //Config has been successfully created. Now download encrypted version.
+        kontaktCloud.configs().secure().withIds(targetDevice.getUniqueId()).execute(new CloudCallback<Configs>() {
+          @Override
+          public void onSuccess(Configs response, CloudHeaders headers) {
+            setStatus("Fetching encrypted configuration...");
+            targetConfiguration = response.getContent().get(0);
+            onConfigurationReady();
+          }
+
+          @Override
+          public void onError(CloudError error) {
+            showError("Error: " + error.getMessage());
+          }
+        });
+      }
+
+      @Override
+      public void onError(CloudError error) {
+        showError("Error: " + error.getMessage());
+      }
+    });
+  }
+
+  private void onConfigurationReady() {
+    //Initialize connection to the device
+    deviceConnection = new KontaktDeviceConnection(this, targetDevice, createConnectionListener());
+    deviceConnection.connect();
+    setStatus("Connecting to device...");
+  }
+
+  private void onDeviceConnected() {
+    setStatus("Applying configuration...");
+    deviceConnection.applySecureConfig(targetConfiguration.getSecureRequest(), new WriteListener() {
+      @Override
+      public void onWriteSuccess(WriteResponse response) {
+        //Configuration has been applied. Now we need to send beacon's response back to the cloud to stay synchronized.
+        setStatus("Configuration applied in the device.");
+        onConfigurationApplied(response);
+        deviceConnection.close();
+      }
+
+      @Override
+      public void onWriteFailure(Cause cause) {
+        showError("Configuration error. Cause: " + cause);
+        deviceConnection.close();
+      }
+    });
+  }
+
+  private void onConfigurationApplied(WriteListener.WriteResponse response) {
+    setStatus("Synchronizing with Cloud...");
+    targetConfiguration.applySecureResponse(response.getExtra(), response.getUnixTimestamp());
+    kontaktCloud.devices().applySecureConfigs(targetConfiguration).execute(new CloudCallback<Configs>() {
+      @Override
+      public void onSuccess(Configs response, CloudHeaders headers) {
+        //Success!
+        setStatus("Configuration completed!");
+        startButton.setEnabled(true);
+      }
+
+      @Override
+      public void onError(CloudError error) {
+        showError("Error: " + error.getMessage());
+      }
+    });
   }
 
   @Override
@@ -173,8 +273,24 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
     }
   }
 
-  private void setStatus(String text) {
-    statusText.setText(text);
+  private void showError(final String errorMessage) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        Toast.makeText(BeaconConfigurationActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+        setStatus(errorMessage);
+        startButton.setEnabled(true);
+      }
+    });
+  }
+
+  private void setStatus(final String text) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        statusText.setText(text);
+      }
+    });
   }
 
   private IBeaconListener createIBeaconListener() {
@@ -191,6 +307,38 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
       @Override
       public void onProfileDiscovered(ISecureProfile profile) {
         onDeviceDiscovered(SecureProfileUtils.asRemoteBluetoothDevice(profile));
+      }
+    };
+  }
+
+  private IKontaktDeviceConnection.ConnectionListener createConnectionListener() {
+    return new IKontaktDeviceConnection.ConnectionListener() {
+      @Override
+      public void onConnectionOpened() {
+
+      }
+
+      @Override
+      public void onAuthenticationSuccess(RemoteBluetoothDevice.Characteristics characteristics) {
+        onDeviceConnected();
+      }
+
+      @Override
+      public void onAuthenticationFailure(int failureCode) {
+      }
+
+      @Override
+      public void onCharacteristicsUpdated(RemoteBluetoothDevice.Characteristics characteristics) {
+      }
+
+      @Override
+      public void onErrorOccured(int errorCode) {
+        showError("Connection error. Code: " + errorCode);
+      }
+
+      @Override
+      public void onDisconnected() {
+        showError("Device disconnected.");
       }
     };
   }
