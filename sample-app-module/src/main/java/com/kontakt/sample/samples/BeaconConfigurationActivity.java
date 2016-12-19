@@ -217,6 +217,7 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
   }
 
   private void onDeviceConnected() {
+    //Device connected. Start configuration...
     setStatus("Applying configuration...");
     deviceConnection.applySecureConfig(targetConfiguration.getSecureRequest(), new WriteListener() {
       @Override
@@ -236,6 +237,7 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
   }
 
   private void onConfigurationApplied(WriteListener.WriteResponse response) {
+    //Configuration has been applied on the beacon. Now we should inform Cloud about it.
     setStatus("Synchronizing with Cloud...");
     targetConfiguration.applySecureResponse(response.getExtra(), response.getUnixTimestamp());
     kontaktCloud.devices().applySecureConfigs(targetConfiguration).execute(new CloudCallback<Configs>() {
