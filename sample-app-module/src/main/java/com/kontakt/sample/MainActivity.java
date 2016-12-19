@@ -14,6 +14,7 @@ import com.kontakt.sample.samples.BackgroundScanActivity;
 import com.kontakt.sample.samples.BeaconConfigurationActivity;
 import com.kontakt.sample.samples.BeaconEddystoneScanActivity;
 import com.kontakt.sample.samples.BeaconProScanActivity;
+import com.kontakt.sample.samples.KontaktCloudActivity;
 import com.kontakt.sample.samples.ScanFiltersActivity;
 import com.kontakt.sample.samples.ScanRegionsActivity;
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private Button scanFiltersButton;
   private Button backgroundScanButton;
   private Button configurationButton;
+  private Button kontaktCloudButton;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     scanFiltersButton = (Button) findViewById(R.id.button_scan_filters);
     backgroundScanButton = (Button) findViewById(R.id.button_scan_background);
     configurationButton = (Button) findViewById(R.id.button_beacon_config);
+    kontaktCloudButton = (Button) findViewById(R.id.button_kontakt_cloud);
 
     beaconsScanningButton.setOnClickListener(this);
     beaconsProScanningButton.setOnClickListener(this);
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     scanFiltersButton.setOnClickListener(this);
     backgroundScanButton.setOnClickListener(this);
     configurationButton.setOnClickListener(this);
+    kontaktCloudButton.setOnClickListener(this);
   }
 
   //Since Android Marshmallow starting a Bluetooth Low Energy scan requires permission from location group.
@@ -94,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         break;
       case R.id.button_beacon_config:
         startActivity(BeaconConfigurationActivity.createIntent(this));
+        break;
+      case R.id.button_kontakt_cloud:
+        startActivity(KontaktCloudActivity.createIntent(this));
         break;
     }
   }

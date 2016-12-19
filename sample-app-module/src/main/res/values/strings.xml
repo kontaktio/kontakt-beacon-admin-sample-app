@@ -19,9 +19,13 @@
     During the scan a broadcast is sent whenever a device is discovered. Activity is registered for those broadcasts and displays scanning results.\n\n
   Check BackgroundScanActivity class for implementation.
   </string>
-    <string name="beacon_config_description">This sample provides an example of changing Beacon\'s configuration (major and minor in this case).\nBeacon needs to have a firmware version 4.0 or higher or be a Beacon Pro.\n\n
+  <string name="beacon_config_description">This sample provides an example of changing Beacon\'s configuration (major and minor in this case).\nBeacon needs to have a firmware version 4.0 or higher or be a Beacon Pro.\n\n
       Firstly, proximity manager will scan for a device with given unique ID, create configuration object, acquire encrypted version from the Kontakt Cloud, apply it on the device and send the results back to the Cloud to stay synchronized.\n\n
   Check BeaconConfigurationActivity class for implementation.
+  </string>
+    <string name="kontakt_cloud_description">This sample provides an example of communicating with Kontakt.io Cloud using KontaktCloud object.\n\n
+      These sample requests allow you to:\n- fetch list of your devices,\n- fetch list of current pending configurations,\n- fetch account managers details.\n\n
+      Check KontaktCloudActivity class for implementation.
   </string>
 
   <string name="start_scanning">Start Scanning</string>
@@ -30,5 +34,9 @@
 
   <string name="start_background_scanning">Start Scanning Service</string>
   <string name="stop_background_scanning">Stop Scanning Service</string>
+
+  <string name="request_devices">Get devices</string>
+  <string name="request_configs">Get configs</string>
+  <string name="request_managers">Get managers</string>
 
 </resources>

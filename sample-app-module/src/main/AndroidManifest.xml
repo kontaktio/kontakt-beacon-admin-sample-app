@@ -42,6 +42,9 @@
     <activity
         android:name=".samples.BeaconConfigurationActivity"
         android:screenOrientation="portrait"/>
+    <activity
+        android:name=".samples.KontaktCloudActivity"
+        android:screenOrientation="portrait"/>
 
     <!-- Services -->
 
