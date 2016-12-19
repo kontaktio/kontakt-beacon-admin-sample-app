@@ -1,1 +1,1 @@
-include ':sample-app-module'
+include ':sample-app'
