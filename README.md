@@ -14,11 +14,13 @@ Simple application for developers, demonstrating Kontakt.io Android SDK features
 
 ##Setup
 1. Clone or download this repository.
-2. Open project in Android Studio. Select top `build.gradle` file when opening the project.
+2. Open project in Android Studio (select top `build.gradle` file when opening the project).
 3. Install any missing dependencies that Android Studio might ask you for.
-4. Remember to put your API key in `KontaktSDK.initialize()` method located in `App.java` file.
+4. Remember to put your API key in `KontaktSDK.initialize()` method located in `App.java` file:
 ```
 public class App extends Application {
+
+  private static final String API_KEY = "Your Api Key here";
 
   @Override
   public void onCreate() {
@@ -26,9 +28,11 @@ public class App extends Application {
     initializeDependencies();
   }
 
+  //Initializing Kontakt SDK. Insert your API key to allow all samples to work correctly
   private void initializeDependencies() {
-    KontaktSDK.initialize("Put your API key here");
+    KontaktSDK.initialize(API_KEY);
   }
+
 }
 ```
 

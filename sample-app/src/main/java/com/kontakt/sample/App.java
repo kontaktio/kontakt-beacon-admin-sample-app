@@ -5,7 +5,7 @@ import com.kontakt.sdk.android.common.KontaktSDK;
 
 public class App extends Application {
 
-  private static final String API_KEY = "zAtWzuQKDIwZVmOKMQGuhLhhxHsJFUaF";
+  private static final String API_KEY = "Put your API key here";
 
   @Override
   public void onCreate() {
