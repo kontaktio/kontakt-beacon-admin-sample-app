@@ -112,5 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     scanFiltersButton.setEnabled(false);
     backgroundScanButton.setEnabled(false);
     configurationButton.setEnabled(false);
+    kontaktCloudButton.setEnabled(false);
   }
 }
