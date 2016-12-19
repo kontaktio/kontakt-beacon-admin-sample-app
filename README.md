@@ -40,4 +40,7 @@ Run the application to see if everything is set up correctly.
 
 For full information see: https://developer.kontakt.io/android-sdk/3.2.0/quickstart/
 
+*NOTE:* The old, deprecated samples app is available in the *archive* branch (if you require it for any reason).
+
+
 
