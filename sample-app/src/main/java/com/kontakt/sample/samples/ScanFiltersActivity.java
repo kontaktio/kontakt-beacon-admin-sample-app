@@ -12,20 +12,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.kontakt.sample.R;
+import com.kontakt.sdk.android.ble.configuration.ScanMode;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
-import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.filter.eddystone.EddystoneFilter;
 import com.kontakt.sdk.android.ble.filter.ibeacon.IBeaconFilter;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
-import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
+import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory;
 import com.kontakt.sdk.android.ble.manager.listeners.EddystoneListener;
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener;
 import com.kontakt.sdk.android.common.profile.IBeaconDevice;
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
 import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +42,7 @@ public class ScanFiltersActivity extends AppCompatActivity implements View.OnCli
 
   public static final String TAG = "ProximityManager";
 
-  private ProximityManagerContract proximityManager;
+  private ProximityManager proximityManager;
   private ProgressBar progressBar;
 
   @Override
@@ -77,7 +79,7 @@ public class ScanFiltersActivity extends AppCompatActivity implements View.OnCli
   }
 
   private void setupProximityManager() {
-    proximityManager = new ProximityManager(this);
+    proximityManager = ProximityManagerFactory.create(this);
 
     //Configure proximity manager basic options
     proximityManager.configuration()

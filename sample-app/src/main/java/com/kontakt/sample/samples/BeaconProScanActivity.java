@@ -12,14 +12,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.kontakt.sample.R;
+import com.kontakt.sdk.android.ble.configuration.ScanMode;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
-import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
-import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
+import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory;
 import com.kontakt.sdk.android.ble.manager.listeners.SecureProfileListener;
 import com.kontakt.sdk.android.common.profile.ISecureProfile;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +37,7 @@ public class BeaconProScanActivity extends AppCompatActivity implements View.OnC
 
   public static final String TAG = "ProximityManager";
 
-  private ProximityManagerContract proximityManager;
+  private ProximityManager proximityManager;
   private ProgressBar progressBar;
 
   @Override
@@ -69,7 +71,7 @@ public class BeaconProScanActivity extends AppCompatActivity implements View.OnC
   }
 
   private void setupProximityManager() {
-    proximityManager = new ProximityManager(this);
+    proximityManager = ProximityManagerFactory.create(this);
 
     //Configure proximity manager basic options
     proximityManager.configuration()
@@ -81,7 +83,7 @@ public class BeaconProScanActivity extends AppCompatActivity implements View.OnC
         .deviceUpdateCallbackInterval(TimeUnit.SECONDS.toMillis(5));
 
     //Setting up Secure Profile listener
-    proximityManager.setKontaktSecureProfileListener(createSecureProfileListener());
+    proximityManager.setSecureProfileListener(createSecureProfileListener());
   }
 
   private void startScanning() {

@@ -12,9 +12,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.kontakt.sample.R;
-import com.kontakt.sdk.android.cloud.IKontaktCloud;
 import com.kontakt.sdk.android.cloud.KontaktCloud;
+import com.kontakt.sdk.android.cloud.KontaktCloudFactory;
 import com.kontakt.sdk.android.cloud.response.CloudCallback;
 import com.kontakt.sdk.android.cloud.response.CloudError;
 import com.kontakt.sdk.android.cloud.response.CloudHeaders;
@@ -37,7 +38,7 @@ public class KontaktCloudActivity extends AppCompatActivity implements View.OnCl
     return new Intent(context, KontaktCloudActivity.class);
   }
 
-  private final IKontaktCloud kontaktCloud = KontaktCloud.newInstance();
+  private final KontaktCloud kontaktCloud = KontaktCloudFactory.create();
 
   private Button getDevicesButton;
   private Button getConfigsButton;

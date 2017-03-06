@@ -14,21 +14,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.kontakt.sample.R;
+import com.kontakt.sdk.android.ble.configuration.ScanMode;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
-import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
-import com.kontakt.sdk.android.ble.connection.IKontaktDeviceConnection;
+import com.kontakt.sdk.android.ble.connection.ErrorCause;
 import com.kontakt.sdk.android.ble.connection.KontaktDeviceConnection;
+import com.kontakt.sdk.android.ble.connection.KontaktDeviceConnectionFactory;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.connection.WriteListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
-import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
+import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory;
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener;
 import com.kontakt.sdk.android.ble.manager.listeners.SecureProfileListener;
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener;
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleSecureProfileListener;
-import com.kontakt.sdk.android.cloud.IKontaktCloud;
 import com.kontakt.sdk.android.cloud.KontaktCloud;
+import com.kontakt.sdk.android.cloud.KontaktCloudFactory;
 import com.kontakt.sdk.android.cloud.response.CloudCallback;
 import com.kontakt.sdk.android.cloud.response.CloudError;
 import com.kontakt.sdk.android.cloud.response.CloudHeaders;
@@ -40,6 +42,7 @@ import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.common.profile.ISecureProfile;
 import com.kontakt.sdk.android.common.profile.RemoteBluetoothDevice;
 import com.kontakt.sdk.android.common.util.SecureProfileUtils;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -55,9 +58,9 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
   public static final int MIN_MINOR_MAJOR = 1;
   public static final int MAX_MINOR_MAJOR = 65535;
 
-  private final IKontaktCloud kontaktCloud = KontaktCloud.newInstance();
-  private ProximityManagerContract proximityManager;
-  private IKontaktDeviceConnection deviceConnection;
+  private final KontaktCloud kontaktCloud = KontaktCloudFactory.create();
+  private ProximityManager proximityManager;
+  private KontaktDeviceConnection deviceConnection;
 
   private TextView statusText;
   private EditText uniqueIdInput;
@@ -107,7 +110,7 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
   }
 
   private void setupProximityManager() {
-    proximityManager = new ProximityManager(this);
+    proximityManager = ProximityManagerFactory.create(this);
 
     //Configure proximity manager basic options
     proximityManager.configuration()
@@ -120,7 +123,7 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
 
     //Setting up iBeacon and Secure Profile listeners
     proximityManager.setIBeaconListener(createIBeaconListener());
-    proximityManager.setKontaktSecureProfileListener(createSecureProfileListener());
+    proximityManager.setSecureProfileListener(createSecureProfileListener());
   }
 
   private void startConfiguration() {
@@ -211,7 +214,7 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
 
   private void onConfigurationReady() {
     //Initialize connection to the device
-    deviceConnection = new KontaktDeviceConnection(this, targetDevice, createConnectionListener());
+    deviceConnection = KontaktDeviceConnectionFactory.create(this, targetDevice, createConnectionListener());
     deviceConnection.connect();
     setStatus("Connecting to device...");
   }
@@ -229,7 +232,7 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
       }
 
       @Override
-      public void onWriteFailure(Cause cause) {
+      public void onWriteFailure(ErrorCause cause) {
         showError("Configuration error. Cause: " + cause);
         deviceConnection.close();
       }
@@ -313,8 +316,8 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
     };
   }
 
-  private IKontaktDeviceConnection.ConnectionListener createConnectionListener() {
-    return new IKontaktDeviceConnection.ConnectionListener() {
+  private KontaktDeviceConnection.ConnectionListener createConnectionListener() {
+    return new KontaktDeviceConnection.ConnectionListener() {
       @Override
       public void onConnectionOpened() {
 

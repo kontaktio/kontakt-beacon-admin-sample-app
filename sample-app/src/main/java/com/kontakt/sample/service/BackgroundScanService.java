@@ -6,11 +6,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.kontakt.sdk.android.ble.configuration.ScanMode;
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod;
-import com.kontakt.sdk.android.ble.configuration.scan.ScanMode;
 import com.kontakt.sdk.android.ble.connection.OnServiceReadyListener;
 import com.kontakt.sdk.android.ble.manager.ProximityManager;
-import com.kontakt.sdk.android.ble.manager.ProximityManagerContract;
+import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory;
 import com.kontakt.sdk.android.ble.manager.listeners.EddystoneListener;
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener;
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleEddystoneListener;
@@ -20,6 +21,7 @@ import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.common.profile.IEddystoneDevice;
 import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
 import com.kontakt.sdk.android.common.profile.RemoteBluetoothDevice;
+
 import java.util.concurrent.TimeUnit;
 
 public class BackgroundScanService extends Service {
@@ -32,7 +34,7 @@ public class BackgroundScanService extends Service {
   private static final long TIMEOUT = TimeUnit.SECONDS.toMillis(30);
 
   private final Handler handler = new Handler();
-  private ProximityManagerContract proximityManager;
+  private ProximityManager proximityManager;
   private boolean isRunning; // Flag indicating if service is already running.
   private int devicesCount; // Total discovered devices count
 
@@ -45,7 +47,7 @@ public class BackgroundScanService extends Service {
 
   private void setupProximityManager() {
     //Create proximity manager instance
-    proximityManager = new ProximityManager(this);
+    proximityManager = ProximityManagerFactory.create(this);
 
     //Configure proximity manager basic options
     proximityManager.configuration()
