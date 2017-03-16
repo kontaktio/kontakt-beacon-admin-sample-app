@@ -10,6 +10,7 @@ Simple application for developers, demonstrating Kontakt.io Android SDK features
 - Applying scanning filters
 - Background scanning
 - Beacon's Configuration
+- Reading Beacon's Pro light sensor
 - Consuming REST API with KontaktCloud
 
 ##Setup
