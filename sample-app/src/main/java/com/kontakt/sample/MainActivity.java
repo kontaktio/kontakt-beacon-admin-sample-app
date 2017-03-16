@@ -9,11 +9,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.kontakt.sample.samples.BackgroundScanActivity;
 import com.kontakt.sample.samples.BeaconConfigurationActivity;
 import com.kontakt.sample.samples.BeaconEddystoneScanActivity;
 import com.kontakt.sample.samples.BeaconProScanActivity;
+import com.kontakt.sample.samples.BeaconProSensorsActivity;
 import com.kontakt.sample.samples.KontaktCloudActivity;
 import com.kontakt.sample.samples.ScanFiltersActivity;
 import com.kontakt.sample.samples.ScanRegionsActivity;
@@ -22,12 +25,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   public static final int REQUEST_CODE_PERMISSIONS = 100;
 
+  private LinearLayout buttonsLayout;
   private Button beaconsScanningButton;
   private Button beaconsProScanningButton;
   private Button scanRegionsButton;
   private Button scanFiltersButton;
   private Button backgroundScanButton;
   private Button configurationButton;
+  private Button beaconProSensorsButton;
   private Button kontaktCloudButton;
 
   @Override
@@ -40,12 +45,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   //Setting up buttons and listeners.
   private void setupButtons() {
+    buttonsLayout = (LinearLayout) findViewById(R.id.buttons_layout);
     beaconsScanningButton = (Button) findViewById(R.id.button_scan_beacons);
     beaconsProScanningButton = (Button) findViewById(R.id.button_scan_beacons_pro);
     scanRegionsButton = (Button) findViewById(R.id.button_scan_regions);
     scanFiltersButton = (Button) findViewById(R.id.button_scan_filters);
     backgroundScanButton = (Button) findViewById(R.id.button_scan_background);
     configurationButton = (Button) findViewById(R.id.button_beacon_config);
+    beaconProSensorsButton = (Button) findViewById(R.id.button_beacon_pro_sensors);
     kontaktCloudButton = (Button) findViewById(R.id.button_kontakt_cloud);
 
     beaconsScanningButton.setOnClickListener(this);
@@ -54,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     scanFiltersButton.setOnClickListener(this);
     backgroundScanButton.setOnClickListener(this);
     configurationButton.setOnClickListener(this);
+    beaconProSensorsButton.setOnClickListener(this);
     kontaktCloudButton.setOnClickListener(this);
   }
 
@@ -62,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int checkSelfPermissionResult = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
     if (PackageManager.PERMISSION_GRANTED != checkSelfPermissionResult) {
       //Permission not granted so we ask for it. Results are handled in onRequestPermissionsResult() callback.
-      ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, REQUEST_CODE_PERMISSIONS);
+      ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_PERMISSIONS);
     }
   }
 
@@ -99,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       case R.id.button_beacon_config:
         startActivity(BeaconConfigurationActivity.createIntent(this));
         break;
+      case R.id.button_beacon_pro_sensors:
+        startActivity(BeaconProSensorsActivity.createIntent(this));
+        break;
       case R.id.button_kontakt_cloud:
         startActivity(KontaktCloudActivity.createIntent(this));
         break;
@@ -106,12 +117,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   }
 
   private void disableButtons() {
-    beaconsScanningButton.setEnabled(false);
-    beaconsProScanningButton.setEnabled(false);
-    scanRegionsButton.setEnabled(false);
-    scanFiltersButton.setEnabled(false);
-    backgroundScanButton.setEnabled(false);
-    configurationButton.setEnabled(false);
-    kontaktCloudButton.setEnabled(false);
+    for (int i = 0; i < buttonsLayout.getChildCount(); i++) {
+      buttonsLayout.getChildAt(i).setEnabled(false);
+    }
   }
+
 }

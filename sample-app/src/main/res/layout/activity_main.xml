@@ -7,7 +7,7 @@
     >
 
   <LinearLayout
-      android:id="@+id/activity_main"
+      android:id="@+id/buttons_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
@@ -64,6 +64,14 @@
         />
 
     <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_beacon_pro_sensors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="Beacon Pro Sensors"
+        />
+
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_kontakt_cloud"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,4 +80,5 @@
         />
 
   </LinearLayout>
+
 </ScrollView>

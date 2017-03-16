@@ -1,42 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <string name="app_name">Kontakt SDK Samples</string>
-  <string name="ibeacon_eddystone_scan_description">This sample runs basic iBeacon and Eddystone foreground scanning and displays results as logs in Android Studio logcat.\n\nCheck BeaconEddystoneScanActivity.class for implementation.</string>
-  <string name="beacon_pro_scan_description">Beacon Pro devices, additionally to non-connectable iBeacon and Eddystone frames, also broadcast a 3rd frame called \'Secure Profile frame\'.\n\n
+    <string name="app_name">Kontakt SDK Samples</string>
+    <string name="ibeacon_eddystone_scan_description">This sample runs basic iBeacon and Eddystone foreground scanning and displays results as logs in Android Studio logcat.\n\nCheck BeaconEddystoneScanActivity.class for implementation.</string>
+
+    <string name="beacon_pro_scan_description">Beacon Pro devices, additionally to non-connectable iBeacon and Eddystone frames, also broadcast a 3rd frame called \'Secure Profile frame\'.\n\n
     This frame is used to connect with Beacon Pro to change its properties. It also contains device\'s Unique ID and Mac address which are not available in iBeacon/Eddystone frames as they were in Smart and Card beacons case.\n\n
     This sample scans specifically for Secure Profile frames and displays results as logs in Android Studio logcat.\n\nCheck BeaconProScanActivity class for implementation.
   </string>
-  <string name="regions_description">This sample runs basic iBeacon and Eddystone foreground scanning and utilizes regions/namespaces option of ProximityManager.\n\n
+
+    <string name="beacon_pro_sensors_description">This sample showcases reading light sensor data from a Beacon Pro device.\n\n
+      We scan for a Beacon Pro with a given Unique ID, connect, authorize and subscribe for a light sensor data.
+      \n\nCheck BeaconProSensorsActivity class for implementation.</string>
+
+    <string name="regions_description">This sample runs basic iBeacon and Eddystone foreground scanning and utilizes regions/namespaces option of ProximityManager.\n\n
   Go to ScanRegionsActivity class to see implementation and set your own regions.
   </string>
-  <string name="filters_description">This sample runs basic iBeacon and Eddystone foreground scanning and utilizes filters option of ProximityManager. Results are displayed as logs in Android Studio logcat.
+
+    <string name="filters_description">This sample runs basic iBeacon and Eddystone foreground scanning and utilizes filters option of ProximityManager. Results are displayed as logs in Android Studio logcat.
       \n\nIBeacons with major and minor values higher than 100 will be omitted. Only Eddystones with URL that contains word \'google\' will be reported.
       \n\nCheck ScanFiltersActivity class for implementation.
   </string>
-  <string name="background_scan_description">This sample presents how one can achieve a background scanning using Android\'s Service\n\n
+
+    <string name="background_scan_description">This sample presents how one can achieve a background scanning using Android\'s Service\n\n
     Service will run for 30 seconds and terminate itself after.\n\n
     During the scan a broadcast is sent whenever a device is discovered. Activity is registered for those broadcasts and displays scanning results.\n\n
   Check BackgroundScanActivity class for implementation.
   </string>
-  <string name="beacon_config_description">This sample provides an example of changing Beacon\'s configuration (major and minor in this case).\nBeacon needs to have a firmware version 4.0 or higher or be a Beacon Pro.\n\n
+
+    <string name="beacon_config_description">This sample provides an example of changing Beacon\'s configuration (major and minor in this case).\nBeacon needs to have a firmware version 4.0 or higher or be a Beacon Pro.\n\n
       Firstly, proximity manager will scan for a device with given unique ID, create configuration object, acquire encrypted version from the Kontakt Cloud, apply it on the device and send the results back to the Cloud to stay synchronized.\n\n
   Check BeaconConfigurationActivity class for implementation.
   </string>
+
     <string name="kontakt_cloud_description">This sample provides an example of communicating with Kontakt.io Cloud using KontaktCloud object.\n\n
       These sample requests allow you to:\n- fetch list of your devices,\n- fetch list of current pending configurations,\n- fetch account managers details.\n\n
       Check KontaktCloudActivity class for implementation.
   </string>
 
-  <string name="start_scanning">Start Scanning</string>
-  <string name="stop_scanning">Stop Scanning</string>
-  <string name="start_configuration">Start Configuration</string>
+    <string name="start_scanning">Start Scanning</string>
+    <string name="stop_scanning">Stop Scanning</string>
+    <string name="start_configuration">Start Configuration</string>
+    <string name="read_light">Read Light Sensor</string>
+    <string name="read_all">Read Configuration</string>
 
-  <string name="start_background_scanning">Start Scanning Service</string>
-  <string name="stop_background_scanning">Stop Scanning Service</string>
+    <string name="start_background_scanning">Start Scanning Service</string>
+    <string name="stop_background_scanning">Stop Scanning Service</string>
 
-  <string name="request_devices">Get devices</string>
-  <string name="request_configs">Get configs</string>
-  <string name="request_managers">Get managers</string>
+    <string name="request_devices">Get devices</string>
+    <string name="request_configs">Get configs</string>
+    <string name="request_managers">Get managers</string>
 
 </resources>
