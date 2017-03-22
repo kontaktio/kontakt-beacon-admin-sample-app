@@ -6,7 +6,7 @@ buildscript {
 
 apply plugin: 'com.android.application'
 
-def androidToolsVersion = '25.2.0'
+def androidToolsVersion = '25.3.0'
 
 android {
   compileSdkVersion 25
@@ -38,5 +38,5 @@ android {
 
 dependencies {
   compile "com.android.support:appcompat-v7:$androidToolsVersion"
-  compile 'com.kontaktio:sdk:3.2.3'
+  compile 'com.kontaktio:sdk:3.3.0'
 }

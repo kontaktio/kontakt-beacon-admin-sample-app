@@ -3,7 +3,7 @@ Kontakt.io Android SDK Samples
 
 Simple application for developers, demonstrating Kontakt.io Android SDK features and sample implementations.
 
-##Samples
+## Samples
 - iBeacon and Eddystone scanning
 - Beacon Pro profile scanning
 - Applying regions and namespaces
@@ -13,7 +13,7 @@ Simple application for developers, demonstrating Kontakt.io Android SDK features
 - Reading Beacon's Pro light sensor
 - Consuming REST API with KontaktCloud
 
-##Setup
+## Setup
 1. Clone or download this repository.
 2. Open project in Android Studio (select top `build.gradle` file when opening the project).
 3. Install any missing dependencies that Android Studio might ask you for.
