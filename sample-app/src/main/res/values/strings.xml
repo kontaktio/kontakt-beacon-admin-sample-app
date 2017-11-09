@@ -28,6 +28,12 @@
   Check BackgroundScanActivity class for implementation.
   </string>
 
+  <string name="foreground_scan_description">This sample presents how to achieve beacons scanning using Android\'s Foreground Service\n\n
+    Service will run until user stops it explicitly by clicking stop button. Beacons will be scanned even if app is not in the foreground.\n\n
+    During the scan a broadcast is sent whenever a device is discovered. Activity is registered for those broadcasts and displays scanning results.\n\n
+  Check ForegroundScanActivity class for implementation.
+  </string>
+
     <string name="beacon_config_description">This sample provides an example of changing Beacon\'s configuration (major and minor in this case).\nBeacon needs to have a firmware version 4.0 or higher or be a Beacon Pro.\n\n
       Firstly, proximity manager will scan for a device with given unique ID, create configuration object, acquire encrypted version from the Kontakt Cloud, apply it on the device and send the results back to the Cloud to stay synchronized.\n\n
   Check BeaconConfigurationActivity class for implementation.
@@ -44,8 +50,8 @@
     <string name="read_light">Read Light Sensor</string>
     <string name="read_all">Read Configuration</string>
 
-    <string name="start_background_scanning">Start Scanning Service</string>
-    <string name="stop_background_scanning">Stop Scanning Service</string>
+    <string name="start_scanning_service">Start Scanning Service</string>
+    <string name="stop_scanning_service">Stop Scanning Service</string>
 
     <string name="request_devices">Get devices</string>
     <string name="request_configs">Get configs</string>

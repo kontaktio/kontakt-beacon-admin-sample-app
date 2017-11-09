@@ -56,6 +56,14 @@
         />
 
     <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_scan_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="Foreground Scanning"
+        />
+
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_beacon_config"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

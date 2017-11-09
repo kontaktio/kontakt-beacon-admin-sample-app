@@ -48,6 +48,9 @@
     <activity
         android:name=".samples.KontaktCloudActivity"
         android:screenOrientation="portrait"/>
+    <activity
+        android:name=".samples.ForegroundScanActivity"
+        android:screenOrientation="portrait"/>
 
     <!-- Services -->
 
@@ -57,8 +60,9 @@
     <service
         android:name=".service.BackgroundScanService"
         android:enabled="true"
-        android:exported="false">
-    </service>
+        android:exported="false"/>
+    <service android:name=".service.ForegroundScanService"
+        android:exported="false"/>
 
   </application>
 
