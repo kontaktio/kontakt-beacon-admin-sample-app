@@ -324,16 +324,8 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
       }
 
       @Override
-      public void onAuthenticationSuccess(RemoteBluetoothDevice.Characteristics characteristics) {
+      public void onConnected() {
         onDeviceConnected();
-      }
-
-      @Override
-      public void onAuthenticationFailure(int failureCode) {
-      }
-
-      @Override
-      public void onCharacteristicsUpdated(RemoteBluetoothDevice.Characteristics characteristics) {
       }
 
       @Override

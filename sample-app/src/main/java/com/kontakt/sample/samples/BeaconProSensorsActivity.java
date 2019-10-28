@@ -173,23 +173,13 @@ public class BeaconProSensorsActivity extends AppCompatActivity implements View.
       }
 
       @Override
-      public void onAuthenticationSuccess(RemoteBluetoothDevice.Characteristics characteristics) {
+      public void onConnected() {
         Log.i(TAG, "Connection successful.");
         obtainAuthToken();
       }
 
       @Override
-      public void onAuthenticationFailure(int failureCode) {
-
-      }
-
-      @Override
-      public void onCharacteristicsUpdated(RemoteBluetoothDevice.Characteristics characteristics) {
-
-      }
-
-      @Override
-      public void onErrorOccured(final int errorCode) {
+      public void onErrorOccured(int errorCode) {
         BeaconProSensorsActivity.this.onErrorOccured("Connection error: " + errorCode);
       }
 
