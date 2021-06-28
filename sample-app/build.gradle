@@ -37,5 +37,5 @@ android {
 
 dependencies {
   implementation "com.android.support:appcompat-v7:$androidToolsVersion"
-  implementation 'io.kontakt.mvn:sdk:5.0.12'
+  implementation 'io.kontakt.mvn:sdk:5.0.14'
 }
