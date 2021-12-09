@@ -2,6 +2,7 @@ package com.kontakt.sample;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -63,11 +64,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   //Since Android Marshmallow starting a Bluetooth Low Energy scan requires permission from location group.
   private void checkPermissions() {
-    int checkSelfPermissionResult = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-    if (PackageManager.PERMISSION_GRANTED != checkSelfPermissionResult) {
-      //Permission not granted so we ask for it. Results are handled in onRequestPermissionsResult() callback.
-      ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_PERMISSIONS);
+    String[] requiredPermissions = Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+            ? new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
+            : new String[]{ Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.ACCESS_FINE_LOCATION };
+    if(isAnyOfPermissionsNotGranted(requiredPermissions)) {
+      ActivityCompat.requestPermissions(this, requiredPermissions, REQUEST_CODE_PERMISSIONS);
     }
+  }
+
+  private boolean isAnyOfPermissionsNotGranted(String[] requiredPermissions){
+    for(String permission: requiredPermissions){
+      int checkSelfPermissionResult = ContextCompat.checkSelfPermission(this, permission);
+      if(PackageManager.PERMISSION_GRANTED != checkSelfPermissionResult){
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

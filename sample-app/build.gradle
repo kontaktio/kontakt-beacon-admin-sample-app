@@ -9,12 +9,12 @@ apply plugin: 'com.android.application'
 def androidToolsVersion = '27.0.0'
 
 android {
-  compileSdkVersion 30
+  compileSdkVersion 31
 
   defaultConfig {
     applicationId "com.kontakt.sample"
     minSdkVersion 18
-    targetSdkVersion 30
+    targetSdkVersion 31
     versionCode 1
     versionName "1.0"
   }
@@ -42,5 +42,5 @@ android {
 
 dependencies {
   implementation "com.android.support:appcompat-v7:$androidToolsVersion"
-  implementation 'io.kontakt.mvn:sdk:5.0.18'
+  implementation 'io.kontakt.mvn:sdk:5.0.25'
 }
