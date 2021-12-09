@@ -1,6 +1,13 @@
 Kontakt.io Android SDK Samples
 ===============================
 
+NOTE: This branch is for clients willing to use the samples in their own applications, but not wanting to immediately migrate to Android 12 permission's model.
+If you have this app already installed from the master branch, it may be important to perform the general cleaning:
+    ./gradlew clean
+    removing build folder
+    uninstalling the existing app.
+As otherwise the system may still have the cached information regarding the target = 31 from the previous installation.
+
 Simple application for developers, demonstrating Kontakt.io Android SDK features and sample implementations.
 
 ## Samples
