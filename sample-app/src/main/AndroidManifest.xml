@@ -8,14 +8,15 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".App"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".samples.beam.PortalBeamImageActivity"></activity>
-        <!-- Activities -->
+        <activity android:name=".samples.android_8_screen_pause.AndroidAbove8ScanWithPausedScreen"></activity>
+        <activity android:name=".samples.beam.PortalBeamImageActivity" /> <!-- Activities -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -63,6 +64,11 @@
         <service
             android:name=".service.ForegroundScanService"
             android:exported="false" />
+
+        <service
+            android:name=".samples.android_8_screen_pause.ShowNotificationService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
