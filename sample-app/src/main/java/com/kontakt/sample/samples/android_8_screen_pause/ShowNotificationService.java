@@ -76,11 +76,15 @@ public class ShowNotificationService extends Service {
     }
 
     private Notification getNotification(Context ctx, String notificationContent) {
+        int flags = 0;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            flags = PendingIntent.FLAG_IMMUTABLE;
+        }
         return new NotificationCompat.Builder(ctx, CHANNEL_ID)
                 .setContentTitle("KontaktWakeUp test")
                 .setContentText(notificationContent)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent(ctx, ShowNotificationService.class), PendingIntent.FLAG_IMMUTABLE))
+                .setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent(ctx, ShowNotificationService.class), flags))
                 .build();
     }
 
