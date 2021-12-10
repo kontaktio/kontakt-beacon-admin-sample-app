@@ -27,6 +27,7 @@ import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListene
 import com.kontakt.sdk.android.common.profile.IBeaconRegion;
 import com.kontakt.sdk.android.common.profile.IEddystoneNamespace;
 
+import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -108,7 +109,9 @@ public class ScanRegionsActivity extends AppCompatActivity implements View.OnCli
         //.major(1)
         //.minor(1)
         .build();
-    proximityManager.spaces().iBeaconRegion(region);
+
+    proximityManager.spaces().iBeaconRegion(region)
+    .forceResolveRegions(Collections.singleton(UUID.fromString("f7826da6-4fa2-4e98-8024-bc5b71e0893e")));
 
     //Setting up single Eddystone namespace. Put your own desired values here.
     IEddystoneNamespace namespace = new EddystoneNamespace.Builder().identifier("My Namespace") //Namespace identifier is mandatory.
@@ -116,7 +119,7 @@ public class ScanRegionsActivity extends AppCompatActivity implements View.OnCli
         //Optional instance id value
         //.instanceId("instanceId")
         .build();
-    proximityManager.spaces().eddystoneNamespace(namespace);
+    proximityManager.spaces().eddystoneNamespace(namespace).forceResolveNamespaces(Collections.singletonList("f7826da64fa24e988024"));
   }
 
   private void startScanning() {
