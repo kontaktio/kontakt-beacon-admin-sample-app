@@ -30,7 +30,7 @@ class PortalBeamImageActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_portal_beam_image)
 		imageFetcher = ImageFetcher(kontaktCloud, Scanner(this, kontaktCloud), this)
-		startStreamingState()
+		setButtonOnStartStreamingClickedState()
 	}
 
 	private fun showInputUniqueIdDialog() {
@@ -44,12 +44,12 @@ class PortalBeamImageActivity : AppCompatActivity() {
 	}
 
 	private fun startStreaming(uniqueId: String) {
-		stopStreamingState()
+		setButtonOnStopStreamingClickedState()
 		imageFetcher.init(uniqueId, object: ImageFetcher.Listener {
 			override fun onImage(pixels: Array<IntArray>, boxes: List<RecognitionBox>) {
 				runOnUiThread {
 					displayImagePixels(pixelsToBitmap(pixels))
-					startStreamingState()
+					setButtonOnStartStreamingClickedState()
 				}
 			}
 
@@ -57,7 +57,7 @@ class PortalBeamImageActivity : AppCompatActivity() {
 				runOnUiThread {
 					Log.e(TAG, "Error fetching image: $errorMsg")
 					Toast.makeText(this@PortalBeamImageActivity, "Error fetching image", Toast.LENGTH_LONG).show()
-					startStreamingState()
+					setButtonOnStartStreamingClickedState()
 					imageFetcher.stopStreaming()
 				}
 			}
@@ -141,12 +141,12 @@ class PortalBeamImageActivity : AppCompatActivity() {
 		return background
 	}
 
-	private fun stopStreamingState() {
+	private fun setButtonOnStopStreamingClickedState() {
 		streamingButton.text = "stop streaming"
-		streamingButton.setOnClickListener { startStreamingState() }
+		streamingButton.setOnClickListener { setButtonOnStartStreamingClickedState() }
 	}
 
-	private fun startStreamingState() {
+	private fun setButtonOnStartStreamingClickedState() {
 		streamingButton.text = "start streaming"
 		streamingButton.setOnClickListener { showInputUniqueIdDialog() }
 	}
