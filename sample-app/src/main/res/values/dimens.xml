@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <dimen name="activity_padding">16dp</dimen>
+
+  <dimen name="beam_image_height">300dp</dimen>
+  <dimen name="beam_image_width">300dp</dimen>
+  <dimen name="beam_image_margin">16dp</dimen>
+
 </resources>
