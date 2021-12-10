@@ -21,6 +21,7 @@ import com.kontakt.sample.samples.ForegroundScanActivity;
 import com.kontakt.sample.samples.KontaktCloudActivity;
 import com.kontakt.sample.samples.ScanFiltersActivity;
 import com.kontakt.sample.samples.ScanRegionsActivity;
+import com.kontakt.sample.samples.beam.PortalBeamImageActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final Button configurationButton = findViewById(R.id.button_beacon_config);
     final Button beaconProSensorsButton = findViewById(R.id.button_beacon_pro_sensors);
     final Button kontaktCloudButton = findViewById(R.id.button_kontakt_cloud);
+    final Button beamImageButton = findViewById(R.id.button_beam_image);
 
     beaconsScanningButton.setOnClickListener(this);
     beaconsProScanningButton.setOnClickListener(this);
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     configurationButton.setOnClickListener(this);
     beaconProSensorsButton.setOnClickListener(this);
     kontaktCloudButton.setOnClickListener(this);
+    beamImageButton.setOnClickListener(this);
   }
 
   //Since Android Marshmallow starting a Bluetooth Low Energy scan requires permission from location group.
@@ -111,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         break;
       case R.id.button_kontakt_cloud:
         startActivity(KontaktCloudActivity.createIntent(this));
+        break;
+      case R.id.button_beam_image:
+        startActivity(PortalBeamImageActivity.createIntent(this));
         break;
     }
   }

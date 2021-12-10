@@ -87,6 +87,13 @@
         android:text="Kontakt Cloud"
         />
 
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/button_beam_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="Beam Image"
+        />
   </LinearLayout>
 
 </ScrollView>

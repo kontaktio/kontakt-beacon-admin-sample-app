@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".samples.beam.PortalBeamImageActivity">
+
+
+    <Button
+        android:id="@+id/streamingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/beamImagesView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="start streaming"/>
+
+    <ImageView
+        android:id="@+id/beamImagesView"
+        android:background="@drawable/dashed_border"
+        android:layout_width="@dimen/beam_image_width"
+        android:layout_height="@dimen/beam_image_height"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/beam_image_margin"/>
+
+</android.support.constraint.ConstraintLayout>
