@@ -2,67 +2,70 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kontakt.sample">
 
-  <uses-permission android:name="android.permission.INTERNET"/>
-  <uses-permission android:name="android.permission.BLUETOOTH"/>
-  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".App"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".samples.beam.PortalBeamImageActivity"></activity>
-        <!-- Activities -->
+        <activity android:name=".samples.android_8_screen_pause.AndroidAbove8ScanWithPausedScreen"></activity>
+        <activity android:name=".samples.beam.PortalBeamImageActivity" /> <!-- Activities -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
-    <activity
-        android:name=".samples.BeaconEddystoneScanActivity"
-        android:screenOrientation="portrait"/>
-    <activity
-        android:name=".samples.BeaconProScanActivity"
-        android:screenOrientation="portrait"/>
-    <activity
-        android:name=".samples.ScanRegionsActivity"
-        android:screenOrientation="portrait"/>
-    <activity
-        android:name=".samples.ScanFiltersActivity"
-        android:screenOrientation="portrait"/>
-    <activity
-        android:name=".samples.BackgroundScanActivity"
-        android:screenOrientation="portrait"/>
-    <activity
-        android:name=".samples.BeaconConfigurationActivity"
-        android:screenOrientation="portrait"/>
-    <activity
-        android:name=".samples.BeaconProSensorsActivity"
-        android:screenOrientation="portrait"/>
-    <activity
-        android:name=".samples.KontaktCloudActivity"
-        android:screenOrientation="portrait"/>
-    <activity
-        android:name=".samples.ForegroundScanActivity"
-        android:screenOrientation="portrait"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".samples.BeaconEddystoneScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".samples.BeaconProScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".samples.ScanRegionsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".samples.ScanFiltersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".samples.BackgroundScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".samples.BeaconConfigurationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".samples.BeaconProSensorsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".samples.KontaktCloudActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".samples.ForegroundScanActivity"
+            android:screenOrientation="portrait" /> <!-- Services -->
+        <service
+            android:name="com.kontakt.sdk.android.ble.service.ProximityService"
+            android:exported="false" />
+        <service
+            android:name=".service.BackgroundScanService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".service.ForegroundScanService"
+            android:exported="false" />
 
-    <!-- Services -->
-
-    <service
-        android:name="com.kontakt.sdk.android.ble.service.ProximityService"
-        android:exported="false"/>
-    <service
-        android:name=".service.BackgroundScanService"
-        android:enabled="true"
-        android:exported="false"/>
-    <service android:name=".service.ForegroundScanService"
-        android:exported="false"/>
-
-  </application>
+        <service
+            android:name=".samples.android_8_screen_pause.ShowNotificationService"
+            android:enabled="true"
+            android:exported="true" />
+    </application>
 
 </manifest>

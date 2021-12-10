@@ -22,13 +22,21 @@
       \n\nCheck ScanFiltersActivity class for implementation.
   </string>
 
+  <string name="paused_screen_scan_description">This sample runs basic iBeacon scanning. Also, the sample features
+    how it is possible to use KontaktScanFilters and proximityManager.setForegroundNotification().
+    This sample has a side effect of showing a foreground notification.
+    Results are displayed as logs in Android Studio logcat. Every time you pause the screen, the scan is not affected for iBeacons.
+    Try comparing the results when you comment out the code line indicated by TODO marker.
+    \n\nCheck AndroidAbove8ScanWithPausedScreen class for implementation.
+  </string>
+
     <string name="background_scan_description">This sample presents how one can achieve a background scanning using Android\'s Service\n\n
     Service will run for 30 seconds and terminate itself after.\n\n
     During the scan a broadcast is sent whenever a device is discovered. Activity is registered for those broadcasts and displays scanning results.\n\n
   Check BackgroundScanActivity class for implementation.
   </string>
 
-  <string name="foreground_scan_description">This sample presents how to achieve beacons scanning using Android\'s Foreground Service\n\n
+    <string name="foreground_scan_description">This sample presents how to achieve beacons scanning using Android\'s Foreground Service\n\n
     Service will run until user stops it explicitly by clicking stop button. Beacons will be scanned even if app is not in the foreground.\n\n
     During the scan a broadcast is sent whenever a device is discovered. Activity is registered for those broadcasts and displays scanning results.\n\n
   Check ForegroundScanActivity class for implementation.
