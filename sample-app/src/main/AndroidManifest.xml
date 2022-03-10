@@ -15,7 +15,8 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".samples.android_8_screen_pause.AndroidAbove8ScanWithPausedScreen"></activity>
+        <activity android:name=".samples.KontaktCloudWithCoroutinesActivity"></activity>
+        <activity android:name=".samples.android_8_screen_pause.AndroidAbove8ScanWithPausedScreen" />
         <activity android:name=".samples.beam.PortalBeamImageActivity" /> <!-- Activities -->
         <activity
             android:name=".MainActivity"
@@ -64,7 +65,6 @@
         <service
             android:name=".service.ForegroundScanService"
             android:exported="false" />
-
         <service
             android:name=".samples.android_8_screen_pause.ShowNotificationService"
             android:enabled="true"
