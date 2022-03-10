@@ -46,5 +46,7 @@ dependencies {
   implementation "com.android.support:appcompat-v7:$androidToolsVersion"
   implementation 'io.kontakt.mvn:sdk:7.0.0'
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+  implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
   implementation 'com.android.support.constraint:constraint-layout:2.0.4'
 }
