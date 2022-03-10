@@ -1,11 +1,10 @@
 package com.kontakt.sample.samples.common.connection.operations;
 
 import com.kontakt.sdk.android.ble.connection.KontaktDeviceConnection;
+import com.kontakt.sdk.android.ble.image_streaming.ImageMetadata;
 import com.kontakt.sdk.android.ble.image_streaming.ImageStreamingListener;
-import com.kontakt.sdk.android.ble.image_streaming.RecognitionBox;
+import com.kontakt.sdk.android.ble.image_streaming.event.StreamingEvent;
 import com.kontakt.sdk.android.cloud.KontaktCloud;
-
-import java.util.List;
 
 public class StartImageStreamingOperation implements Operation {
 
@@ -30,14 +29,16 @@ public class StartImageStreamingOperation implements Operation {
     }
 
     private final ImageStreamingListener internalImageStreamingListener = new ImageStreamingListener() {
+
         @Override
-        public void onImage(int[][] ints, List<RecognitionBox> boxes) {
-            listener.onImage(ints, boxes);
+        public void onImage(int[][] image, ImageMetadata imageMetadata) {
+            listener.onImage(image, imageMetadata);
         }
 
         @Override
-        public void startedStreaming() {
-            listener.startedStreaming();
+        public void onEvent(StreamingEvent event) {
+            listener.onEvent(event);
+
         }
 
         @Override

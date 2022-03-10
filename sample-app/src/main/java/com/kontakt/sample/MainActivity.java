@@ -3,14 +3,15 @@ package com.kontakt.sample;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.kontakt.sample.samples.BackgroundScanActivity;
 import com.kontakt.sample.samples.BeaconConfigurationActivity;
@@ -19,6 +20,7 @@ import com.kontakt.sample.samples.BeaconProScanActivity;
 import com.kontakt.sample.samples.BeaconProSensorsActivity;
 import com.kontakt.sample.samples.ForegroundScanActivity;
 import com.kontakt.sample.samples.KontaktCloudActivity;
+import com.kontakt.sample.samples.KontaktCloudWithCoroutinesActivity;
 import com.kontakt.sample.samples.ScanFiltersActivity;
 import com.kontakt.sample.samples.ScanRegionsActivity;
 import com.kontakt.sample.samples.android_8_screen_pause.AndroidAbove8ScanWithPausedScreen;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final Button kontaktCloudButton = findViewById(R.id.button_kontakt_cloud);
     final Button beamImageButton = findViewById(R.id.button_beam_image);
     final Button pausedScreenScanButton = findViewById(R.id.button_scan_with_paused_screen);
+    final Button kontaktCloudWithCoroutinesButton = findViewById(R.id.button_kontakt_cloud_with_coroutines);
 
     beaconsScanningButton.setOnClickListener(this);
     beaconsProScanningButton.setOnClickListener(this);
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     kontaktCloudButton.setOnClickListener(this);
     beamImageButton.setOnClickListener(this);
     pausedScreenScanButton.setOnClickListener(this);
+    kontaktCloudWithCoroutinesButton.setOnClickListener(this);
   }
 
   //Since Android Marshmallow starting a Bluetooth Low Energy scan requires permission from location group.
@@ -123,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         break;
       case R.id.button_scan_with_paused_screen:
         startActivity(AndroidAbove8ScanWithPausedScreen.createIntent(this));
+        break;
+      case R.id.button_kontakt_cloud_with_coroutines:
+        startActivity(KontaktCloudWithCoroutinesActivity.createIntent(this));
         break;
     }
   }

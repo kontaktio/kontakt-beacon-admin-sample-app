@@ -3,9 +3,6 @@ package com.kontakt.sample.samples;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,6 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.kontakt.sample.R;
 import com.kontakt.sdk.android.ble.configuration.ScanMode;
@@ -243,9 +244,9 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
     //Configuration has been applied on the beacon. Now we should inform Cloud about it.
     setStatus("Synchronizing with Cloud...");
     targetConfiguration.applySecureResponse(response.getExtra(), response.getUnixTimestamp());
-    kontaktCloud.devices().applySecureConfigs(targetConfiguration).execute(new CloudCallback<Configs>() {
+    kontaktCloud.devices().applySecureConfigs(targetConfiguration).execute(new CloudCallback<Void>() {
       @Override
-      public void onSuccess(Configs response, CloudHeaders headers) {
+      public void onSuccess(Void response, CloudHeaders headers) {
         //Success!
         setStatus("Configuration completed!");
         startButton.setEnabled(true);
