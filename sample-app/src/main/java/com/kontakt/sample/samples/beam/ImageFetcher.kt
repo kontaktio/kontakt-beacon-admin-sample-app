@@ -6,8 +6,10 @@ import android.os.Looper
 import android.util.Log
 import com.kontakt.sample.samples.common.Scanner
 import com.kontakt.sample.samples.common.connection.Connection
+import com.kontakt.sdk.android.ble.image_streaming.ImageMetadata
 import com.kontakt.sdk.android.ble.image_streaming.ImageStreamingListener
 import com.kontakt.sdk.android.ble.image_streaming.RecognitionBox
+import com.kontakt.sdk.android.ble.image_streaming.event.StreamingEvent
 import com.kontakt.sdk.android.ble.util.BluetoothUtils
 import com.kontakt.sdk.android.cloud.KontaktCloud
 import com.kontakt.sdk.android.common.log.Logger
@@ -54,16 +56,17 @@ class ImageFetcher(private val kontaktCloud: KontaktCloud, private val deviceDet
 	}
 
 	private val imageStreamingListener = object: ImageStreamingListener {
-		override fun onImage(pixels: Array<IntArray>, boxes: List<RecognitionBox>) {
+
+		override fun onImage(pixels: Array<IntArray>, imageMetadata: ImageMetadata) {
 			if(isNonZeroMatrix(pixels)){
-				listener.onImage(pixels, boxes)
+				listener.onImage(pixels, imageMetadata.recognitionBoxes)
 				stopStreaming()
 			} else {
 				Log.d(TAG, "Parsed image is a zero matrix, ignoring")
 			}
 		}
 
-		override fun startedStreaming() {
+		override fun onEvent(event: StreamingEvent) {
 			Log.d(TAG, "Started streaming")
 		}
 

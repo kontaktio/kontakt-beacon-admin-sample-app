@@ -243,9 +243,9 @@ public class BeaconConfigurationActivity extends AppCompatActivity implements Vi
     //Configuration has been applied on the beacon. Now we should inform Cloud about it.
     setStatus("Synchronizing with Cloud...");
     targetConfiguration.applySecureResponse(response.getExtra(), response.getUnixTimestamp());
-    kontaktCloud.devices().applySecureConfigs(targetConfiguration).execute(new CloudCallback<Configs>() {
+    kontaktCloud.devices().applySecureConfigs(targetConfiguration).execute(new CloudCallback<Void>() {
       @Override
-      public void onSuccess(Configs response, CloudHeaders headers) {
+      public void onSuccess(Void response, CloudHeaders headers) {
         //Success!
         setStatus("Configuration completed!");
         startButton.setEnabled(true);
