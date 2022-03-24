@@ -15,10 +15,11 @@ Simple application for developers, demonstrating Kontakt.io Android SDK features
 - Beacon Pro profile scanning
 - Applying regions and namespaces
 - Applying scanning filters
-- Background scanning
+- Background scanning (including ScanFilters required for scanning with the screen off after Android 8)
 - Beacon's Configuration
 - Reading Beacon's Pro light sensor
 - Consuming REST API with KontaktCloud
+- Consuming REST API with KontaktCloud using coroutines
 
 ## Setup
 1. Clone or download this repository.
@@ -46,7 +47,7 @@ public class App extends Application {
 
 Run the application to see if everything is set up correctly.
 
-For full information see: https://developer.kontakt.io/mobile/android/qsg/setup/
+For full information see: https://kontakt-api-docs.stoplight.io/docs/dev-ctr-sdks/ZG9jOjMwMzg3NjUz-getting-started
 
 *NOTE:* The old, deprecated samples app is available in the *archive* branch (if you require it for any reason).
 
