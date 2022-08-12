@@ -19,6 +19,7 @@ public class App extends Application {
   public void onCreate() {
     super.onCreate();
     initializeDependencies();
+    Logger.enableAllLoggerLevels(true);
   }
 
   //Initializing Kontakt SDK. Insert your API key to allow all samples to work correctly
