@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat;
 import com.kontakt.sample.samples.BackgroundScanActivity;
 import com.kontakt.sample.samples.BeaconConfigurationActivity;
 import com.kontakt.sample.samples.BeaconEddystoneScanActivity;
-import com.kontakt.sample.samples.BeaconProScanActivity;
+import com.kontakt.sample.samples.SecureProfileScanActivity;
 import com.kontakt.sample.samples.BeaconProSensorsActivity;
 import com.kontakt.sample.samples.ForegroundScanActivity;
 import com.kontakt.sample.samples.KontaktCloudActivity;
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     buttonsLayout = findViewById(R.id.buttons_layout);
 
     final Button beaconsScanningButton = findViewById(R.id.button_scan_beacons);
-    final Button beaconsProScanningButton = findViewById(R.id.button_scan_beacons_pro);
+    final Button beaconsProScanningButton = findViewById(R.id.button_scan_secure_profile);
     final Button scanRegionsButton = findViewById(R.id.button_scan_regions);
     final Button scanFiltersButton = findViewById(R.id.button_scan_filters);
     final Button backgroundScanButton = findViewById(R.id.button_scan_background);
@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       case R.id.button_scan_beacons:
         startActivity(BeaconEddystoneScanActivity.createIntent(this));
         break;
-      case R.id.button_scan_beacons_pro:
-        startActivity(BeaconProScanActivity.createIntent(this));
+      case R.id.button_scan_secure_profile:
+        startActivity(SecureProfileScanActivity.createIntent(this));
         break;
       case R.id.button_scan_filters:
         startActivity(ScanFiltersActivity.createIntent(this));

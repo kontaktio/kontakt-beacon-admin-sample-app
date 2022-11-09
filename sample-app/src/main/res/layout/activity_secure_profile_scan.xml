@@ -6,7 +6,6 @@
     >
 
   <LinearLayout
-      android:id="@+id/activity_beacon_eddystone_scan"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
@@ -17,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/beacon_pro_scan_description"
+        android:text="@string/secure_profile_scan_description"
         />
 
     <Button

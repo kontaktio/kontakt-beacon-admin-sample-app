@@ -5,7 +5,7 @@ Simple application for developers, demonstrating Kontakt.io Android SDK features
 
 ## Samples
 - iBeacon and Eddystone scanning
-- Beacon Pro profile scanning
+- Secure Profile scanning
 - Applying regions and namespaces
 - Applying scanning filters
 - Background scanning (including ScanFilters required for scanning with the screen off after Android 8)
@@ -22,7 +22,8 @@ Simple application for developers, demonstrating Kontakt.io Android SDK features
 ```
 public class App extends Application {
 
-  private static final String API_KEY = "Your Api Key here";
+  // TODO Put your API key here
+  public static final String API_KEY = "Your_Api_Key";
 
   @Override
   public void onCreate() {

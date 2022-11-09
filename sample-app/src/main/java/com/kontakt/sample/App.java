@@ -13,7 +13,8 @@ import com.kontakt.sdk.android.common.log.Logger;
 
 public class App extends Application {
 
-  private static final String API_KEY = "Put your API key here";
+  // TODO Put your API key here
+  public static final String API_KEY = "Your_Api_Key";
 
   @Override
   public void onCreate() {

@@ -24,11 +24,11 @@
         />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_scan_beacons_pro"
+        android:id="@+id/button_scan_secure_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="Beacon Pro Scanning"
+        android:text="Secure Profile Scanning"
         />
 
     <androidx.appcompat.widget.AppCompatButton

@@ -34,7 +34,7 @@
             android:name=".samples.BeaconEddystoneScanActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".samples.BeaconProScanActivity"
+            android:name=".samples.SecureProfileScanActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".samples.ScanRegionsActivity"
